@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const UserSchema = z.object({
   id: z.number(),
-  username: z.string(),
+  userName: z.string(),
   email: z.string(),
   address: z.string(),
   phone: z.string(),
@@ -11,7 +11,7 @@ export const UserSchema = z.object({
 
 export type UserType = {
   id: number;
-  username: string;
+  userName: string;
   email: string;
   address: string;
   phone: string;
@@ -19,7 +19,7 @@ export type UserType = {
 };
 
 export type UserSignUpType = Omit<UserType, 'id' | 'roleId' > & { pass: string };
-export type UserLoginType = Omit<UserSignUpType, 'username'>;
+export type UserLoginType = Omit<UserSignUpType, 'userName'>;
 
 export type UserFromBackendType = { accessToken: string; user: UserType };
 

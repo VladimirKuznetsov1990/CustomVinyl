@@ -1,5 +1,8 @@
 'use strict';
 
+const bcrypt = require('bcrypt');
+
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // FormatVinyl Seeder
@@ -40,7 +43,7 @@ module.exports = {
       {
         userName: 'admin',
         email: 'admin@example.com',
-        pass: 'adminpass',
+        password: await bcrypt.hash('adminpass', 10),
         address: '123 Admin St',
         phone: '1234567890',
         roleId: 1,
@@ -50,7 +53,7 @@ module.exports = {
       {
         userName: 'user',
         email: 'user@example.com',
-        pass: 'userpass',
+        password: await bcrypt.hash('userpass', 10),
         address: '456 User St',
         phone: '0987654321',
         roleId: 2,

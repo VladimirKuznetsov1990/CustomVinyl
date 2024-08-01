@@ -28,7 +28,7 @@ export default function SignUpModal(): JSX.Element {
           void dispatch(signUpThunk(formData));
         }}
       >
-        <TextField name="username" label="Логин" variant="outlined" />
+        <TextField name="userName" label="Логин" variant="outlined" />
         <br />
         <TextField name="email" type="email" label="Email" variant="outlined" />
         <br />

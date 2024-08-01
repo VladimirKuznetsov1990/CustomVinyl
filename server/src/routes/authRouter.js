@@ -7,13 +7,13 @@ const cookiesConfig = require('../../config/cookiesConfig');
 const router = Router();
 
 router.post('/signup', async (req, res) => {
-  const { userName, email, pass } = req.body;
+  const { userName, email, password } = req.body;
 
-  if (userName && email && pass) {
+  if (userName && email && password) {
     try {
       const [user, created] = await User.findOrCreate({
         where: { email },
-        defaults: { userName, pass: await bcrypt.hash(pass, 10) },
+        defaults: { userName, password: await bcrypt.hash(password, 10) },
       });
 
       if (!created) {
@@ -21,7 +21,7 @@ router.post('/signup', async (req, res) => {
       }
 
       const plainUser = user.get();
-      delete plainUser.pass;
+      delete plainUser.password;
 
       const { accessToken, refreshToken } = generateTokens({ user: plainUser });
 
@@ -38,20 +38,20 @@ router.post('/signup', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-  const { email, pass } = req.body;
+  const { email, password } = req.body;
 
-  if (email && pass) {
+  if (email && password) {
     try {
       const user = await User.findOne({
         where: { email },
       });
 
-      if (!(await bcrypt.compare(pass, user.pass))) {
+      if (!(await bcrypt.compare(password, user.password))) {
         return res.status(401).json({ message: 'Incorrect password' });
       }
 
       const plainUser = user.get();
-      delete plainUser.pass;
+      delete plainUser.password;
 
       const { accessToken, refreshToken } = generateTokens({ user: plainUser });
 
