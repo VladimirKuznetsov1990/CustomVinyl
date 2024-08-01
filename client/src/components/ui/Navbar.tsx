@@ -1,6 +1,7 @@
 import { AppBar, Box, Button, Container, IconButton, Toolbar, Typography } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { openModal } from '../../redux/slices/modal/modalSlice';
 import SignUpModal from './SignUpModal';
 import LoginModal from './LoginModal';
@@ -14,14 +15,14 @@ export default function Navbar(): JSX.Element {
   console.log(user.status)
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}> 
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="/candidates"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -56,20 +57,37 @@ export default function Navbar(): JSX.Element {
           )}
           <Typography>Привет, {user.status === 'logged' ? user.userName : 'Гость'}</Typography>
           {user.status === 'logged' && (
-            <>
+            <Box display="flex" alignItems="center">
               <Button
                 variant="text"
-                sx={{ color: 'black' }}
+                sx={{ color: 'white' }}
                 onClick={() => {
                   void dispatch(logoutThunk());
                 }}
               >
                 Выйти
               </Button>
-              <IconButton color="primary" aria-label="add to shopping cart">
-              <AddShoppingCartIcon />
-            </IconButton>
-            </>
+              <Link to="/">
+                <Button variant="text" sx={{ color: 'white' }}>
+                  О нас
+                </Button>
+              </Link>
+              <Link to="/account">
+                <Button variant="text" sx={{ color: 'white' }}>
+                  Оформить заказ
+                </Button>
+              </Link>
+              <Link to="/order">
+                <Button variant="text" sx={{ color: 'white' }}>
+                  Личный кабинет
+                </Button>
+              </Link>
+              <Link to="/cart">
+                <IconButton color="warning" aria-label="add to shopping cart">
+                  <AddShoppingCartIcon />
+                </IconButton>
+              </Link>
+            </Box>
           )}
         </Toolbar>
       </Container>
