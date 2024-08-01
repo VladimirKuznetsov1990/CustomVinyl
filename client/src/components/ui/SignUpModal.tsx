@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Button, Dialog, DialogTitle, TextField } from '@mui/material';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import type { UserSignUpType } from '../../types/userTypes';
 import { signUpThunk } from '../../redux/slices/auth/authThunks';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { closeModal } from '../../redux/slices/modal/modalSlice';
 
 export default function SignUpModal(): JSX.Element {

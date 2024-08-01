@@ -11,7 +11,7 @@ import Layout from './components/Layout';
 
 function App(): JSX.Element {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((store) => store.auth.user);
+  const user = useAppSelector((store) => store.auth.userStatus);
 
   useEffect(() => {
     void dispatch(checkUserThunk());
@@ -27,7 +27,7 @@ function App(): JSX.Element {
           element: <MainPage/>,
         },
         {
-          element: <PrivateRouter isAllowed={user.status === 'logged'} redirect="/login" />,
+          element: <PrivateRouter isAllowed={user.status === 'logged'} redirect="/" />,
           children: [
             {
               path: '/account',
