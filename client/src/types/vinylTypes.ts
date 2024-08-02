@@ -11,3 +11,9 @@ export const VinylSchema = z.object({
 });
 
 export const VinylsSchema = z.array(VinylSchema);
+
+export type VinylType = z.infer<typeof VinylSchema>;
+
+export type VinylListType = VinylType[];
+
+export type VinylDataType = Omit<VinylType, 'id'>;
