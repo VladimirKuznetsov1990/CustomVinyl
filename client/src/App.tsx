@@ -8,6 +8,8 @@ import MainPage from './components/pages/MainPage';
 import CartPage from './components/pages/CartPage';
 import OrderPage from './components/pages/OrderPage';
 import Layout from './components/Layout';
+import ContactsPage from './components/pages/ContactsPage';
+import FaqPage from './components/pages/FaqPage';
 
 function App(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -24,18 +26,31 @@ function App(): JSX.Element {
       children: [
         {
           path: '/',
-          element: <MainPage/>,
+          element: <MainPage />,
         },
         {
           element: <PrivateRouter isAllowed={user.status === 'logged'} redirect="/" />,
           children: [
             {
               path: '/account',
-              element: <AccountPage/>,
+              element: <AccountPage />,
             },
             {
               path: '/cart',
               element: <CartPage />,
+            },
+          ],
+        },
+        {
+          element: <Layout />,
+          children: [
+            {
+              path: '/contacts',
+              element: <ContactsPage />,
+            },
+            {
+              path: '/faq',
+              element: <FaqPage />,
             },
             {
               path: '/order',

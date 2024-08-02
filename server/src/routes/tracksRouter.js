@@ -2,9 +2,9 @@ const { Router } = require('express');
 const { Track } = require('../../db/models');
 const { TrackSchema, TrackReqBodySchema } = require('../schemas/track');
 
-const todosRouter = Router();
+const trackRouter = Router();
 
-todosRouter
+trackRouter
   .route('/')
   .get(async (req, res) => {
     try {
@@ -26,7 +26,7 @@ todosRouter
     }
   });
 
-todosRouter
+  trackRouter
   .route('/:id')
   .get(async (req, res) => {
     try {
@@ -50,4 +50,4 @@ todosRouter
     }
 });
 
-module.exports = todosRouter;
+module.exports = trackRouter;
