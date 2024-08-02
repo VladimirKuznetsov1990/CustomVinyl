@@ -4,7 +4,8 @@ const morgan = require('morgan');
 const cors = require('cors');
 const authRouter = require('./routes/authRouter');
 const tokensRouter = require('./routes/tokensRouter');
-
+const formatsRouter = require('./routes/formatVinylRouter');
+const vinylsRouter = require('./routes/vinylsRouter');
 
 const app = express();
 
@@ -16,5 +17,7 @@ app.use(express.json());
 
 app.use('/api/tokens', tokensRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/formats', formatsRouter);
+app.use('/api/vinyls', vinylsRouter);
 
 module.exports = app;
