@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const cors = require('cors');
 const authRouter = require('./routes/authRouter');
 const tokensRouter = require('./routes/tokensRouter');
+const orderRouter = require('./routes/orderRouter');
+const orderItemRouter = require('./routes/orderItemRouter');
 
 
 const app = express();
@@ -16,5 +18,7 @@ app.use(express.json());
 
 app.use('/api/tokens', tokensRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/orders', orderRouter);
+app.use('/api/ordersItems', orderItemRouter)
 
 module.exports = app;
