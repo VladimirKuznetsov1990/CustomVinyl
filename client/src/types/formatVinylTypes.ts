@@ -6,3 +6,7 @@ export const FormatSchema = z.object({
 });
 
 export const FormatesSchema = z.array(FormatSchema);
+
+export type FormatType = z.infer<typeof FormatSchema>;
+
+export type FormatListType = FormatType[];

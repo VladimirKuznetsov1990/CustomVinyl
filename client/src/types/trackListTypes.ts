@@ -5,5 +5,9 @@ export const TrackListSchema = z.object({
     userId: z.number(),
 });
 
-export const TrackListsSchema = z.array(TrackListSchema);
 export const TrListReqBodySchema = TrackListSchema.omit({ id: true });
+
+export type TrackListType = z.infer<typeof TrackListSchema>;
+
+export type TrackListDataType = Omit<TrackListType, 'id'>;
+
