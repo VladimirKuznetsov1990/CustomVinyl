@@ -9,7 +9,6 @@ import CartPage from './components/pages/CartPage';
 import OrderPage from './components/pages/OrderPage';
 import Layout from './components/Layout';
 import ContactsPage from './components/pages/ContactsPage';
-import GalleryPage from './components/pages/FaqPage';
 import FaqPage from './components/pages/FaqPage';
 
 function App(): JSX.Element {
@@ -40,7 +39,6 @@ function App(): JSX.Element {
               path: '/cart',
               element: <CartPage />,
             },
-
           ],
         },
         {
