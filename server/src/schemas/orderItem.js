@@ -5,7 +5,7 @@ const OrderItemSchema = z.object({
   orderId: z.number(),
   vinylId: z.number(),
   quantity: z.number(),
-  price: z.number(),
+  price: z.number().nonnegative(),
 });
 
 const orderItemReqBodySchema = OrderItemSchema.omit({ id: true });

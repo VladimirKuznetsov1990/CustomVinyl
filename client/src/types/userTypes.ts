@@ -18,7 +18,7 @@ export type UserType = {
   roleId: number;
 };
 
-export type UserSignUpType = Omit<UserType, 'id' | 'roleId' > & { pass: string };
+export type UserSignUpType = Omit<UserType, 'id' | 'roleId' > & { pass: string }; //TODO здесь должно быть password
 export type UserLoginType = Omit<UserSignUpType, 'userName'>;
 
 export type UserFromBackendType = { accessToken: string; user: UserType };
