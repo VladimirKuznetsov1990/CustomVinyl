@@ -30,6 +30,7 @@ module.exports = {
           model: 'Roles',
           key: 'id',
         },
+        defaultValue: 'user',
       },
       createdAt: {
         allowNull: false,
