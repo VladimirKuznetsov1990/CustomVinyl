@@ -8,14 +8,20 @@ import LoginModal from './LoginModal';
 import { logoutThunk } from '../../redux/slices/auth/authThunks';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
-
 export default function Navbar(): JSX.Element {
   const dispatch = useAppDispatch();
   const user = useAppSelector((store) => store.auth.userStatus);
-  console.log(user.status)
+  console.log(user.status);
+
+  const scrollToAbout = (): void => {
+    const aboutSection = document.getElementById('about');
+    if (aboutSection) {
+      aboutSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}> 
+    <AppBar position="static" sx={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', boxShadow: 'none', position: 'absolute', zIndex: 1000,  }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography
@@ -37,7 +43,7 @@ export default function Navbar(): JSX.Element {
           </Typography>
           {user.status === 'guest' && (
             <Box display="flex" alignItems="center">
-              <Button
+              <Button 
                 variant="text"
                 sx={{ color: 'white' }}
                 onClick={() => dispatch(openModal({ modalType: 'login' }))}
@@ -67,8 +73,8 @@ export default function Navbar(): JSX.Element {
               >
                 Выйти
               </Button>
-              <Link to="/">
-                <Button variant="text" sx={{ color: 'white' }}>
+              <Link to="/#about">
+                <Button onClick={scrollToAbout} variant="text" sx={{ color: 'white' }}>
                   О нас
                 </Button>
               </Link>

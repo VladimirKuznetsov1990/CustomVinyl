@@ -5,7 +5,7 @@ import Navbar from './ui/Navbar';
 
 export default function Layout(): JSX.Element {
   return (
-    <Container>
+    <Container style={{ padding: '0', margin: '0', maxWidth:'none'}} >
       <>
         <Navbar />
         <Outlet />
