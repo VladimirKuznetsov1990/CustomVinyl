@@ -9,3 +9,7 @@ export const OrderSchema = z.object({
 
 export const OrdersSchema = z.array(OrderSchema);
 export const orderReqBodySchema = OrderSchema.omit({ id: true });
+
+export type OrderType = z.infer<typeof OrderSchema>;
+
+export type OrderListType = OrderType[];
