@@ -15,3 +15,7 @@ export type OrderType = z.infer<typeof OrderSchema>;
 export type OrderListType = OrderType[];
 
 export type OrderDataType = Omit<OrderType, 'id'>;
+
+export type UpdateStatusOrderType = {
+    status: number;
+};
