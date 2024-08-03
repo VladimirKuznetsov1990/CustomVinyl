@@ -15,14 +15,14 @@ export default function Loader({
       setIsLoading(true);
       setTimeout(() => {
         setIsLoading(false);
-      }, 1500); // 1-2 секунды
+      }, 1000);
     }
   }, [showSpinner]);
 
   if (isLoading) {
     return (
       <div>
-        <SpinnerUi id="record-canvas" labelColor="#00FF7F	" size={520} />
+        <SpinnerUi id="record-canvas" labelColor="#00F1F2	" size={520} />
       </div>
     );
   }
