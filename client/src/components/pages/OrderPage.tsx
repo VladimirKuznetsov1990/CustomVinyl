@@ -1,8 +1,8 @@
 
 import React, { useEffect } from 'react';
+import { Container, Typography, OutlinedInput, FormControl, InputLabel } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { getFormatVinylThunk } from '../../redux/slices/formatVinyl/formatVinylThunk';
-import { Container, Typography, OutlinedInput, FormControl, InputLabel } from '@mui/material';
 
 
 export default function OrderPage(): JSX.Element {

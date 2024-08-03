@@ -14,6 +14,17 @@ router.get('/:orderId', async (req, res) => {
     }
 });
 
+//Создать позицию в заказе
+router.post('/', async (req, res) => {
+    try {
+        const orderItem = await OrderItem.create(req.body);
+        res.json(OrderItemSchema.parse(orderItem));
+    } catch (error) {
+        console.log('Ошибка создания позиции в заказе', error);
+        res.sendStatus(500).json({ message: 'Ошибка создания позиции в заказе' });
+    }
+});
+
 //Удалить позицию в заказе
 router.delete('/:id', async (req, res) => {
     try {
