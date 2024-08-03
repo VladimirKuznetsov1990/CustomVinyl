@@ -1,7 +1,9 @@
+
 import React, { useEffect } from 'react';
-import { Container, Typography} from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { getFormatVinylThunk } from '../../redux/slices/formatVinyl/formatVinylThunk';
+import { Container, Typography, OutlinedInput, FormControl, InputLabel } from '@mui/material';
+
 
 export default function OrderPage(): JSX.Element {
 
@@ -26,6 +28,14 @@ export default function OrderPage(): JSX.Element {
         Оформление заказа
         {formatVinyls.map((el) => <div>{el.format}</div>)}
       </Typography>
+      <FormControl variant="outlined" fullWidth>
+        <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+        <OutlinedInput
+          id="outlined-adornment-amount"
+          value="111"
+          label="Amount"
+        />
+      </FormControl>
     </Container>
   );
 }
