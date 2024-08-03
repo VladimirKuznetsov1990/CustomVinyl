@@ -140,7 +140,7 @@ export default function Navbar(): JSX.Element {
                   </Button>
                 </Link>
                 <Link to="/cart">
-                  <IconButton color="warning" aria-label="add to shopping cart">
+                  <IconButton color="primary" aria-label="add to shopping cart">
                     <AddShoppingCartIcon />
                   </IconButton>
                 </Link>
