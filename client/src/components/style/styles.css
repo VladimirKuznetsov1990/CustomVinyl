@@ -22,11 +22,12 @@ body {
   z-index: 100;
   width: 100%;
   height: calc(var(--index) * 10);
-  background-image: url(/img/ground.png);
+  /* background-image: url(/img/55.png); */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   bottom: calc(var(--index) * -4.5);
+  top: 600px
 }
 .layers {
   margin-top: 0;
@@ -50,16 +51,16 @@ body {
 }
 .layers__base {
   transform: translate3d(0, calc(var(--scrollTop) / 1.6), 0);
-  z-index: 0;
+  /* z-index: 10; */
 }
 .layers__middle {
   transform: translate3d(0, calc(var(--scrollTop) / 2.5), 0);
 }
 .layers__front {
-  transform: translate3d(0, calc(var(--scrollTop) / 5.7), 0);
+  transform: translate3d(0, calc(var(--scrollTop) / 100), 0);
 }
 .layer__header {
-  z-index: 1;
+  /* z-index: 1; */
   transform: translate3d(0, calc(var(--scrollTop) / 2), 0);
   transition: var(--transition);
   will-change: transform;
@@ -78,7 +79,7 @@ body {
   margin-top: calc(var(--index) * -0.75);
 }
 .main-article {
-  --main-article-transform: translate3d(0, calc(var(--scrollTop) / -7.5), 0);
+  /* --main-article-transform: translate3d(0, calc(var(--scrollTop) / -7.5), 0); */
   min-height: 100vh;
   background-size: cover;
   background-position: center;
@@ -117,6 +118,10 @@ body {
   opacity: 0.45;
   font-size: calc(var(--index) * 0.75);
   letter-spacing: calc(var(--index) / 37.5);
+}
+
+#about {
+  /* margin-top: -365px; */
 }
 
 /* Добавленные стили для раздела "Наши работы" */

@@ -8,16 +8,39 @@ import LoginModal from './LoginModal';
 import { logoutThunk } from '../../redux/slices/auth/authThunks';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
+const scrollToElement = (elementId: string, offset: number = 0, duration: number = 1000): void => {
+  const element = document.getElementById(elementId);
+  if (!element) return;
+
+  const elementPosition = element.getBoundingClientRect().top;
+  const startingY = window.pageYOffset;
+  const diff = elementPosition - startingY + offset;
+  let start: number | null = null;
+
+  window.requestAnimationFrame(function step(timestamp: number) {
+    if (!start) start = timestamp;
+    const time = timestamp - start;
+    const percent = Math.min(time / duration, 1);
+
+    window.scrollTo(0, startingY + diff * percent);
+
+    if (time < duration) {
+      window.requestAnimationFrame(step);
+    }
+  });
+};
+
 export default function Navbar(): JSX.Element {
   const dispatch = useAppDispatch();
   const user = useAppSelector((store) => store.auth.userStatus);
   console.log(user.status);
 
   const scrollToAbout = (): void => {
-    const aboutSection = document.getElementById('about');
-    if (aboutSection) {
-      aboutSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToElement('about', -240, 1000);
+  };
+
+  const scrollToOurWorks = (): void => {
+    scrollToElement('our-works', 0, 2000);
   };
 
   return (
@@ -56,7 +79,7 @@ export default function Navbar(): JSX.Element {
               </Button>
             </Link>
             <Link to="/#our-works">
-              <Button onClick={scrollToAbout} variant="text" sx={{ color: 'white' }}>
+              <Button onClick={scrollToOurWorks} variant="text" sx={{ color: 'white' }}>
                 Наши работы
               </Button>
             </Link>
