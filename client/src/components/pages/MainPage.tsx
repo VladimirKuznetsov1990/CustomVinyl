@@ -26,21 +26,23 @@ export default function MainPage(): JSX.Element {
             </div>
             <div
               className="layer layers__base"
-              style={{ backgroundImage: 'url(/img/layer-base.png)' }}
+              style={{ backgroundImage: 'url(/img/vin-base.png)' }}
             />
             <div
               className="layer layers__middle"
-              style={{ backgroundImage: 'url(/img/3.jpg)' }}
+              style={{ backgroundImage: 'url(/img/vin-middle.png)' }}
             />
             <div
               className="layer layers__front"
-              // style={{ backgroundImage: 'url(/img/3.jpg' }}
+              style={{ backgroundImage: 'url(/img/vin-front.png)' }}
             />
           </div>
+          <div className="layer layers__front" style={{ backgroundImage: 'url(/img/fon-2.png)' }} />
+          <div className="layer layers__front" style={{ marginTop:'0px', backgroundImage: 'url(/img/vin2-front.png)' }} />
         </header>
 
-        <article className="main-article" style={{ backgroundImage: 'url(/img/3.jpg)' }}>
-          <div className="main-article__content">
+        <article className="main-article" style={{ backgroundImage: 'url(/img/.jpg)' }}>
+          <div id="about" className="main-article__content">
             <h2 className="main-article__header">Custom Vinyl</h2>
             <p id="about" className="main-article__paragraph">
               В нашем магазине вы найдете уникальные виниловые пластинки, которые мы красим и
