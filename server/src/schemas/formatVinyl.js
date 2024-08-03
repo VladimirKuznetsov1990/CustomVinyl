@@ -2,7 +2,7 @@ const { z } = require('zod');
 
 const FormatSchema = z.object({
   id: z.number(),
-  name: z.string(),
+  format: z.string(),
 });
 
 module.exports = { FormatSchema };
