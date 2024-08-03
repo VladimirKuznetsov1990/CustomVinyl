@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { getFormatVinylThunk } from '../../redux/slices/formatVinyl/formatVinylThunk';
+import { addOrderThunk } from '../../redux/slices/order/orderThunk';
 
 export default function OrderPage(): JSX.Element {
   const formatVinyls = useAppSelector((state) => state.format.data);
