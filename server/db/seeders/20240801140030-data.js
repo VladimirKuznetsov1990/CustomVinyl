@@ -2,7 +2,6 @@
 
 const bcrypt = require('bcrypt');
 
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     // FormatVinyl Seeder
@@ -62,6 +61,20 @@ module.exports = {
       },
     ], {});
 
+    // TrackList Seeder
+    await queryInterface.bulkInsert('TrackLists', [
+      {
+        userId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        userId: 2,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ], {});
+
     // Vinyl Seeder
     await queryInterface.bulkInsert('Vinyls', [
       {
@@ -81,20 +94,6 @@ module.exports = {
         formatId: 2,
         price: 200,
         trackListId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ], {});
-
-    // TrackList Seeder
-    await queryInterface.bulkInsert('TrackLists', [
-      {
-        userId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        userId: 2,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

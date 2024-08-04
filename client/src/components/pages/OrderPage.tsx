@@ -281,7 +281,24 @@ export default function OrderPage(): JSX.Element {
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
-              <ImageUploadAndCrop vinylImage={getImagePath} onSave={handleSaveCroppedImage} />
+            <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+                  <InputLabel id="color-label">Цвет</InputLabel>
+                  <Select
+                    labelId="color-label"
+                    id="color-select"
+                    value={selectedColor}
+                    onChange={(e) => setSelectedColor(e.target.value)}
+                    label="Цвет"
+                  >
+                    <MenuItem value="">Выберите цвет</MenuItem>
+                    <MenuItem value="red">Красный</MenuItem>
+                    <MenuItem value="blue">Синий</MenuItem>
+                    <MenuItem value="green">Зеленый</MenuItem>
+                    {/* Добавьте другие цвета по мере необходимости */}
+                  </Select>
+                </FormControl>
+                
+              <ImageUploadAndCrop  vinylImage={getImagePath} onSave={handleSaveCroppedImage} />
               <Box component="form" onSubmit={OrderHandleSubmit}>
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <InputLabel id="format-label">Формат пластинки</InputLabel>
@@ -299,22 +316,7 @@ export default function OrderPage(): JSX.Element {
                   </Select>
                 </FormControl>
 
-                <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
-                  <InputLabel id="color-label">Цвет</InputLabel>
-                  <Select
-                    labelId="color-label"
-                    id="color-select"
-                    value={selectedColor}
-                    onChange={(e) => setSelectedColor(e.target.value)}
-                    label="Цвет"
-                  >
-                    <MenuItem value="">Выберите цвет</MenuItem>
-                    <MenuItem value="red">Красный</MenuItem>
-                    <MenuItem value="blue">Синий</MenuItem>
-                    <MenuItem value="green">Зеленый</MenuItem>
-                    {/* Добавьте другие цвета по мере необходимости */}
-                  </Select>
-                </FormControl>
+
 
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <input
