@@ -71,7 +71,7 @@ export default function Navbar(): JSX.Element {
                 textDecoration: 'none',
               }}
             >
-              LOGO
+              CustomVinyl
             </Typography>
             <Link to="/#about">
               <Button onClick={scrollToAbout} variant="text" sx={{ color: 'white' }}>
@@ -140,7 +140,7 @@ export default function Navbar(): JSX.Element {
                   </Button>
                 </Link>
                 <Link to="/cart">
-                  <IconButton color="warning" aria-label="add to shopping cart">
+                  <IconButton color="primary" aria-label="add to shopping cart">
                     <AddShoppingCartIcon />
                   </IconButton>
                 </Link>
