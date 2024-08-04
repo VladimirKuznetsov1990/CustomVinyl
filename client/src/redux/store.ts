@@ -4,6 +4,7 @@ import modalReducer from './slices/modal/modalSlice';
 import formatVinylReducer from './slices/formatVinyl/formatVinylSlice';
 import orderReducer from './slices/order/orderSlice';
 import trackListReducer from './slices/trackList/trackListSlice';
+import vinylReducer from './slices/vinyl/vinylSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     format: formatVinylReducer,
     order: orderReducer,
     trackList: trackListReducer,
+    vinyl: vinylReducer,
   },
 });
 
