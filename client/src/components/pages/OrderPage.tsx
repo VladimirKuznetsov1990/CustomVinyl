@@ -34,15 +34,15 @@ export default function OrderPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const user = useAppSelector((store) => store.auth.userStatus);
   const [quantity, setQuantity] = useState(1); // Количество пластинок
-  const [selectedFormat, setSelectedFormat] = useState('');
+  const [selectedFormat, setSelectedFormat] = useState('Single');
   const [selectedColor, setSelectedColor] = useState('');
   const [totalPrice, setTotalPrice] = useState(0); // Общая стоимость
   const [audioFiles, setAudioFiles] = useState<File[]>([]); // Файлы аудио
   const [audioDurations, setAudioDurations] = useState<string[]>([]); // Длительности аудио
-  const [totalDuration, setTotalDuration] = useState<string>(''); // Общее время всех треков в формате MM:SS
+  const [totalDuration, setTotalDuration] = useState<string>('00:00'); // Общее время всех треков в формате MM:SS
   const [availableDuration, setAvailableDuration] = useState(0); // Доступное время в секундах
   const [usedDuration, setUsedDuration] = useState(0); // Использованное время в секундах
-  const croppedImage = useAppSelector((store) => store.image.croppedImage); //кропнутое изображение
+  const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
   const [audioFile, setAudioFile] = useState<File | null>(null); // Файл аудио
 
   useEffect(() => {
@@ -281,24 +281,24 @@ export default function OrderPage(): JSX.Element {
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
-            <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
-                  <InputLabel id="color-label">Цвет</InputLabel>
-                  <Select
-                    labelId="color-label"
-                    id="color-select"
-                    value={selectedColor}
-                    onChange={(e) => setSelectedColor(e.target.value)}
-                    label="Цвет"
-                  >
-                    <MenuItem value="">Выберите цвет</MenuItem>
-                    <MenuItem value="red">Красный</MenuItem>
-                    <MenuItem value="blue">Синий</MenuItem>
-                    <MenuItem value="green">Зеленый</MenuItem>
-                    {/* Добавьте другие цвета по мере необходимости */}
-                  </Select>
-                </FormControl>
-                
-              <ImageUploadAndCrop  vinylImage={getImagePath} onSave={handleSaveCroppedImage} />
+              <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+                <InputLabel id="color-label">Цвет</InputLabel>
+                <Select
+                  labelId="color-label"
+                  id="color-select"
+                  value={selectedColor}
+                  onChange={(e) => setSelectedColor(e.target.value)}
+                  label="Цвет"
+                >
+                  <MenuItem value="">Выберите цвет</MenuItem>
+                  <MenuItem value="red">Красный</MenuItem>
+                  <MenuItem value="blue">Синий</MenuItem>
+                  <MenuItem value="green">Зеленый</MenuItem>
+                  {/* Добавьте другие цвета по мере необходимости */}
+                </Select>
+              </FormControl>
+
+              <ImageUploadAndCrop vinylImage={getImagePath} onSave={handleSaveCroppedImage} />
               <Box component="form" onSubmit={OrderHandleSubmit}>
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <InputLabel id="format-label">Формат пластинки</InputLabel>
@@ -309,14 +309,11 @@ export default function OrderPage(): JSX.Element {
                     onChange={(e) => setSelectedFormat(e.target.value)}
                     label="Формат пластинки"
                   >
-                    <MenuItem value="">Выберите формат пластинки</MenuItem>
                     <MenuItem value="Single">Single</MenuItem>
                     <MenuItem value="EP">EP</MenuItem>
                     <MenuItem value="LP">LP</MenuItem>
                   </Select>
                 </FormControl>
-
-
 
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <input
@@ -332,39 +329,65 @@ export default function OrderPage(): JSX.Element {
                   </Button>
                 </FormControl>
 
-                <TableContainer component={Paper} sx={{ mb: 4, border: '1px solid black' }}>
-                  <Table aria-label="track table">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Картинка</TableCell>
-                        <TableCell>Название трека</TableCell>
-                        <TableCell>Длительность</TableCell>
-                        <TableCell>Удалить</TableCell>
-                      </TableRow>
-                    </TableHead>
-
-                    <TableBody>
-                      {audioFiles.map((file, index) => (
-                        <TableRow key={file.name}>
-                          <TableCell>
-                            {' '}
-                            <Avatar src="/path/to/track/image.jpg" alt={file.name} sx={{ mr: 2 }} />
-                          </TableCell>
-                          <TableCell>{`${file.name.slice(0, 20)}...`}</TableCell>
-                          <TableCell>{audioDurations[index] || 'Загрузка...'}</TableCell>
-                          <TableCell>
-                            <IconButton
-                              aria-label="delete"
-                              onClick={() => handleDeleteAudioFile(index)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </TableCell>
+                {audioFiles.length > 0 ? (
+                  <TableContainer
+                    component={Paper}
+                    sx={{
+                      mb: 4,
+                      border: '1px solid black',
+                      maxHeight: audioFiles.length > 3 ? '300px' : 'auto', // Устанавливаем максимальную высоту, если треков больше 5
+                    }}
+                  >
+                    <Table aria-label="track table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Картинка</TableCell>
+                          <TableCell>Название трека</TableCell>
+                          <TableCell>Длительность</TableCell>
+                          <TableCell>Удалить</TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                      </TableHead>
+
+                      <TableBody>
+                        {audioFiles.map((file, index) => (
+                          <TableRow key={file.name}>
+                            <TableCell>
+                              {' '}
+                              <Avatar
+                                src="/path/to/track/image.jpg"
+                                alt={file.name}
+                                sx={{ mr: 2 }}
+                              />
+                            </TableCell>
+                            <TableCell>{`${file.name.slice(0, 20)}...`}</TableCell>
+                            <TableCell>{audioDurations[index] || 'Загрузка...'}</TableCell>
+                            <TableCell>
+                              <IconButton
+                                aria-label="delete"
+                                onClick={() => handleDeleteAudioFile(index)}
+                              >
+                                <DeleteIcon />
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                ) : (
+                  <Typography
+                    variant="h6"
+                    gutterBottom
+                    style={{
+                      marginBottom: '20px',
+                      textAlign: 'center',
+                      color: usedDuration > availableDuration ? 'red' : 'inherit',
+                    }}
+                  >
+                    Общее время всех треков: {totalDuration} из {Math.floor(availableDuration / 60)}
+                    :00
+                  </Typography>
+                )}
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <InputLabel htmlFor="outlined-adornment-quantity">Количество</InputLabel>
                   <OutlinedInput
@@ -375,21 +398,17 @@ export default function OrderPage(): JSX.Element {
                   />
                 </FormControl>
 
-                <Typography variant="h6" gutterBottom>
-                  Общая стоимость: {totalPrice}
-                </Typography>
-
-                <Typography
-                  variant="h6"
-                  gutterBottom
-                  style={{ color: usedDuration > availableDuration ? 'red' : 'inherit' }}
-                >
-                  Общее время всех треков: {totalDuration} / {Math.floor(availableDuration / 60)}:00
-                </Typography>
-
-                <Button type="submit" variant="contained" color="primary">
-                  Добавить в корзину
-                </Button>
+                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                  <Button type="submit" variant="contained" color="primary">
+                    Добавить в корзину
+                  </Button>
+                  <Typography variant="h6" gutterBottom>
+                    Общая стоимость:{' '}
+                    <Typography component="span" sx={{ fontWeight: 'bold', fontSize: '1.2em' }}>
+                      {totalPrice} руб
+                    </Typography>
+                  </Typography>
+                </Box>
               </Box>
             </Grid>
           </Grid>
