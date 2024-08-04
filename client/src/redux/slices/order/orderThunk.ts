@@ -8,19 +8,22 @@ export const getOrdersThunk = createAsyncThunk<OrderListType>('orders/getAll', a
     return data;
 });
 
-// export const getOrdersOfUserThunk = createAsyncThunk<OrderListType>('orders/getOrdersOfUser', async (id) => {
-//     const data = await orderService.getOrdersOfUser(id);
-//     return data;
-// });
 
 export const addOrderThunk = createAsyncThunk<OrderType, OrderDataType>('orders/add', async (obj) => {
     const data = await orderService.addOrder(obj);
     return data;
 });
 
-// export const deleteOrderThunk = createAsyncThunk<void, number>('orders/delete', async (id) => {
-//     await orderService.deleteOrder(id);
+export const deleteOrderThunk = createAsyncThunk<OrderType['id'], OrderType['id']>('orders/delete', async (id) => {
+    await orderService.deleteOrder(id);
+    return id;
+});
+
+// export const getOrdersOfUserThunk = createAsyncThunk<OrderListType>('orders/getOrdersOfUser', async (id) => {
+//     const data = await orderService.getOrdersOfUser(id);
+//     return data;
 // });
+
 
 // export const updateOrderThunk = createAsyncThunk<OrderType, {id: number, obj: OrderDataType}>('orders/update', async ({ id, obj }) => {
 //     const data = await orderService.updateOrder(id, obj);
