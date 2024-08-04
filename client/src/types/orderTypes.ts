@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const OrderSchema = z.object({
     id: z.number(),
     userId: z.number(),
-    status: z.number(),
+    status: z.string(),
     totalPrice: z.number(),
 });
 
@@ -17,5 +17,5 @@ export type OrderListType = OrderType[];
 export type OrderDataType = Omit<OrderType, 'id'>;
 
 export type UpdateStatusOrderType = {
-    status: number;
+    status: string;
 };
