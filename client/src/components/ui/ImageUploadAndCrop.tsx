@@ -77,9 +77,9 @@ export default function ImageUploadAndCrop({
 
   return (
     <Box mb={2}>
-      <Button variant="contained" color="primary" onClick={() => setOpenCropper(true)}>
+      <Button variant="contained" color="primary" fullWidth onClick={() => setOpenCropper(true)}>
         <input
-          style={{ position: 'absolute', inset: 0, border: 'none', background: 'none', opacity: 0, width: '100%'}}
+          style={{ position: 'absolute', inset: 0, border: 'none', background: 'none', opacity: 0}}
           type="file"
           accept="image/*"
           onChange={handleImageChange}
