@@ -10,7 +10,11 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
       },
       color: {
         type: Sequelize.STRING
@@ -19,13 +23,21 @@ module.exports = {
         type: Sequelize.STRING
       },
       formatId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'FormatVinyls',
+          key: 'id',
+        },
       },
       price: {
         type: Sequelize.INTEGER
       },
       trackListId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'TrackLists',
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,
