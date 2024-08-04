@@ -26,21 +26,23 @@ export default function MainPage(): JSX.Element {
             </div>
             <div
               className="layer layers__base"
-              style={{ backgroundImage: 'url(/img/layer-base.png)' }}
+              style={{ backgroundImage: 'url(/img/vin-base3.png)' }}
             />
             <div
               className="layer layers__middle"
-              style={{ backgroundImage: 'url(/img/3.jpg)' }}
+              style={{ backgroundImage: 'url(/img/vin-middle3.png)' }}
             />
             <div
               className="layer layers__front"
-              // style={{ backgroundImage: 'url(/img/3.jpg' }}
+              style={{ backgroundImage: 'url(/img/vin-front3.png)' }}
             />
           </div>
+          <div className="layer layers__front" style={{ backgroundImage: 'url(/img/fv-3.png)' }} />
+          {/* <div className="layer layers__front" style={{ marginTop:'0px', backgroundImage: 'url(/img/vin2-front.png)' }} /> */}
         </header>
 
-        <article className="main-article" style={{ backgroundImage: 'url(/img/3.jpg)' }}>
-          <div className="main-article__content">
+        <article className="main-article" style={{ backgroundImage: 'url(/img/fon-3.jpg)' }}>
+          <div id="about" className="main-article__content">
             <h2 className="main-article__header">Custom Vinyl</h2>
             <p id="about" className="main-article__paragraph">
               В нашем магазине вы найдете уникальные виниловые пластинки, которые мы красим и
@@ -61,27 +63,27 @@ export default function MainPage(): JSX.Element {
             </p>
             <div className="gallery">
               <div className="gallery-item">
-                <img src="/img/work1.jpg" alt="Работа 1" />
+                {/* <img src="/img/work1.jpg" alt="Работа 1" /> */}
                 <p>Описание работы 1</p>
               </div>
               <div className="gallery-item">
-                <img src="/img/work2.jpg" alt="Работа 2" />
+                {/* <img src="/img/work2.jpg" alt="Работа 2" /> */}
                 <p>Описание работы 2</p>
               </div>
               <div className="gallery-item">
-                <img src="/img/work3.jpg" alt="Работа 3" />
+                {/* <img src="/img/work3.jpg" alt="Работа 3" /> */}
                 <p>Описание работы 3</p>
               </div>
               <div className="gallery-item">
-                <img src="/img/work4.jpg" alt="Работа 4" />
+                {/* <img src="/img/work4.jpg" alt="Работа 4" /> */}
                 <p>Описание работы 4</p>
               </div>
               <div className="gallery-item">
-                <img src="/img/work5.jpg" alt="Работа 5" />
+                {/* <img src="/img/work5.jpg" alt="Работа 5" /> */}
                 <p>Описание работы 5</p>
               </div>
               <div className="gallery-item">
-                <img src="/img/work6.jpg" alt="Работа 6" />
+                {/* <img src="/img/work6.jpg" alt="Работа 6" /> */}
                 <p>Описание работы 6</p>
               </div>
             </div>

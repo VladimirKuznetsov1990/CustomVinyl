@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Box, Paper } from '@mui/material';
+import { Container, Typography, Box, Paper, Grid, CardMedia } from '@mui/material';
 
 export default function ContactsPage(): JSX.Element {
   return (
@@ -13,7 +13,7 @@ export default function ContactsPage(): JSX.Element {
         <Container
           maxWidth="lg"
           sx={{
-            backgroundColor: '#333', // Темный фон для контраста
+            backgroundColor: '#333',
             padding: '20px',
             borderRadius: '8px',
           }}
@@ -26,32 +26,46 @@ export default function ContactsPage(): JSX.Element {
               borderRadius: '8px',
             }}
           >
-            <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'white' }}>
+            <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'white', textAlign: 'center' }}>
               Контакты:
             </Typography>
-            <Box sx={{ marginBottom: '20px', color: 'white' , }}>
-              <Typography variant="body1" gutterBottom >
-                Москва, ул. Орджоникидзе, 11 стр. 10 (м. Ленинский проспект)
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                CustomVinyl
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                График работы: понедельник-пятница, с 10-00 до 19-00
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Оформляете заказы на сайте (КРУГЛОСУТОЧНО) или по телефону
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Тел. +7 (999) 999-99-99 (Пн-Пт с 10.00-19.00)
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                E-mail: info@сustomVinyl.ru
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                E-mail: info@сustomVinyl.pro
-              </Typography>
-            </Box>
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={6}>
+                <Box sx={{ marginBottom: '20px', color: 'white' }}>
+                  <Typography variant="body1" gutterBottom>
+                    Москва, ул. Орджоникидзе, 11 стр. 10 (м. Ленинский проспект)
+
+                    
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    CustomVinyl
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    График работы: понедельник-пятница, с 10-00 до 19-00
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Оформляете заказы на сайте (КРУГЛОСУТОЧНО) или по телефону
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Тел. +7 (999) 999-99-99 (Пн-Пт с 10.00-19.00)
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    E-mail: info@customVinyl.ru
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    E-mail: info@customVinyl.pro
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <CardMedia
+                  component="img"
+                  image="/img/map.png"
+                  alt="Карта магазина"
+                  sx={{ maxWidth: '100%', height: 'auto', borderRadius: '8px' }}
+                />
+              </Grid>
+            </Grid>
           </Paper>
         </Container>
       </Box>

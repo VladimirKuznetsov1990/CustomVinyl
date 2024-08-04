@@ -1,53 +1,83 @@
-import React from 'react';
-import { styled, keyframes } from '@mui/material/styles';
+import React, { useEffect, useRef } from 'react';
+import './SpinnerUi.scss';
 
-// Анимация вращения
-const spin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`;
+type SpinnerUiProps = {
+  id: string;
+  labelColor: string;
+  size: number;
+};
 
-// Стили для пластинки
-const VinylRecord = styled('div')({
-  width: '100px',
-  height: '100px',
-  borderRadius: '50%',
-  background: 'radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 70%)',
-  position: 'relative',
-  animation: `${spin} 2s linear infinite`,
-});
+const SpinnerUi: React.FC<SpinnerUiProps> = ({ id, labelColor, size }) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-// Стили для центра пластинки
-const VinylCenter = styled('div')({
-  width: '20px',
-  height: '20px',
-  borderRadius: '50%',
-  backgroundColor: '#fff',
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-});
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-// Стили для контейнера спиннера
-const SpinnerContainer = styled('div')({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: '100vh',
-});
+    const recordRadius: number = size / 2 - 5;
+    const st: number = recordRadius + 5;
+    const pen = canvas.getContext('2d');
 
-export default function SpinnerUi(): JSX.Element {
+    if (!pen) return;
+
+    // Record
+    pen.beginPath();
+    pen.shadowBlur = 6;
+    pen.shadowColor = 'black';
+    pen.arc(st, st, recordRadius, 0, 2 * Math.PI, false);
+    pen.fill();
+
+    // Record label
+    pen.shadowBlur = 0;
+    pen.fillStyle = labelColor;
+    pen.beginPath();
+    pen.arc(st, st, recordRadius / 3, 0, 2 * Math.PI, false);
+    pen.fill();
+
+    // Record grooves
+    const gradient = pen.createLinearGradient(0, 0, 200, 0);
+    gradient.addColorStop(0, '#000');
+    gradient.addColorStop(0.5, '#555');
+    gradient.addColorStop(1, '#000');
+    pen.strokeStyle = gradient;
+
+    const grooves = [
+      {
+        r: 1.2,
+        begin: (2 * Math.PI) / 3,
+        end: 0,
+      },
+      {
+        r: 1.35,
+        begin: Math.PI,
+        end: Math.PI / 4,
+      },
+      {
+        r: 1.6,
+        begin: Math.PI / 2,
+        end: 0,
+      },
+    ];
+
+    for (let i = 0; i < grooves.length; i++) {
+      const g = grooves[i];
+      pen.beginPath();
+      pen.arc(st, st, recordRadius / g.r, g.begin, g.end);
+      pen.stroke();
+    }
+
+    // Cut the hole in the record
+    pen.globalCompositeOperation = 'destination-out';
+    pen.beginPath();
+    pen.arc(st, st, recordRadius / 8, 0, 2 * Math.PI, false);
+    pen.fill();
+  }, [labelColor, size]);
+
   return (
-    <SpinnerContainer>
-      <VinylRecord>
-        <VinylCenter />
-      </VinylRecord>
-    </SpinnerContainer>
+    <div className="spinner" style={{ width: size, height: size }}>
+      <canvas id={id} ref={canvasRef} width={size} height={size} />
+    </div>
   );
-}
-  
+};
+
+export default SpinnerUi;

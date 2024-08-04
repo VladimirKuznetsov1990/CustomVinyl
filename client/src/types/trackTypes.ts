@@ -11,5 +11,5 @@ export const TracksSchema = z.array(TrackSchema);
 export const TrackReqBodySchema = TrackSchema.omit({ id: true });
 
 export type TrackType = z.infer<typeof TrackSchema>;
-export type TrackListType = TrackType[];
+export type TracksType = TrackType[];
 export type TrackDataType = Omit<TrackType, 'id'>;
