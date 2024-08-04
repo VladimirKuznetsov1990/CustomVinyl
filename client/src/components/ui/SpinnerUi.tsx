@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import React, { useEffect, useRef } from 'react';
 import './SpinnerUi.scss';
 
@@ -7,7 +8,7 @@ type SpinnerUiProps = {
   size: number;
 };
 
-const SpinnerUi: React.FC<SpinnerUiProps> = ({ id, labelColor, size }) => {
+export default function SpinnerUi ({ id, labelColor, size }: SpinnerUiProps): JSX.Element {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -79,5 +80,3 @@ const SpinnerUi: React.FC<SpinnerUiProps> = ({ id, labelColor, size }) => {
     </div>
   );
 };
-
-export default SpinnerUi;

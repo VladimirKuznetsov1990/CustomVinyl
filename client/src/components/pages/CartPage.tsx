@@ -11,6 +11,9 @@ import {
   IconButton,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { addOrderThunk } from '../../redux/slices/order/orderThunk';
+import type { OrderDataType } from '../../types/orderTypes';
 
 const cartItems = [
   { id: '1', name: 'Пластинка 1', price: 1000, image: '/img/Vinyl_blue.png', format: 'LP' },
@@ -20,6 +23,43 @@ const cartItems = [
 ];
 
 export default function CartPage(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((store) => store.auth.userStatus);
+  const audioFile = useAppSelector((state) => state.trackList.tempAudioFile);
+
+  const handleOrderSubmit = async () => {
+    if (user && user.id !== undefined && audioFile) {
+      const newOrder: OrderDataType = {
+        userId: user.id,
+        status: 'newOrder',
+        totalPrice: cartItems.reduce((total, item) => total + item.price, 0),
+      };
+
+      void dispatch(addOrderThunk(newOrder));
+
+      const formData = new FormData();
+      formData.append('audioFile', audioFile);
+
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('File uploaded successfully:', data);
+        } else {
+          console.error('File upload failed');
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+      }
+    } else {
+      console.error('User is not authenticated or user ID is undefined');
+    }
+  };
+
   return (
     <Container
       maxWidth="lg"
@@ -89,7 +129,7 @@ export default function CartPage(): JSX.Element {
             )}
           </Grid>
           {cartItems.length > 0 && (
-            <Button variant="contained" color="primary" sx={{ mt: 2, width: '100%' }}>
+            <Button variant="contained" color="primary" sx={{ mt: 2, width: '100%' }} onClick={handleOrderSubmit}>
               Оформить заказ
             </Button>
           )}
