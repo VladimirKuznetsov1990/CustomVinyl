@@ -1,7 +1,19 @@
 import React, { useEffect } from 'react';
 import '../style/styles.css';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { getVinylsThunk } from '../../redux/slices/vinyl/vinylThunk';
+import VinylCard from '../ui/VinylCard';
 
 export default function MainPage(): JSX.Element {
+
+  const vinyls = useAppSelector((store) => store.vinyl.data);
+  const dispatch = useAppDispatch();
+  
+  useEffect(() => {
+    void dispatch(getVinylsThunk());
+  }, [dispatch]);
+  console.log(vinyls);
+  
   useEffect(() => {
     const handleScroll = (): void => {
       const scrollTop = window.scrollY;
@@ -62,30 +74,9 @@ export default function MainPage(): JSX.Element {
               любимых треков на винил. Создайте свою идеальную коллекцию с нами!
             </p>
             <div className="gallery">
-              <div className="gallery-item">
-                {/* <img src="/img/work1.jpg" alt="Работа 1" /> */}
-                <p>Описание работы 1</p>
-              </div>
-              <div className="gallery-item">
-                {/* <img src="/img/work2.jpg" alt="Работа 2" /> */}
-                <p>Описание работы 2</p>
-              </div>
-              <div className="gallery-item">
-                {/* <img src="/img/work3.jpg" alt="Работа 3" /> */}
-                <p>Описание работы 3</p>
-              </div>
-              <div className="gallery-item">
-                {/* <img src="/img/work4.jpg" alt="Работа 4" /> */}
-                <p>Описание работы 4</p>
-              </div>
-              <div className="gallery-item">
-                {/* <img src="/img/work5.jpg" alt="Работа 5" /> */}
-                <p>Описание работы 5</p>
-              </div>
-              <div className="gallery-item">
-                {/* <img src="/img/work6.jpg" alt="Работа 6" /> */}
-                <p>Описание работы 6</p>
-              </div>
+              {vinyls.map((el) => (
+              <VinylCard vinyl={el} key={el.id} />
+              ))}
             </div>
           </div>
           <div className="copy">Vinyl Paradise</div>
