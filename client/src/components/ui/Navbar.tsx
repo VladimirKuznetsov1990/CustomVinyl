@@ -33,7 +33,6 @@ const scrollToElement = (elementId: string, offset: number = 0, duration: number
 export default function Navbar(): JSX.Element {
   const dispatch = useAppDispatch();
   const user = useAppSelector((store) => store.auth.userStatus);
-  console.log(user.status);
 
   const scrollToAbout = (): void => {
     scrollToElement('about', -240, 1000);
