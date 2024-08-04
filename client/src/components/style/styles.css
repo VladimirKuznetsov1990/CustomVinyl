@@ -3,19 +3,23 @@
   padding: 0;
   box-sizing: border-box;
 }
+
 :root {
   --index: calc(0.8vw + 1vh);
   --text: #e7e7e0;
   --transition: transform 0.75s cubic-bezier(0.075, 0.5, 0, 1);
 }
+
 body {
   background-color: #000000;
   font-family: raleway_f, sans-serif;
   line-height: 1.55;
 }
+
 .main-header {
   position: relative;
 }
+
 .main-header::after {
   content: '';
   position: absolute;
@@ -27,8 +31,9 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   bottom: calc(var(--index) * -4.5);
-  top: 600px
+  top: 600px;
 }
+
 .layers {
   margin-top: 0;
   height: 100vh;
@@ -39,6 +44,7 @@ body {
   overflow: hidden;
   position: relative;
 }
+
 .layer {
   height: 100%;
   width: 100%;
@@ -48,17 +54,23 @@ body {
   will-change: transform;
   z-index: 2;
   transition: var(--transition);
+  /* opacity: 0; */
+  /* animation: fadeIn 5s forwards;  */
 }
+
 .layers__base {
   transform: translate3d(0, calc(var(--scrollTop) / 1.6), 0);
   /* z-index: 10; */
 }
+
 .layers__middle {
   transform: translate3d(0, calc(var(--scrollTop) / 2.5), 0);
 }
+
 .layers__front {
   transform: translate3d(0, calc(var(--scrollTop) / 100), 0);
 }
+
 .layer__header {
   /* z-index: 1; */
   transform: translate3d(0, calc(var(--scrollTop) / 2), 0);
@@ -69,15 +81,18 @@ body {
   color: var(--text);
   text-shadow: 0 0 15px #9d822b;
 }
+
 .layers__title {
   font-size: calc(var(--index) * 2.65);
   letter-spacing: calc(var(--index) / 2.25);
 }
+
 .layers__caption {
   font-size: calc(var(--index) / 1.175);
   letter-spacing: calc(var(--index) / 3.5);
   margin-top: calc(var(--index) * -0.75);
 }
+
 .main-article {
   /* --main-article-transform: translate3d(0, calc(var(--scrollTop) / -7.5), 0); */
   min-height: 100vh;
@@ -92,6 +107,7 @@ body {
   top: -1px;
   z-index: 10;
 }
+
 .main-article__header {
   text-transform: uppercase;
   font-size: calc(var(--index) * 1.8);
@@ -100,6 +116,7 @@ body {
   transition: var(--transition);
   will-change: transform;
 }
+
 .main-article__paragraph {
   max-width: calc(var(--index) * 30);
   font-size: calc(var(--index) * 0.9);
@@ -107,11 +124,13 @@ body {
   transform: var(--main-article-transform);
   transition: var(--transition);
   will-change: transform;
-  text-align: center; /* Добавлено для выравнивания текста по центру */
+  text-align: center;
 }
+
 .content {
   will-change: transform;
 }
+
 .copy {
   position: absolute;
   bottom: calc(var(--index) * 2.5);
@@ -151,4 +170,11 @@ body {
   margin-top: 10px;
   font-size: 0.9rem;
   color: var(--text);
+}
+
+/* Анимация появления */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
 }

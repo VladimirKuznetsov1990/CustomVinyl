@@ -71,7 +71,7 @@ export default function Navbar(): JSX.Element {
                 textDecoration: 'none',
               }}
             >
-              LOGO
+              CustomVinyl
             </Typography>
             <Link to="/#about">
               <Button onClick={scrollToAbout} variant="text" sx={{ color: 'white' }}>
