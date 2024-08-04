@@ -11,7 +11,17 @@ import {
   CardMedia,
   Select,
   MenuItem,
+  IconButton,
+  Avatar,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { getFormatVinylThunk } from '../../redux/slices/formatVinyl/formatVinylThunk';
 import { addOrderThunk } from '../../redux/slices/order/orderThunk';
@@ -30,7 +40,11 @@ export default function OrderPage(): JSX.Element {
   const [selectedFormat, setSelectedFormat] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [totalPrice, setTotalPrice] = useState(0); // Общая стоимость
-  const [audioFile, setAudioFile] = useState<File | null>(null); // Файл аудио
+  const [audioFiles, setAudioFiles] = useState<File[]>([]); // Файлы аудио
+  const [audioDurations, setAudioDurations] = useState<string[]>([]); // Длительности аудио
+  const [totalDuration, setTotalDuration] = useState<string>(''); // Общее время всех треков в формате MM:SS
+  const [availableDuration, setAvailableDuration] = useState(0); // Доступное время в секундах
+  const [usedDuration, setUsedDuration] = useState(0); // Использованное время в секундах
 
   const [formDataOrder, setFormDataOrder] = useState<OrderDataType>({
     userId: 0,
@@ -90,6 +104,113 @@ export default function OrderPage(): JSX.Element {
         return '/img/Vinyl+.png';
     }
   };
+
+  // Функция для получения длительности аудиофайлов
+  const getAudioDurations = (files: File[]): void => {
+    const durations: string[] = [];
+    let newUsedDuration = 0; // Новая суммарная длительность
+
+    files.forEach((file) => {
+      const audio = new Audio(URL.createObjectURL(file));
+      audio.onloadedmetadata = () => {
+        const { duration } = audio;
+        const minutes = Math.floor(duration / 60);
+        const seconds = Math.floor(duration % 60);
+        const formattedDuration = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+        durations.push(formattedDuration);
+        newUsedDuration += duration; // Добавляем длительность файла к общей
+
+        setAudioDurations(durations);
+        setUsedDuration(newUsedDuration); // Обновляем общее время
+
+        // Обновляем totalDuration только после того, как длительность всех файлов будет получена
+        if (durations.length === files.length) {
+          const totalMinutes = Math.floor(newUsedDuration / 60);
+          const totalSecondsRemaining = Math.floor(newUsedDuration % 60);
+          setTotalDuration(
+            `${totalMinutes}:${totalSecondsRemaining < 10 ? '0' : ''}${totalSecondsRemaining}`,
+          );
+        }
+      };
+    });
+  };
+
+  // Функция для удаления аудиофайла
+  const handleDeleteAudioFile = (index: number): void => {
+    const updatedAudioFiles = [...audioFiles];
+    const deletedFile = updatedAudioFiles.splice(index, 1)[0];
+    setAudioFiles(updatedAudioFiles);
+
+    const updatedAudioDurations = [...audioDurations];
+    updatedAudioDurations.splice(index, 1);
+    setAudioDurations(updatedAudioDurations);
+
+    // Вычитаем длительность удаленного файла
+    const audio = new Audio(URL.createObjectURL(deletedFile));
+    audio.onloadedmetadata = () => {
+      setUsedDuration((prevDuration) => prevDuration - audio.duration);
+    };
+
+    // Пересчитываем общее время в формате MM:SS
+    getAudioDurations(updatedAudioFiles);
+  };
+
+  // Функция для добавления аудиофайлов
+  const handleAddAudioFiles = async (newFiles: File[]): Promise<void> => {
+    let newTotalDuration = usedDuration;
+
+    const audioPromises = newFiles.map(
+      (file) =>
+        new Promise<number>((resolve) => {
+          const audio = new Audio(URL.createObjectURL(file));
+          audio.onloadedmetadata = () => {
+            resolve(audio.duration);
+          };
+        }),
+    );
+
+    const durations = await Promise.all(audioPromises);
+    newTotalDuration += durations.reduce((sum, duration) => sum + duration, 0);
+
+    if (newTotalDuration > availableDuration) {
+      alert('Превышено допустимое время для выбранного формата');
+      return;
+    }
+
+    setAudioFiles((prevFiles) => [...prevFiles, ...newFiles]);
+  };
+
+  // Обработчик события onChange для input[type="file"]
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { files } = e.target;
+    if (files) {
+      void handleAddAudioFiles(Array.from(files));
+    }
+  };
+
+  // Обновление доступного времени при изменении формата
+  useEffect(() => {
+    let maxDuration = 0;
+    if (selectedFormat === 'Single') {
+      maxDuration = 10 * 60;
+    } else if (selectedFormat === 'EP') {
+      maxDuration = 20 * 60;
+    } else if (selectedFormat === 'LP') {
+      maxDuration = 40 * 60;
+    }
+    setAvailableDuration(maxDuration);
+    setUsedDuration(0);
+    setAudioFiles([]);
+    setAudioDurations([]);
+  }, [selectedFormat]);
+
+  // Вызов getAudioDurations при изменении списка файлов
+  useEffect(() => {
+    if (audioFiles.length > 0) {
+      getAudioDurations(audioFiles);
+    }
+  }, [audioFiles]);
 
   return (
     <Container
@@ -178,15 +299,49 @@ export default function OrderPage(): JSX.Element {
                   <input
                     id="audio-file-input"
                     type="file"
-                    accept="audio/*"
+                    accept="audio/*, .m4r,.mp3,.acc"
                     style={{ display: 'none' }}
-                    onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
+                    onChange={handleFileInputChange}
+                    multiple
                   />
                   <Button variant="contained" component="label" htmlFor="audio-file-input">
-                    Выберите аудио файл
+                    Выберите аудио файлы
                   </Button>
                 </FormControl>
 
+                <TableContainer component={Paper} sx={{ mb: 4, border: '1px solid black' }}>
+                  <Table aria-label="track table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Картинка</TableCell>
+                        <TableCell>Название трека</TableCell>
+                        <TableCell>Длительность</TableCell>
+                        <TableCell>Удалить</TableCell>
+                      </TableRow>
+                    </TableHead>
+
+                    <TableBody>
+                      {audioFiles.map((file, index) => (
+                        <TableRow key={file.name}>
+                          <TableCell>
+                            {' '}
+                            <Avatar src="/path/to/track/image.jpg" alt={file.name} sx={{ mr: 2 }} />
+                          </TableCell>
+                          <TableCell>{`${file.name.slice(0, 20)}...`}</TableCell>
+                          <TableCell>{audioDurations[index] || 'Загрузка...'}</TableCell>
+                          <TableCell>
+                            <IconButton
+                              aria-label="delete"
+                              onClick={() => handleDeleteAudioFile(index)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <InputLabel htmlFor="outlined-adornment-quantity">Количество</InputLabel>
                   <OutlinedInput
@@ -199,6 +354,14 @@ export default function OrderPage(): JSX.Element {
 
                 <Typography variant="h6" gutterBottom>
                   Общая стоимость: {totalPrice}
+                </Typography>
+
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  style={{ color: usedDuration > availableDuration ? 'red' : 'inherit' }}
+                >
+                  Общее время всех треков: {totalDuration} / {Math.floor(availableDuration / 60)}:00
                 </Typography>
 
                 <Button type="submit" variant="contained" color="primary">
