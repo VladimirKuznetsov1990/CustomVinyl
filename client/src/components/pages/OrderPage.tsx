@@ -29,11 +29,10 @@ export default function OrderPage(): JSX.Element {
   const [totalPrice, setTotalPrice] = useState(0); // Общая стоимость
   const croppedImage = useAppSelector((store) => store.image.croppedImage); //кропнутое изображение
   const [audioFile, setAudioFile] = useState<File | null>(null); // Файл аудио
-  
-  
+
   useEffect(() => {
     void dispatch(getFormatVinylThunk());
-    console.log(typeof(croppedImage))
+    console.log(croppedImage);
   }, [dispatch, croppedImage]);
 
   const [formDataOrder, setFormDataOrder] = useState<OrderDataType>({
@@ -142,16 +141,25 @@ export default function OrderPage(): JSX.Element {
                   animation: 'spin 7s linear infinite',
                 }}
               >
-                {croppedImage && (<CardMedia
-                  component="img"
-                  image={croppedImage}
-                  alt="Vinyl"
-                  sx={{ maxWidth: '100%', position: 'absolute', height: '92%', width: '92%', borderRadius: '50%', opacity: '.7' }}
-                />)}
+                {croppedImage && (
+                  <CardMedia
+                    component="img"
+                    image={croppedImage}
+                    alt="Vinyl"
+                    sx={{
+                      maxWidth: '100%',
+                      position: 'absolute',
+                      height: '92%',
+                      width: '92%',
+                      borderRadius: '50%',
+                      opacity: '.7',
+                    }}
+                  />
+                )}
               </Box>
             </Grid>
-            <ImageUploadAndCrop vinylImage={getImagePath} onSave={handleSaveCroppedImage} />
             <Grid item xs={12} md={6}>
+              <ImageUploadAndCrop vinylImage={getImagePath} onSave={handleSaveCroppedImage} />
               <Box component="form" onSubmit={OrderHandleSubmit}>
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <InputLabel id="format-label">Формат пластинки</InputLabel>

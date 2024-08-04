@@ -1,6 +1,9 @@
+const fs = require('fs/promises');
+const sharp = require('sharp');
 const { Router } = require('express');
 const { Vinyl } = require('../../db/models');
 const { VinylSchema, vinylReqBodySchema } = require('../schemas/vinyl');
+const upload = require('../middlewares/multer.middleware');
 
 const vinylsRouter = Router();
 
@@ -15,18 +18,25 @@ vinylsRouter
       res.status(500).json({ message: 'Ошибка получения всех Пластинок' });
     }
   })
-  .post(async (req, res) => {
+  .post(upload.single('img'), async (req, res) => {
     try {
-      const { userId, color, userImg, formatId, price, trackListId } = vinylReqBodySchema.parse(
-        req.body,
-      );
+      if (!req.file) {
+        return res.status(400).json({ message: 'Файл не найден' });
+      }
+      const filename = `${Date.now()}.webp`;
+      const outputBuffer = await sharp(req.file.buffer).webp().toBuffer();
+      await fs.writeFile(`./public/img/${name}`, outputBuffer);
+
+      // const { userId, color, userImg, formatId, price, trackListId } = vinylReqBodySchema.parse(
+      //   req.body,
+      // );
       const createdVinyl = await Vinyl.create({
-        userId,
-        color,
-        userImg,
-        formatId,
-        price,
-        trackListId,
+        userId: req.body.userId,
+        color: req.body.color,
+        userImg: filename,
+        formatId: req.body.formatId,
+        price: req.body.price,
+        trackListId: req.body.trackListId,
       });
       res.status(201).json(VinylSchema.parse(createdVinyl));
     } catch (error) {

@@ -11,7 +11,11 @@ class VinylService {
   }
 
   async addVinyl(obj: VinylDataType): Promise<VinylType> {
-    const { data } = await this.api.post<VinylType>('/vinyls', obj);
+    const { data } = await this.api.post<VinylType>('/vinyls', obj, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return data;
   }
 }

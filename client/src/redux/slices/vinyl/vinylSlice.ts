@@ -5,11 +5,15 @@ import { addVinylThunk, getVinylsThunk } from "./vinylThunk";
 
 type InitialStateType = {
     data: VinylListType;
+    loading: boolean;
+    error: string | null;
 };
 
 
 const initialState: InitialStateType = {
     data: [],
+    loading: false,
+    error: null,
 };
 
 const vinylSlice = createSlice({
@@ -17,12 +21,31 @@ const vinylSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getVinylsThunk.fulfilled, (state, { payload }) => {
-      state.data = payload;
-    });
-    builder.addCase(addVinylThunk.fulfilled, (state, { payload }) => {
-      state.data.push(payload);
-    });
+    builder
+      .addCase(getVinylsThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getVinylsThunk.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.data = payload;
+      })
+      .addCase(getVinylsThunk.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload as string;
+      })
+      .addCase(addVinylThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addVinylThunk.fulfilled, (state, { payload }) => {
+        state.loading = false;
+        state.data.push(payload);
+      })
+      .addCase(addVinylThunk.rejected, (state, { payload }) => {
+        state.loading = false;
+        state.error = payload as string;
+      });
   },
 });
 
