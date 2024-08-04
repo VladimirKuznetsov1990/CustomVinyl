@@ -26,16 +26,13 @@ import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { getFormatVinylThunk } from '../../redux/slices/formatVinyl/formatVinylThunk';
 import { addOrderThunk } from '../../redux/slices/order/orderThunk';
 import type { OrderDataType } from '../../types/orderTypes';
+import ImageUploadAndCrop from '../ui/ImageUploadAndCrop';
+import { setCroppedImage } from '../../redux/slices/image/imageSlice';
 
 export default function OrderPage(): JSX.Element {
   const formatVinyls = useAppSelector((state) => state.format.data);
   const dispatch = useAppDispatch();
   const user = useAppSelector((store) => store.auth.userStatus);
-
-  useEffect(() => {
-    void dispatch(getFormatVinylThunk());
-  }, [dispatch]);
-
   const [quantity, setQuantity] = useState(1); // Количество пластинок
   const [selectedFormat, setSelectedFormat] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
@@ -45,12 +42,23 @@ export default function OrderPage(): JSX.Element {
   const [totalDuration, setTotalDuration] = useState<string>(''); // Общее время всех треков в формате MM:SS
   const [availableDuration, setAvailableDuration] = useState(0); // Доступное время в секундах
   const [usedDuration, setUsedDuration] = useState(0); // Использованное время в секундах
+  const croppedImage = useAppSelector((store) => store.image.croppedImage); //кропнутое изображение
+  const [audioFile, setAudioFile] = useState<File | null>(null); // Файл аудио
+
+  useEffect(() => {
+    void dispatch(getFormatVinylThunk());
+    console.log(croppedImage);
+  }, [dispatch, croppedImage]);
 
   const [formDataOrder, setFormDataOrder] = useState<OrderDataType>({
     userId: 0,
     status: '',
     totalPrice: 0,
   });
+
+  const handleSaveCroppedImage = (image: string): void => {
+    dispatch(setCroppedImage(image));
+  };
 
   const OrderHandleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
@@ -246,21 +254,34 @@ export default function OrderPage(): JSX.Element {
             <Grid item xs={12} md={6}>
               <Box
                 sx={{
+                  position: 'relative',
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  height: '100%',
+                  height: '500px',
+                  background: `url(${getImagePath()}) no-repeat 50% / cover`,
+                  animation: 'spin 7s linear infinite',
                 }}
               >
-                <CardMedia
-                  component="img"
-                  image={getImagePath()}
-                  alt="Vinyl"
-                  sx={{ maxWidth: '100%', height: '500px', animation: 'spin 2s linear infinite' }}
-                />
+                {croppedImage && (
+                  <CardMedia
+                    component="img"
+                    image={croppedImage}
+                    alt="Vinyl"
+                    sx={{
+                      maxWidth: '100%',
+                      position: 'absolute',
+                      height: '92%',
+                      width: '92%',
+                      borderRadius: '50%',
+                      opacity: '.7',
+                    }}
+                  />
+                )}
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
+              <ImageUploadAndCrop vinylImage={getImagePath} onSave={handleSaveCroppedImage} />
               <Box component="form" onSubmit={OrderHandleSubmit}>
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <InputLabel id="format-label">Формат пластинки</InputLabel>

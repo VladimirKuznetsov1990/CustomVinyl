@@ -67,7 +67,7 @@ module.exports = {
       {
         userId: 1,
         color: 'Black',
-        userImg: 'black_vinyl.jpg',
+        userImg: '/img/Vinyl_blue.png',
         formatId: 1,
         price: 50,
         trackListId: 1,
@@ -77,7 +77,7 @@ module.exports = {
       {
         userId: 2,
         color: 'Red',
-        userImg: 'red_vinyl.jpg',
+        userImg: '/img/Vinyl_red.png',
         formatId: 2,
         price: 200,
         trackListId: 2,
