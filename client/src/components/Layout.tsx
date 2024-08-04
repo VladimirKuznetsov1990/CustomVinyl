@@ -7,7 +7,6 @@ import { useAppSelector } from '../hooks/reduxHooks';
 
 export default function Layout(): JSX.Element {
   const user = useAppSelector((store) => store.auth.userStatus);
-  console.log(user.status);
 
   return (
     <Loader showSpinner={user.status === 'fetching'}>
