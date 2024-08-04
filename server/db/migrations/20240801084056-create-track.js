@@ -16,7 +16,11 @@ module.exports = {
         type: Sequelize.STRING
       },
       trackListId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'TrackLists',
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,
