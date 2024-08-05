@@ -3,7 +3,6 @@ import authReducer from './slices/auth/authSlice';
 import modalReducer from './slices/modal/modalSlice';
 import formatVinylReducer from './slices/formatVinyl/formatVinylSlice';
 import orderReducer from './slices/order/orderSlice';
-import trackListReducer from './slices/trackList/trackListSlice';
 import imageReducer from './slices/image/imageSlice';
 
 export const store = configureStore({
@@ -13,7 +12,6 @@ export const store = configureStore({
     format: formatVinylReducer,
     order: orderReducer,
     image: imageReducer,
-    trackList: trackListReducer,
   },
 });
 
