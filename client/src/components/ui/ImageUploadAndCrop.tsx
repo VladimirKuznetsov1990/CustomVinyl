@@ -5,6 +5,8 @@ import { getCroppedImg } from '../../hooks/cropImage';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { addVinylThunk } from '../../redux/slices/vinyl/vinylThunk';
 import type { VinylDataType } from '../../types/vinylTypes';
+import { addOrderThunk } from '../../redux/slices/order/orderThunk';
+
 
 // const vinylImage = '/disk2.png'
 
@@ -24,6 +26,7 @@ export default function ImageUploadAndCrop({
   const [openCropper, setOpenCropper] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [croppedImageSrc, setCroppedImageSrc] = useState<string | null>(null);
+
   const { loading, error } = useAppSelector((store) => store.vinyl)
   const dispatch = useAppDispatch();
 
@@ -47,31 +50,11 @@ export default function ImageUploadAndCrop({
   //   }
   // };
 
-  const handleApply = async () => {
+  const handleApply = async (): Promise<void> => {
     if (imageSrc && croppedAreaPixels) {
       const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
       setCroppedImageSrc(croppedImage);
       onSave(croppedImage);
-    }
-  };
-
-  console.log(croppedImageSrc)
-
-  const handleSave = async () => {
-    if (croppedImageSrc) {
-      const vinylData: VinylDataType = {
-        color: 'black',
-        userImg: croppedImageSrc,
-        formatId: 1, // пример
-        price: 1000,
-        trackListId: 1, // пример
-        userId: 1, // пример
-      };
-      void dispatch(addVinylThunk(vinylData)).then((result: any) => {
-        if (result.type === 'vinyl/addVinyl/fulfilled') {
-          onSave(result.payload.userImg);
-        }
-      });
     }
   };
 
@@ -104,7 +87,6 @@ export default function ImageUploadAndCrop({
               showGrid={false}
               onCropChange={setCrop}
               onZoomChange={setZoom}
-              onRotationChange={setRotation}
               onCropComplete={onCropComplete}
               style={{
                 containerStyle: {
@@ -174,11 +156,10 @@ export default function ImageUploadAndCrop({
       {imageSrc && openCropper && (
         <Box>
           <Button onClick={handleApply}>Применить</Button>
-          <Button onClick={handleSave}>Сохранить</Button>
         </Box>
       )}
-      {loading && <Typography>Loading...</Typography>}
-      {error && <Typography color="error">{error}</Typography>}
+      {/* {loading && <Typography>Loading...</Typography>}
+      {error && <Typography color="error">{error}</Typography>} */}
     </Box>
   );
 }

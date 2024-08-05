@@ -1,10 +1,11 @@
 import type { AxiosInstance } from 'axios';
 import apiInstance from './apiInstance';
-import type {
-  OrderDataType,
-  OrderListType,
-  OrderType,
-  UpdateStatusOrderType,
+import {
+  OrderSchema,
+  type OrderDataType,
+  type OrderListType,
+  type OrderType,
+  type UpdateStatusOrderType,
 } from '../types/orderTypes';
 
 class OrderService {
@@ -20,9 +21,13 @@ class OrderService {
     return data;
   }
 
-  async addOrder(obj: OrderDataType): Promise<OrderType> {
-    const { data } = await this.api.post<OrderType>('/orders', obj);
-    return data; //TODO сомневаюсь очень с этим сервисом, как создатся заказ с такими ключами
+  async addOrder(formData: OrderDataType): Promise<OrderType> {
+    const { data } = await this.api.post<OrderType>('/orders', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return data;
   }
 
   async deleteOrder(id: number): Promise<void> {

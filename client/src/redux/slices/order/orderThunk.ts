@@ -9,8 +9,8 @@ export const getOrdersThunk = createAsyncThunk<OrderListType>('orders/getAll', a
 });
 
 
-export const addOrderThunk = createAsyncThunk<OrderType, OrderDataType>('orders/add', async (obj) => {
-    const data = await orderService.addOrder(obj);
+export const addOrderThunk = createAsyncThunk<OrderType, OrderDataType>('orders/add', async (formData) => {
+    const data = await orderService.addOrder(formData);
     return data;
 });
 

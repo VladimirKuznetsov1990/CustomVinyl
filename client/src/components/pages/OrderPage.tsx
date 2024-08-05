@@ -51,7 +51,6 @@ export default function OrderPage(): JSX.Element {
 
   useEffect(() => {
     void dispatch(getFormatVinylThunk());
-    console.log(croppedImage);
   }, [dispatch, croppedImage]);
 
   const handleSaveCroppedImage = (image: string): void => {
@@ -71,6 +70,34 @@ export default function OrderPage(): JSX.Element {
       void dispatch(addOrderThunk(newOrder));
     } else {
       console.error('User is not authenticated or user ID is undefined');
+    }
+  };
+
+  const handleOrderSubmit = async (): void => {
+    if (!croppedImage) {
+      alert('Please upload and crop an image.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('userId', formDataOrder.userId.toString());
+    formData.append('status', formDataOrder.status);
+    formData.append('totalPrice', formDataOrder.totalPrice.toString());
+    formData.append('formatId', formDataOrder.formatId.toString());
+    formData.append('color', formDataOrder.color);
+    formData.append('quantity', formDataOrder.quantity.toString());
+    formData.append('trackListId', formDataOrder.trackListId.toString());
+    formData.append('userImg', croppedImage?.file);
+    // formData.append('file', croppedImage?.file)
+
+    console.log(formData)
+
+    try {
+      await dispatch(addOrderThunk(formData));
+      alert('Order added successfully!');
+    } catch (error) {
+      console.error('Error adding order:', error);
+      alert('Failed to add order.');
     }
   };
 
@@ -283,7 +310,7 @@ export default function OrderPage(): JSX.Element {
                 {croppedImage && (
                   <CardMedia
                     component="img"
-                    image={croppedImage}
+                    image={croppedImage.fileUrl}
                     alt="Vinyl"
                     sx={{
                       maxWidth: '100%',
@@ -431,7 +458,7 @@ export default function OrderPage(): JSX.Element {
                 </FormControl>
 
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                  <Button type="submit" variant="contained" color="primary">
+                  <Button variant="contained" color="primary" onClick={handleOrderSubmit}>
                     Добавить в корзину
                   </Button>
                   <Typography variant="h6" gutterBottom>
