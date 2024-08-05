@@ -7,7 +7,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -17,17 +17,17 @@ module.exports = {
         },
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       totalPrice: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       formatId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'FormatVinyls',
           key: 'id',
-        }
+        },
       },
       userImg: {
         type: Sequelize.STRING,
@@ -38,24 +38,20 @@ module.exports = {
       quantity: {
         type: Sequelize.INTEGER,
       },
-      trackListId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'TrackLists',
-          key: 'id',
-        }
+      tracks: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Orders');
-  }
+  },
 };

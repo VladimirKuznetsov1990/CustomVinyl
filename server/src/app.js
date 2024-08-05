@@ -6,8 +6,6 @@ const authRouter = require('./routes/authRouter');
 const tokensRouter = require('./routes/tokensRouter');
 const orderRouter = require('./routes/orderRouter');
 const formatsRouter = require('./routes/formatVinylRouter');
-const trackRouter = require('./routes/tracksRouter');
-const trackListsRouter = require('./routes/trackListsRouter');
 
 const app = express();
 
@@ -22,8 +20,6 @@ app.use('/api/tokens', tokensRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/orders', orderRouter);
 app.use('/api/formats', formatsRouter);
-app.use('/api/tracks', trackRouter);
-app.use('/api/trackLists', trackListsRouter);
 
 
 module.exports = app;

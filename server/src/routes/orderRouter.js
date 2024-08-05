@@ -18,11 +18,13 @@ router
       res.sendStatus(500).json({ message: 'Ошибка получения всех заказов' });
     }
   })
-  .post(upload.single('userImg'), async (req, res) => {
+  .post(upload.single('userImg'), upload.array('tracks'), async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ message: 'Файл не найден' });
       }
+
+      
       const fileName = `${Date.now()}.webp`;
       const outputBuffer = await sharp(req.file.buffer).webp().toBuffer();
       // const { userId, status, totalPrice, formatId, userImg, color,quantity, trackListId } = orderReqBodySchema.parse(req.body);
@@ -36,7 +38,7 @@ router
         userImg: fileName,
         color: req.body.color,
         quantity: req.body.quantity,
-        trackListId: req.body.trackListId,
+        tracks: req.body.tracks,
       });
 
       // const plainOrder = await Order.findOne({
