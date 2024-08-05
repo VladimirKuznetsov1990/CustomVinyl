@@ -98,7 +98,10 @@ export default function OrderPage(): JSX.Element {
     formData.append('color', formDataOrder.color);
     formData.append('quantity', formDataOrder.quantity.toString());
     formData.append('userImg', croppedImage?.file);
-    formData.append('tracks', ...audioFiles);
+    Array.from(audioFiles).forEach((file) => {
+      formData.append('tracks', file);
+    })
+    // formData.append('tracks', audioFiles);
 
     console.log(audioFiles)
 
