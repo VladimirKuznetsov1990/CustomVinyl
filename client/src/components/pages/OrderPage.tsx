@@ -46,6 +46,17 @@ export default function OrderPage(): JSX.Element {
   const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
   const [additionalImage, setAdditionalImage] = useState<string | null>(null); // дополнительное изображение
 
+  const [formDataOrder, setFormDataOrder] = useState<OrderDataType>({
+    userId: 1,
+    status: 'pending',
+    totalPrice: 1000,
+    formatId: 1,
+    color: 'black',
+    quantity: 1,
+    userImg: croppedImage?.fileUrl,
+    tracks: [],
+  });
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -74,8 +85,8 @@ export default function OrderPage(): JSX.Element {
   };
 
   const handleOrderSubmit = async (): void => {
-    if (!croppedImage) {
-      alert('Please upload and crop an image.');
+    if (!croppedImage || !audioFiles) {
+      alert('Please upload files.');
       return;
     }
 
@@ -86,11 +97,10 @@ export default function OrderPage(): JSX.Element {
     formData.append('formatId', formDataOrder.formatId.toString());
     formData.append('color', formDataOrder.color);
     formData.append('quantity', formDataOrder.quantity.toString());
-    formData.append('trackListId', formDataOrder.trackListId.toString());
     formData.append('userImg', croppedImage?.file);
-    // formData.append('file', croppedImage?.file)
+    formData.append('tracks', ...audioFiles);
 
-    console.log(formData)
+    console.log(audioFiles)
 
     try {
       await dispatch(addOrderThunk(formData));
@@ -459,7 +469,7 @@ export default function OrderPage(): JSX.Element {
 
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                   <Button variant="contained" color="primary" onClick={handleOrderSubmit}>
-                    Добавить в корзину
+                    Оформить Заказ
                   </Button>
                   <Typography variant="h6" gutterBottom>
                     Общая стоимость:{' '}

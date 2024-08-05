@@ -22,12 +22,11 @@ export default function ImageUploadAndCrop({
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [rotation, setRotation] = useState(0);
   const [openCropper, setOpenCropper] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [croppedImageSrc, setCroppedImageSrc] = useState<string | null>(null);
 
-  const { loading, error } = useAppSelector((store) => store.vinyl)
+  // const { loading, error } = useAppSelector((store) => store.vinyl)
   const dispatch = useAppDispatch();
 
   const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPixels: Area) => {
@@ -81,7 +80,6 @@ export default function ImageUploadAndCrop({
               image={imageSrc}
               crop={crop}
               zoom={zoom}
-              rotation={rotation}
               aspect={1}
               cropShape="round"
               showGrid={false}
@@ -124,15 +122,6 @@ export default function ImageUploadAndCrop({
               max={3}
               step={0.1}
               onChange={(_, onzoom) => setZoom(Number(onzoom))}
-            />
-            <Typography>Rotation</Typography>
-            <Slider
-              value={rotation}
-              min={0}
-              max={360}
-              step={1}
-              aria-labelledby="Rotation"
-              onChange={(_, rotat) => setRotation(Number(rotat))}
             />
           </Box>
         </Box>

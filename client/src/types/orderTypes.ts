@@ -9,7 +9,7 @@ export const OrderSchema = z.object({
   userImg: z.string(),
   color: z.string(),
   quantity: z.number(),
-  trackListId: z.number(),
+  tracks: z.array(z.string()),
 });
 
 export const OrdersSchema = z.array(OrderSchema);

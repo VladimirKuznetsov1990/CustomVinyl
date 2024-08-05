@@ -18,44 +18,58 @@ router
       res.sendStatus(500).json({ message: 'Ошибка получения всех заказов' });
     }
   })
-  .post(upload.single('userImg'), upload.array('tracks'), async (req, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).json({ message: 'Файл не найден' });
+  .post(
+    upload.fields([
+      { name: 'userImg', maxCount: 1 },
+      { name: 'tracks', maxCount: 20 },
+    ]),
+    async (req, res) => {
+      console.log(req.files)
+      try {
+        if (!req.files['userImg'] || !req.files['tracks']) {
+          return res.status(400).json({ message: 'Файлы не найдены' });
+        }
+
+        const userImgFile = req.files['userImg'][0];
+        const audiofiles = req.files['tracks'] || [];
+
+        const fileName = `${Date.now()}.webp`;
+        const outputBuffer = await sharp(userImgFile.buffer).webp().toBuffer();
+        await fs.writeFile(`./public/img/${fileName}`, outputBuffer);
+
+        const trackFiles = audiofiles.map((file, index) => {
+          const trackFileName = `${Date.now()}-${index}.mp3`;
+          fs.writeFile(`./public/audio/${trackFileName}`, file.buffer);
+          return trackFileName;
+        });
+
+        const order = await Order.create({
+          userId: req.body.userId,
+          status: req.body.status,
+          totalPrice: req.body.totalPrice,
+          formatId: req.body.formatId,
+          userImg: fileName,
+          color: req.body.color,
+          quantity: req.body.quantity,
+          tracks: trackFiles,
+        });
+
+        // const plainOrder = await Order.findOne({
+        //   where: {
+        //     id: order.id,
+        //   },
+        //   include: {
+        //     model: User,
+        //     attributes: ['id', 'userName', 'email'],
+        //   },
+        // });
+        res.json(order);
+      } catch (error) {
+        console.log('Ошибка создания заказа', error);
+        res.sendStatus(500).json({ message: 'Ошибка создания заказа' });
       }
-
-      
-      const fileName = `${Date.now()}.webp`;
-      const outputBuffer = await sharp(req.file.buffer).webp().toBuffer();
-      // const { userId, status, totalPrice, formatId, userImg, color,quantity, trackListId } = orderReqBodySchema.parse(req.body);
-      await fs.writeFile(`./public/img/${fileName}`, outputBuffer);
-
-      const order = await Order.create({
-        userId: req.body.userId,
-        status: req.body.status,
-        totalPrice: req.body.totalPrice,
-        formatId: req.body.formatId,
-        userImg: fileName,
-        color: req.body.color,
-        quantity: req.body.quantity,
-        tracks: req.body.tracks,
-      });
-
-      // const plainOrder = await Order.findOne({
-      //   where: {
-      //     id: order.id,
-      //   },
-      //   include: {
-      //     model: User,
-      //     attributes: ['id', 'userName', 'email'],
-      //   },
-      // });
-      res.json(OrderSchema.parse(order));
-    } catch (error) {
-      console.log('Ошибка создания заказа', error);
-      res.sendStatus(500).json({ message: 'Ошибка создания заказа' });
-    }
-  });
+    },
+  );
 
 // Получить все заказы определенного пользователя
 router.get('/user/:userId', async (req, res) => {
