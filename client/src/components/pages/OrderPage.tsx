@@ -20,6 +20,8 @@ import {
   TableHead,
   TableRow,
   Paper,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
@@ -43,7 +45,11 @@ export default function OrderPage(): JSX.Element {
   const [availableDuration, setAvailableDuration] = useState(0); // Доступное время в секундах
   const [usedDuration, setUsedDuration] = useState(0); // Использованное время в секундах
   const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
+  const [additionalImage, setAdditionalImage] = useState<string | null>(null); // дополнительное изображение
   const [audioFile, setAudioFile] = useState<File | null>(null); // Файл аудио
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
     void dispatch(getFormatVinylThunk());
@@ -99,8 +105,8 @@ export default function OrderPage(): JSX.Element {
     calculateTotalPrice();
   }, [quantity, selectedColor, selectedFormat]);
 
-  // Функция для получения пути к изображению в зависимости от выбранного цвета
-  const getImagePath = (): string => {
+  // Функция для получения пути к основному изображению в зависимости от выбранного цвета
+  const getMainImagePath = (): string => {
     switch (selectedColor) {
       case 'red':
         return '/img/Vinyl_red.png';
@@ -109,7 +115,21 @@ export default function OrderPage(): JSX.Element {
       case 'green':
         return '/img/Vinyl_green.png';
       default:
-        return '/img/Vinyl+.png';
+        return '/img/1Vinyl+.png';
+    }
+  };
+
+  // Функция для получения пути к дополнительному изображению в зависимости от выбранного цвета
+  const getAdditionalImagePath = (): string => {
+    switch (selectedColor) {
+      case 'red':
+        return '/img/Vinyl+Red_mid.png';
+      case 'blue':
+        return '/img/Vinyl+Blue_mid.png';
+      case 'green':
+        return '/img/Vinyl+Green_mid.png';
+      default:
+        return '/img/Vinyl+Custom_mid.png';
     }
   };
 
@@ -220,16 +240,21 @@ export default function OrderPage(): JSX.Element {
     }
   }, [audioFiles]);
 
+  // Обновление дополнительного изображения при изменении выбранного цвета
+  useEffect(() => {
+    setAdditionalImage(getAdditionalImagePath());
+  }, [selectedColor]);
+
   return (
     <Container
       maxWidth="lg"
       sx={{
-        padding: '80px',
+        padding: isMobile ? '20px' : '80px',
       }}
     >
       <Box
         sx={{
-          padding: '20px',
+          padding: isMobile ? '10px' : '20px',
           backgroundColor: '#444',
           borderRadius: '8px',
         }}
@@ -244,7 +269,7 @@ export default function OrderPage(): JSX.Element {
         </Typography>
         <Box
           sx={{
-            padding: '40px',
+            padding: isMobile ? '20px' : '40px',
             border: '3px solid black',
             backgroundColor: 'white',
             borderRadius: '20px',
@@ -258,8 +283,8 @@ export default function OrderPage(): JSX.Element {
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  height: '500px',
-                  background: `url(${getImagePath()}) no-repeat 50% / cover`,
+                  height: isMobile ? '300px' : '500px',
+                  background: `url(${getMainImagePath()}) no-repeat center center / contain`,
                   animation: 'spin 7s linear infinite',
                 }}
               >
@@ -275,6 +300,21 @@ export default function OrderPage(): JSX.Element {
                       width: '92%',
                       borderRadius: '50%',
                       opacity: '.7',
+                    }}
+                  />
+                )}
+                {additionalImage && (
+                  <CardMedia
+                    component="img"
+                    image={additionalImage}
+                    alt="Additional"
+                    sx={{
+                      maxWidth: '100%',
+                      position: 'absolute',
+                      height: '92%',
+                      width: '92%',
+                      borderRadius: '50%',
+                      opacity: '.95',
                     }}
                   />
                 )}
@@ -297,8 +337,8 @@ export default function OrderPage(): JSX.Element {
                   {/* Добавьте другие цвета по мере необходимости */}
                 </Select>
               </FormControl>
-
-              <ImageUploadAndCrop vinylImage={getImagePath} onSave={handleSaveCroppedImage} />
+              
+              <ImageUploadAndCrop vinylImage={getMainImagePath} onSave={handleSaveCroppedImage} />
               <Box component="form" onSubmit={OrderHandleSubmit}>
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <InputLabel id="format-label">Формат пластинки</InputLabel>
