@@ -34,11 +34,6 @@ class OrderService {
     return this.api.delete(`/orders/${id}`);
   }
 
-  // async updateOrder(id: number, obj): Promise<OrderType> {
-  //   const { data } = await this.api.patch<OrderType>(`/orders/${id}`, obj);
-  //   return data;
-  // }
-
   async updateStatusOrder(id: number, obj: UpdateStatusOrderType): Promise<OrderType> {
     const { data } = await this.api.patch<OrderType>(`/orders/${id}/status`, obj);
     return data;
