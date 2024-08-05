@@ -5,7 +5,6 @@ import formatVinylReducer from './slices/formatVinyl/formatVinylSlice';
 import orderReducer from './slices/order/orderSlice';
 import trackListReducer from './slices/trackList/trackListSlice';
 import imageReducer from './slices/image/imageSlice';
-import vinylReducer from './slices/vinyl/vinylSlice';
 
 export const store = configureStore({
   reducer: {
@@ -15,7 +14,6 @@ export const store = configureStore({
     order: orderReducer,
     image: imageReducer,
     trackList: trackListReducer,
-    vinyl: vinylReducer,
   },
 });
 

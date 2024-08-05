@@ -1,10 +1,15 @@
 import { z } from 'zod';
 
 export const OrderSchema = z.object({
-    id: z.number(),
-    userId: z.number(),
-    status: z.string(),
-    totalPrice: z.number(),
+  id: z.number(),
+  userId: z.number(),
+  status: z.string(),
+  totalPrice: z.number(),
+  formatId: z.number(),
+  userImg: z.string(),
+  color: z.string(),
+  quantity: z.number(),
+  trackListId: z.number(),
 });
 
 export const OrdersSchema = z.array(OrderSchema);
@@ -17,5 +22,5 @@ export type OrderListType = OrderType[];
 export type OrderDataType = Omit<OrderType, 'id'>;
 
 export type UpdateStatusOrderType = {
-    status: string;
+  status: string;
 };

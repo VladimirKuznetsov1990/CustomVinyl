@@ -75,30 +75,6 @@ module.exports = {
       },
     ], {});
 
-    // Vinyl Seeder
-    await queryInterface.bulkInsert('Vinyls', [
-      {
-        userId: 1,
-        color: 'Black',
-        userImg: '/img/Vinyl_blue.png',
-        formatId: 1,
-        price: 50,
-        trackListId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        userId: 2,
-        color: 'Red',
-        userImg: '/img/Vinyl_red.png',
-        formatId: 2,
-        price: 200,
-        trackListId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ], {});
-
     // Track Seeder
     await queryInterface.bulkInsert('Tracks', [
       {
@@ -134,36 +110,14 @@ module.exports = {
         updatedAt: new Date(),
       },
     ], {});
-
-    // OrderItem Seeder
-    await queryInterface.bulkInsert('OrderItems', [
-      {
-        orderId: 1,
-        vinylId: 1,
-        quantity: 2,
-        price: 50,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        orderId: 2,
-        vinylId: 2,
-        quantity: 1,
-        price: 200,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ], {});
   },
 
   down: async (queryInterface, Sequelize) => {
     await queryInterface.bulkDelete('FormatVinyls', null, {});
     await queryInterface.bulkDelete('Roles', null, {});
     await queryInterface.bulkDelete('Users', null, {});
-    await queryInterface.bulkDelete('Vinyls', null, {});
     await queryInterface.bulkDelete('TrackLists', null, {});
     await queryInterface.bulkDelete('Tracks', null, {});
     await queryInterface.bulkDelete('Orders', null, {});
-    await queryInterface.bulkDelete('OrderItems', null, {});
   },
 };

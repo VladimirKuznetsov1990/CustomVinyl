@@ -2,8 +2,8 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class FormatVinyl extends Model {
-    static associate({ Vinyl }) {
-      this.hasMany(Vinyl, { foreignKey: 'formatId' });
+    static associate({ Order }) {
+      this.hasMany(Order, { foreignKey: 'formatId' });
     }
   }
   FormatVinyl.init(
