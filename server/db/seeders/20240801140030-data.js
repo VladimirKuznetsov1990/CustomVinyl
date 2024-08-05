@@ -61,37 +61,6 @@ module.exports = {
       },
     ], {});
 
-    // TrackList Seeder
-    await queryInterface.bulkInsert('TrackLists', [
-      {
-        userId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        userId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ], {});
-
-    // Track Seeder
-    await queryInterface.bulkInsert('Tracks', [
-      {
-        trackName: 'Track 1',
-        originalName: 'Original Track 1',
-        trackListId: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        trackName: 'Track 2',
-        originalName: 'Original Track 2',
-        trackListId: 2,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ], {});
 
     // Order Seeder
     await queryInterface.bulkInsert('Orders', [
@@ -116,8 +85,6 @@ module.exports = {
     await queryInterface.bulkDelete('FormatVinyls', null, {});
     await queryInterface.bulkDelete('Roles', null, {});
     await queryInterface.bulkDelete('Users', null, {});
-    await queryInterface.bulkDelete('TrackLists', null, {});
-    await queryInterface.bulkDelete('Tracks', null, {});
     await queryInterface.bulkDelete('Orders', null, {});
   },
 };
