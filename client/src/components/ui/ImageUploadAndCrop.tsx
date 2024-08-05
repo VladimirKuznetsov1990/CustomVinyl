@@ -4,13 +4,13 @@ import Cropper, { type Area } from 'react-easy-crop';
 import { getCroppedImg } from '../../hooks/cropImage';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { addVinylThunk } from '../../redux/slices/vinyl/vinylThunk';
-import { VinylDataType } from '../../types/vinylTypes';
+import type { VinylDataType } from '../../types/vinylTypes';
 
 // const vinylImage = '/disk2.png'
 
 type ImageUploadAndCropProps = {
   onSave: (image: string) => void;
-  vinylImage: () => void;
+  vinylImage: () => string;
 };
 
 export default function ImageUploadAndCrop({
@@ -24,10 +24,10 @@ export default function ImageUploadAndCrop({
   const [openCropper, setOpenCropper] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [croppedImageSrc, setCroppedImageSrc] = useState<string | null>(null);
-  const { loading, error, data } = useAppSelector((store) => store.vinyl)
+  const { loading, error } = useAppSelector((store) => store.vinyl)
   const dispatch = useAppDispatch();
 
-  const onCropComplete = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
+  const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPixels: Area) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
@@ -141,7 +141,7 @@ export default function ImageUploadAndCrop({
               min={1}
               max={3}
               step={0.1}
-              onChange={(e, zoom) => setZoom(Number(zoom))}
+              onChange={(_, onzoom) => setZoom(Number(onzoom))}
             />
             <Typography>Rotation</Typography>
             <Slider
@@ -150,7 +150,7 @@ export default function ImageUploadAndCrop({
               max={360}
               step={1}
               aria-labelledby="Rotation"
-              onChange={(e, rotation) => setRotation(Number(rotation))}
+              onChange={(_, rotat) => setRotation(Number(rotat))}
             />
           </Box>
         </Box>

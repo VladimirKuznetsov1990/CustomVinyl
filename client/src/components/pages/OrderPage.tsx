@@ -32,7 +32,6 @@ import ImageUploadAndCrop from '../ui/ImageUploadAndCrop';
 import { setCroppedImage } from '../../redux/slices/image/imageSlice';
 
 export default function OrderPage(): JSX.Element {
-  const formatVinyls = useAppSelector((state) => state.format.data);
   const dispatch = useAppDispatch();
   const user = useAppSelector((store) => store.auth.userStatus);
   const [quantity, setQuantity] = useState(1); // Количество пластинок
@@ -46,7 +45,6 @@ export default function OrderPage(): JSX.Element {
   const [usedDuration, setUsedDuration] = useState(0); // Использованное время в секундах
   const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
   const [additionalImage, setAdditionalImage] = useState<string | null>(null); // дополнительное изображение
-  const [audioFile, setAudioFile] = useState<File | null>(null); // Файл аудио
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -55,12 +53,6 @@ export default function OrderPage(): JSX.Element {
     void dispatch(getFormatVinylThunk());
     console.log(croppedImage);
   }, [dispatch, croppedImage]);
-
-  const [formDataOrder, setFormDataOrder] = useState<OrderDataType>({
-    userId: 0,
-    status: '',
-    totalPrice: 0,
-  });
 
   const handleSaveCroppedImage = (image: string): void => {
     dispatch(setCroppedImage(image));

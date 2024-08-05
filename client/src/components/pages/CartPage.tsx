@@ -27,7 +27,7 @@ export default function CartPage(): JSX.Element {
   const user = useAppSelector((store) => store.auth.userStatus);
   const audioFile = useAppSelector((state) => state.trackList.tempAudioFile);
 
-  const handleOrderSubmit = async () => {
+  const handleOrderSubmit = async (): Promise<void> => {
     if (user && user.id !== undefined && audioFile) {
       const newOrder: OrderDataType = {
         userId: user.id,

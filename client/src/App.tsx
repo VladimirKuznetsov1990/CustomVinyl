@@ -17,7 +17,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     void dispatch(checkUserThunk());
-  }, []);
+  }, [dispatch]);
 
   const router = createBrowserRouter([
     {
