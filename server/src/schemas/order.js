@@ -5,6 +5,11 @@ const OrderSchema = z.object({
   userId: z.number(),
   status: z.string(),
   totalPrice: z.number(),
+  formatId: z.number(),
+  userImg: z.string(),
+  color: z.string(),
+  quantity: z.number(),
+  trackListId: z.number(),
 });
 
 const orderReqBodySchema = OrderSchema.omit({ id: true });

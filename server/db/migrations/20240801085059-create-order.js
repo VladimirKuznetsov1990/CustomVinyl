@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Vinyls', {
+    await queryInterface.createTable('Orders', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,28 +16,34 @@ module.exports = {
           key: 'id',
         },
       },
-      color: {
+      status: {
         type: Sequelize.STRING
       },
-      userImg: {
-        type: Sequelize.STRING
+      totalPrice: {
+        type: Sequelize.INTEGER
       },
       formatId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'FormatVinyls',
           key: 'id',
-        },
+        }
       },
-      price: {
-        type: Sequelize.INTEGER
+      userImg: {
+        type: Sequelize.STRING,
+      },
+      color: {
+        type: Sequelize.STRING,
+      },
+      quantity: {
+        type: Sequelize.INTEGER,
       },
       trackListId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'TrackLists',
           key: 'id',
-        },
+        }
       },
       createdAt: {
         allowNull: false,
@@ -50,6 +56,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Vinyls');
+    await queryInterface.dropTable('Orders');
   }
 };

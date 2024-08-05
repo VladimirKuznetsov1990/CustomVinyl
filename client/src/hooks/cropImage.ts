@@ -27,7 +27,7 @@ const getCroppedImg = (imageSrc: string, pixelCrop: any): Promise<string> => {
         0,
         0,
         pixelCrop.width,
-        pixelCrop.height
+        pixelCrop.height,
       );
 
       // Получение Blob из Canvas
@@ -36,8 +36,9 @@ const getCroppedImg = (imageSrc: string, pixelCrop: any): Promise<string> => {
           reject(new Error('Canvas is empty'));
           return;
         }
+        const file = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
         const fileUrl = window.URL.createObjectURL(blob);
-        resolve(fileUrl);
+        resolve({ fileUrl, file });
       }, 'image/jpeg');
     };
 

@@ -1,18 +1,10 @@
 import React, { useEffect } from 'react';
 import '../style/styles.css';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { getVinylsThunk } from '../../redux/slices/vinyl/vinylThunk';
 import VinylCard from '../ui/VinylCard';
 
 export default function MainPage(): JSX.Element {
-
-  const vinyls = useAppSelector((store) => store.vinyl.data);
   const dispatch = useAppDispatch();
-  
-  useEffect(() => {
-    void dispatch(getVinylsThunk());
-  }, [dispatch]);
-  console.log(vinyls);
   
   useEffect(() => {
     const handleScroll = (): void => {
@@ -73,11 +65,11 @@ export default function MainPage(): JSX.Element {
               наносим на них изображения по вашему заказу. Также мы предлагаем услугу записи ваших
               любимых треков на винил. Создайте свою идеальную коллекцию с нами!
             </p>
-            <div className="gallery">
+            {/* <div className="gallery">
               {vinyls.map((el) => (
               <VinylCard vinyl={el} key={el.id} />
               ))}
-            </div>
+            </div> */}
           </div>
           <div className="copy">Vinyl Paradise</div>
         </article>
