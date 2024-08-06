@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import '../style/styles.css';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import VinylCard from '../ui/VinylCard';
+import VinylCard from '../ui/OrderCard';
 
 export default function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();

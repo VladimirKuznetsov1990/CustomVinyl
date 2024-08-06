@@ -10,6 +10,10 @@ const OrderSchema = z.object({
   color: z.string(),
   quantity: z.number(),
   tracks: z.array(z.string()),
+  userName: z.string(),
+  email: z.string(),
+  address: z.string(),
+  phone: z.string(),
 });
 
 const orderReqBodySchema = OrderSchema.omit({ id: true });
