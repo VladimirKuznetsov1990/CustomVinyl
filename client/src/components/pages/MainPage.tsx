@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import '../style/styles.css';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import VinylCard from '../ui/OrderCard';
 
 export default function MainPage(): JSX.Element {
   const dispatch = useAppDispatch();
-  
+  const { hash } = useLocation();
+
   useEffect(() => {
     const handleScroll = (): void => {
       const scrollTop = window.scrollY;
@@ -18,6 +20,37 @@ export default function MainPage(): JSX.Element {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    const scrollToElement = (elementId: string, offset: number = 0, duration: number = 1000): void => {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+
+      const elementPosition = element.getBoundingClientRect().top;
+      const startingY = window.pageYOffset;
+      const diff = elementPosition - startingY + offset;
+      let start: number | null = null;
+
+      window.requestAnimationFrame(function step(timestamp: number) {
+        if (!start) start = timestamp;
+        const time = timestamp - start;
+        const percent = Math.min(time / duration, 1);
+
+        window.scrollTo(0, startingY + diff * percent);
+
+        if (time < duration) {
+          window.requestAnimationFrame(step);
+        }
+      });
+    };
+
+    if (hash) {
+      setTimeout(() => {
+        const elementId = hash.substring(1);
+        scrollToElement(elementId, -240, 1000);
+      }, 0);
+    }
+  }, [hash]);
 
   return (
     <div className="wrapper">
