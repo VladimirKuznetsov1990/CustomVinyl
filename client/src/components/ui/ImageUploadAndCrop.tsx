@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Box, Slider, Button, Typography } from '@mui/material';
+import { Box, Slider, Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 import Cropper, { type Area } from 'react-easy-crop';
 import { getCroppedImg } from '../../hooks/cropImage';
 
@@ -45,6 +45,9 @@ export default function ImageUploadAndCrop({
     }
   };
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
     <Box mb={2}>
       <Button variant="contained" color="primary" fullWidth onClick={() => setOpenCropper(true)}>
@@ -58,11 +61,12 @@ export default function ImageUploadAndCrop({
       </Button>
       {imageSrc && openCropper && (
         <Box>
-          <div style={{ position: 'relative', width: 500, height: 500 }}>
-            <img
+          <Box position="relative" width={isMobile ? 300 : 500} height={isMobile ? 300 : 500}>
+            <Box
+              component="img"
               src={vinylImage}
               alt="Vinyl"
-              style={{ position: 'absolute', width: '100%', height: '100%', opacity: 0 }}
+              sx={{ position: 'absolute', width: '100%', height: '100%', opacity: 0 }}
             />
             <Cropper
               image={imageSrc}
@@ -88,11 +92,11 @@ export default function ImageUploadAndCrop({
                 },
               }}
             />
-            <div
-              style={{
+            <Box
+              sx={{
                 position: 'absolute',
-                height: 700,
-                width: 700,
+                height: isMobile ? '100%' : 700,
+                width: isMobile ? '100%' : 700,
                 top: 0,
                 left: 0,
                 right: 0,
@@ -101,8 +105,8 @@ export default function ImageUploadAndCrop({
                 pointerEvents: 'none',
               }}
             />
-          </div>
-          <Box>
+          </Box>
+          <Box sx={{ mt: 2 }}>
             <Typography>Zoom</Typography>
             <Slider
               value={zoom}
@@ -115,7 +119,7 @@ export default function ImageUploadAndCrop({
         </Box>
       )}
       {imageSrc && openCropper && (
-        <Box>
+        <Box sx={{ mt: 2 }}>
           <Button variant="contained" color="primary" onClick={() => handleApply()}>Применить</Button>
         </Box>
       )}

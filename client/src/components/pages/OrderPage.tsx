@@ -304,7 +304,7 @@ export default function OrderPage(): JSX.Element {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         minHeight: '100%',
-        minWidth: '100%'
+        // minWidth: '100%'
       }}
     >
       <Box

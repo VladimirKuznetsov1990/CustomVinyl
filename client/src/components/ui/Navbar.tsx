@@ -1,6 +1,6 @@
-import { AppBar, Box, Button, Container, IconButton, Toolbar, Typography } from '@mui/material';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import React from 'react';
+import { AppBar, Box, Button, Container, IconButton, Toolbar, Typography, Drawer, List, ListItem, ListItemText, useMediaQuery, useTheme } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { openModal } from '../../redux/slices/modal/modalSlice';
 import SignUpModal from './SignUpModal';
@@ -33,6 +33,9 @@ const scrollToElement = (elementId: string, offset: number = 0, duration: number
 export default function Navbar(): JSX.Element {
   const dispatch = useAppDispatch();
   const user = useAppSelector((store) => store.auth.userStatus);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const scrollToAbout = (): void => {
     scrollToElement('about', -240, 1000);
@@ -41,6 +44,45 @@ export default function Navbar(): JSX.Element {
   const scrollToOurWorks = (): void => {
     scrollToElement('our-works', 0, 2000);
   };
+
+  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (
+      event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' ||
+        (event as React.KeyboardEvent).key === 'Shift')
+    ) {
+      return;
+    }
+
+    setDrawerOpen(open);
+  };
+
+  const list = () => (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      <List>
+        <ListItem button component={Link} to="/#about" onClick={scrollToAbout}>
+          <ListItemText primary="О нас" />
+        </ListItem>
+        <ListItem button component={Link} to="/#our-works" onClick={scrollToOurWorks}>
+          <ListItemText primary="Наши работы" />
+        </ListItem>
+        <ListItem button component={Link} to="/contacts">
+          <ListItemText primary="Контакты" />
+        </ListItem>
+        <ListItem button component={Link} to="/faq">
+          <ListItemText primary="FAQ" />
+        </ListItem>
+        <ListItem button component={Link} to="/order">
+          <ListItemText primary="Оформить заказ" />
+        </ListItem>
+      </List>
+    </Box>
+  );
 
   return (
     <AppBar
@@ -72,31 +114,44 @@ export default function Navbar(): JSX.Element {
             >
               CustomVinyl
             </Typography>
-            <Link to="/#about">
-              <Button onClick={scrollToAbout} variant="text" sx={{ color: 'white' }}>
-                О нас
-              </Button>
-            </Link>
-            <Link to="/#our-works">
-              <Button onClick={scrollToOurWorks} variant="text" sx={{ color: 'white' }}>
-                Наши работы
-              </Button>
-            </Link>
-            <Link to="/contacts">
-              <Button variant="text" sx={{ color: 'white' }}>
-                Контакты
-              </Button>
-            </Link>
-            <Link to="/faq">
-              <Button variant="text" sx={{ color: 'white' }}>
-                FAQ
-              </Button>
-            </Link>
-            <Link to="/order">
-              <Button variant="text" sx={{ color: 'white' }}>
-                Оформить заказ
-              </Button>
-            </Link>
+            {isMobile ? (
+              <IconButton
+                edge="start"
+                color="inherit"
+                aria-label="menu"
+                onClick={toggleDrawer(true)}
+              >
+                <MenuIcon />
+              </IconButton>
+            ) : (
+              <>
+                <Link to="/#about">
+                  <Button onClick={scrollToAbout} variant="text" sx={{ color: 'white' }}>
+                    О нас
+                  </Button>
+                </Link>
+                <Link to="/#our-works">
+                  <Button onClick={scrollToOurWorks} variant="text" sx={{ color: 'white' }}>
+                    Наши работы
+                  </Button>
+                </Link>
+                <Link to="/contacts">
+                  <Button variant="text" sx={{ color: 'white' }}>
+                    Контакты
+                  </Button>
+                </Link>
+                <Link to="/faq">
+                  <Button variant="text" sx={{ color: 'white' }}>
+                    FAQ
+                  </Button>
+                </Link>
+                <Link to="/order">
+                  <Button variant="text" sx={{ color: 'white' }}>
+                    Оформить заказ
+                  </Button>
+                </Link>
+              </>
+            )}
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography sx={{ mr: 2 }}>
@@ -138,16 +193,18 @@ export default function Navbar(): JSX.Element {
                     Личный кабинет
                   </Button>
                 </Link>
-                {/* <Link to="/cart">
-                  <IconButton color="primary" aria-label="add to shopping cart">
-                    <AddShoppingCartIcon />
-                  </IconButton>
-                </Link> */}
               </>
             )}
           </Box>
         </Toolbar>
       </Container>
+      <Drawer
+        anchor="left"
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
+      >
+        {list()}
+      </Drawer>
     </AppBar>
   );
 }
