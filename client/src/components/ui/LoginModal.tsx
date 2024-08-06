@@ -3,7 +3,7 @@ import { Box, Button, Dialog, DialogTitle, TextField } from '@mui/material';
 import type { UserLoginType } from '../../types/userTypes';
 import { loginThunk } from '../../redux/slices/auth/authThunks';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { closeModal } from '../../redux/slices/modal/modalSlice';
+import { closeModal, openModal } from '../../redux/slices/modal/modalSlice';
 
 export default function LoginModal(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -13,9 +13,14 @@ export default function LoginModal(): JSX.Element {
     dispatch(closeModal('login'));
   };
 
+  const handleSwitchToSignUp = (): void => {
+    dispatch(closeModal('login'));
+    dispatch(openModal({ modalType: 'signUp' }));
+  };
+
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>LOGIN</DialogTitle>
+      <DialogTitle sx={{textAlign: 'center'}}>Вход</DialogTitle>
       <Box
         mt={5}
         display="flex"
@@ -31,10 +36,13 @@ export default function LoginModal(): JSX.Element {
       >
         <TextField name="email" type="email" label="Email" variant="outlined" />
         <br />
-        <TextField name="password" type="password" label="Password" variant="outlined" />
+        <TextField name="password" type="password" label="Пароль" variant="outlined" />
         <br />
         <Button onClick={handleClose} type="submit">
-          Login
+          Вход
+        </Button>
+        <Button onClick={handleSwitchToSignUp}>
+          Регистрация
         </Button>
       </Box>
     </Dialog>

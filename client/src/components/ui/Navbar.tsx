@@ -138,11 +138,11 @@ export default function Navbar(): JSX.Element {
                     Личный кабинет
                   </Button>
                 </Link>
-                <Link to="/cart">
+                {/* <Link to="/cart">
                   <IconButton color="primary" aria-label="add to shopping cart">
                     <AddShoppingCartIcon />
                   </IconButton>
-                </Link>
+                </Link> */}
               </>
             )}
           </Box>

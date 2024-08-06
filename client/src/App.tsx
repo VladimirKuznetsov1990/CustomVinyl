@@ -10,6 +10,10 @@ import OrderPage from './components/pages/OrderPage';
 import Layout from './components/Layout';
 import ContactsPage from './components/pages/ContactsPage';
 import FaqPage from './components/pages/FaqPage';
+import LoginModal from './components/ui/LoginModal';
+import SignUpModal from './components/ui/SignUpModal';
+import AuthRequiredModal from './components/ui/AuthRequiredModal';
+import NotFoundPage from './components/pages/NotFoundPage';
 
 function App(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -58,11 +62,22 @@ function App(): JSX.Element {
             },
           ],
         },
+        {
+          path: '*',
+          element: <NotFoundPage />,
+        },
       ],
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <LoginModal />
+      <SignUpModal />
+      <AuthRequiredModal />
+    </>
+  );
 }
 
 export default App;
