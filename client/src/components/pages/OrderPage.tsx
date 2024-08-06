@@ -31,6 +31,7 @@ import type { OrderDataType } from '../../types/orderTypes';
 import ImageUploadAndCrop from '../ui/ImageUploadAndCrop';
 import { setCroppedImage } from '../../redux/slices/image/imageSlice';
 import { openModal } from '../../redux/slices/modal/modalSlice';
+import AudioPlayer from '../ui/AudioPlayer';
 
 export default function OrderPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -162,7 +163,7 @@ export default function OrderPage(): JSX.Element {
       alert('Failed to add order.');
     }
   };
-
+  
   // Пример функции для расчета общей стоимости
   const calculateTotalPrice = (): void => {
     // Пример расчета стоимости, замените на вашу логику
@@ -445,27 +446,31 @@ export default function OrderPage(): JSX.Element {
                     }}
                   >
                     <Table aria-label="track table">
-                      <TableHead>
+                      {/* <TableHead>
                         <TableRow>
+                          <TableCell>Прослушать</TableCell>
                           <TableCell>Картинка</TableCell>
                           <TableCell>Название трека</TableCell>
                           <TableCell>Длительность</TableCell>
                           <TableCell>Удалить</TableCell>
                         </TableRow>
-                      </TableHead>
+                      </TableHead> */}
 
                       <TableBody>
                         {audioFiles.map((file, index) => (
                           <TableRow key={file.name}>
                             <TableCell>
+                              <AudioPlayer file={file} />
+                            </TableCell>
+                            {/* <TableCell>
                               {' '}
                               <Avatar
                                 src="/path/to/track/image.jpg"
                                 alt={file.name}
                                 sx={{ mr: 2 }}
                               />
-                            </TableCell>
-                            <TableCell>{`${file.name.slice(0, 20)}...`}</TableCell>
+                            </TableCell> */}
+                            {/* <TableCell>{`${file.name.slice(0, 20)}...`}</TableCell> */}
                             <TableCell>{audioDurations[index] || 'Загрузка...'}</TableCell>
                             <TableCell>
                               <IconButton
