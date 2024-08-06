@@ -45,24 +45,60 @@ export default function OrderPage(): JSX.Element {
   const [usedDuration, setUsedDuration] = useState(0); // Использованное время в секундах
   const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
   const [additionalImage, setAdditionalImage] = useState<string | null>(null); // дополнительное изображение
+  const formats = useAppSelector((store) => store.format.data)
+  
+  useEffect(() => {
+    void dispatch(getFormatVinylThunk())
+  }, [dispatch])
 
+  const getImagePaths = (color: string): { mainImagePath: string; additionalImagePath: string } => {
+    let mainImagePath = '';
+    let additionalImagePath = '';
+
+    switch (color) {
+      case 'red':
+        mainImagePath = '/img/Vinyl_red.png';
+        additionalImagePath = '/img/Vinyl+Red_mid.png';
+        break;
+      case 'blue':
+        mainImagePath = '/img/Vinyl_blue.png';
+        additionalImagePath = '/img/Vinyl+Blue_mid.png';
+        break;
+      case 'green':
+        mainImagePath = '/img/Vinyl_green.png';
+        additionalImagePath = '/img/Vinyl+Green_mid.png';
+        break;
+      default:
+        mainImagePath = '/img/1Vinyl+.png';
+        additionalImagePath = '/img/Vinyl+Custom_mid.png';
+        break;
+    }
+
+    return { mainImagePath, additionalImagePath };
+  };
+
+  const { mainImagePath, additionalImagePath } = getImagePaths(selectedColor);
+  
+  useEffect(() => {
+    void dispatch(getFormatVinylThunk());
+  }, [dispatch, croppedImage]);
+  
   const [formDataOrder, setFormDataOrder] = useState<OrderDataType>({
     userId: 1,
     status: 'pending',
-    totalPrice: 1000,
-    formatId: 1,
-    color: 'black',
-    quantity: 1,
+    totalPrice: totalPrice,
+    formatId: selectedFormat,
+    color: selectedColor,
+    quantity: quantity,
     userImg: croppedImage?.fileUrl,
     tracks: [],
   });
 
+  console.log(selectedColor, formDataOrder)
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  useEffect(() => {
-    void dispatch(getFormatVinylThunk());
-  }, [dispatch, croppedImage]);
 
   const handleSaveCroppedImage = (image: string): void => {
     dispatch(setCroppedImage(image));
@@ -84,7 +120,7 @@ export default function OrderPage(): JSX.Element {
     }
   };
 
-  const handleOrderSubmit = async (): void => {
+  const handleOrderSubmit = async (): Promise<void> => {
     if (!croppedImage || !audioFiles) {
       alert('Please upload files.');
       return;
@@ -95,15 +131,12 @@ export default function OrderPage(): JSX.Element {
     formData.append('status', formDataOrder.status);
     formData.append('totalPrice', formDataOrder.totalPrice.toString());
     formData.append('formatId', formDataOrder.formatId.toString());
-    formData.append('color', formDataOrder.color);
+    formData.append('color', selectedColor);
     formData.append('quantity', formDataOrder.quantity.toString());
     formData.append('userImg', croppedImage?.file);
     Array.from(audioFiles).forEach((file) => {
       formData.append('tracks', file);
     })
-    // formData.append('tracks', audioFiles);
-
-    console.log(audioFiles)
 
     try {
       await dispatch(addOrderThunk(formData));
@@ -137,33 +170,6 @@ export default function OrderPage(): JSX.Element {
     calculateTotalPrice();
   }, [quantity, selectedColor, selectedFormat]);
 
-  // Функция для получения пути к основному изображению в зависимости от выбранного цвета
-  const getMainImagePath = (): string => {
-    switch (selectedColor) {
-      case 'red':
-        return '/img/Vinyl_red.png';
-      case 'blue':
-        return '/img/Vinyl_blue.png';
-      case 'green':
-        return '/img/Vinyl_green.png';
-      default:
-        return '/img/1Vinyl+.png';
-    }
-  };
-
-  // Функция для получения пути к дополнительному изображению в зависимости от выбранного цвета
-  const getAdditionalImagePath = (): string => {
-    switch (selectedColor) {
-      case 'red':
-        return '/img/Vinyl+Red_mid.png';
-      case 'blue':
-        return '/img/Vinyl+Blue_mid.png';
-      case 'green':
-        return '/img/Vinyl+Green_mid.png';
-      default:
-        return '/img/Vinyl+Custom_mid.png';
-    }
-  };
 
   // Функция для получения длительности аудиофайлов
   const getAudioDurations = (files: File[]): void => {
@@ -273,9 +279,6 @@ export default function OrderPage(): JSX.Element {
   }, [audioFiles]);
 
   // Обновление дополнительного изображения при изменении выбранного цвета
-  useEffect(() => {
-    setAdditionalImage(getAdditionalImagePath());
-  }, [selectedColor]);
 
   return (
     <Container
@@ -316,7 +319,7 @@ export default function OrderPage(): JSX.Element {
                   justifyContent: 'center',
                   alignItems: 'center',
                   height: isMobile ? '300px' : '500px',
-                  background: `url(${getMainImagePath()}) no-repeat center center / contain`,
+                  background: `url(${mainImagePath}) no-repeat center center / contain`,
                   animation: 'spin 7s linear infinite',
                 }}
               >
@@ -338,7 +341,7 @@ export default function OrderPage(): JSX.Element {
                 {additionalImage && (
                   <CardMedia
                     component="img"
-                    image={additionalImage}
+                    image={additionalImagePath}
                     alt="Additional"
                     sx={{
                       maxWidth: '100%',
@@ -370,20 +373,23 @@ export default function OrderPage(): JSX.Element {
                 </Select>
               </FormControl>
               
-              <ImageUploadAndCrop vinylImage={getMainImagePath} onSave={handleSaveCroppedImage} />
+              <ImageUploadAndCrop vinylImage={mainImagePath} onSave={handleSaveCroppedImage} />
               <Box component="form" onSubmit={OrderHandleSubmit}>
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <InputLabel id="format-label">Формат пластинки</InputLabel>
                   <Select
                     labelId="format-label"
                     id="format-select"
-                    value={selectedFormat}
+                    value=''
                     onChange={(e) => setSelectedFormat(e.target.value)}
                     label="Формат пластинки"
                   >
-                    <MenuItem value="Single">Single</MenuItem>
+                    {formats.toReversed().map((format) => (
+                      <MenuItem value={format.format}>{format.format}</MenuItem>
+                    ))}
+                    {/* <MenuItem value="Single">Single</MenuItem>
                     <MenuItem value="EP">EP</MenuItem>
-                    <MenuItem value="LP">LP</MenuItem>
+                    <MenuItem value="LP">LP</MenuItem> */}
                   </Select>
                 </FormControl>
 
@@ -463,10 +469,13 @@ export default function OrderPage(): JSX.Element {
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <InputLabel htmlFor="outlined-adornment-quantity">Количество</InputLabel>
                   <OutlinedInput
+                  type="number"
+
                     id="outlined-adornment-quantity"
                     value={quantity}
                     onChange={(e) => setQuantity(Number(e.target.value))}
                     label="Количество"
+                    inputProps={{min: 1}}
                   />
                 </FormControl>
 
