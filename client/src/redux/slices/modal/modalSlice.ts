@@ -1,4 +1,3 @@
-// redux/slices/modalSlice.ts
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
@@ -6,11 +5,13 @@ type ModalState = {
   [key: string]: boolean | null
   signUp: boolean;
   login: boolean;
+  authRequired: boolean;
 };
 
 const initialState: ModalState = {
   signUp: false,
   login: false,
+  authRequired: false,
 };
 
 const modalSlice = createSlice({

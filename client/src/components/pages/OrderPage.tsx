@@ -30,6 +30,7 @@ import { addOrderThunk } from '../../redux/slices/order/orderThunk';
 import type { OrderDataType } from '../../types/orderTypes';
 import ImageUploadAndCrop from '../ui/ImageUploadAndCrop';
 import { setCroppedImage } from '../../redux/slices/image/imageSlice';
+import { openModal } from '../../redux/slices/modal/modalSlice';
 
 export default function OrderPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -84,7 +85,12 @@ export default function OrderPage(): JSX.Element {
     }
   };
 
-  const handleOrderSubmit = async (): void => {
+  const handleOrderSubmit = async (): Promise<void> => {
+    if (!user || !user.id) {
+      dispatch(openModal({ modalType: 'authRequired' }));
+      return;
+    }
+
     if (!croppedImage || !audioFiles) {
       alert('Please upload files.');
       return;
@@ -100,10 +106,9 @@ export default function OrderPage(): JSX.Element {
     formData.append('userImg', croppedImage?.file);
     Array.from(audioFiles).forEach((file) => {
       formData.append('tracks', file);
-    })
-    // formData.append('tracks', audioFiles);
+    });
 
-    console.log(audioFiles)
+    console.log(audioFiles);
 
     try {
       await dispatch(addOrderThunk(formData));
@@ -315,7 +320,7 @@ export default function OrderPage(): JSX.Element {
           sx={{
             padding: isMobile ? '20px' : '40px',
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            borderRadius: '8px',
+            borderRadius: '20px',
           }}
         >
           <Grid container spacing={2}>
