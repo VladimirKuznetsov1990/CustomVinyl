@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { OrderDataType, OrderListType, OrderType } from "../../../types/orderTypes";
+import type { OrderDataType, OrderListType, OrderType, UpdateStatusOrderType } from "../../../types/orderTypes";
 import orderService from "../../../services/orderService";
 
 // eslint-disable-next-line import/prefer-default-export
@@ -30,7 +30,7 @@ export const deleteOrderThunk = createAsyncThunk<OrderType['id'], OrderType['id'
 //     return data;
 // });
 
-// export const updateStatusOrderThunk = createAsyncThunk<OrderType, {id: number, obj: UpdateStatusOrderType}>('orders/updateStatus', async ({ id, obj }) => {
-//     const data = await orderService.updateStatusOrder(id, obj);
-//     return data;
-// });
+export const updateStatusOrderThunk = createAsyncThunk<OrderType, {id: number, obj: UpdateStatusOrderType}>('orders/updateStatus', async ({ id, obj }) => {
+    const data = await orderService.updateStatusOrder(id, obj);
+    return data;
+});
