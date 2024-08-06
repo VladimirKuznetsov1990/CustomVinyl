@@ -1,17 +1,24 @@
-import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+
 import '../style/styles.css';
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import VinylCard from '../ui/OrderCard';
 
 export default function MainPage(): JSX.Element {
-  const dispatch = useAppDispatch();
-  const { hash } = useLocation();
+  const [visibleImages, setVisibleImages] = useState<number[]>([]);
+  const galleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = (): void => {
       const scrollTop = window.scrollY;
       document.documentElement.style.setProperty('--scrollTop', `${scrollTop}px`);
+
+      if (galleryRef.current) {
+        const rect = galleryRef.current.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom >= 0) {
+          setVisibleImages([0, 1, 2, 3, 4, 5]);
+        } else {
+          setVisibleImages([]);
+        }
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -21,91 +28,70 @@ export default function MainPage(): JSX.Element {
     };
   }, []);
 
-  useEffect(() => {
-    const scrollToElement = (elementId: string, offset: number = 0, duration: number = 1000): void => {
-      const element = document.getElementById(elementId);
-      if (!element) return;
-
-      const elementPosition = element.getBoundingClientRect().top;
-      const startingY = window.pageYOffset;
-      const diff = elementPosition - startingY + offset;
-      let start: number | null = null;
-
-      window.requestAnimationFrame(function step(timestamp: number) {
-        if (!start) start = timestamp;
-        const time = timestamp - start;
-        const percent = Math.min(time / duration, 1);
-
-        window.scrollTo(0, startingY + diff * percent);
-
-        if (time < duration) {
-          window.requestAnimationFrame(step);
-        }
-      });
-    };
-
-    if (hash) {
-      setTimeout(() => {
-        const elementId = hash.substring(1);
-        scrollToElement(elementId, -240, 1000);
-      }, 0);
-    }
-  }, [hash]);
-
   return (
     <div className="wrapper">
       <div className="content">
         <header className="main-header">
           <div className="layers">
-            <div className="layer__header">
-              <div className="layers__caption">Добро пожаловать в мир винила</div>
-              <div className="layers__title">Custom Vinyl</div>
-            </div>
+
             <div
               className="layer layers__base"
-              style={{ backgroundImage: 'url(/static/img/vin-base3.png)' }}
+              style={{ backgroundImage: 'url(/static/img/fb4.png)' }}
             />
             <div
               className="layer layers__middle"
-              style={{ backgroundImage: 'url(/static/img/vin-middle3.png)' }}
+              style={{ backgroundImage: 'url(/static/img/fm4.png)' }}
             />
             <div
               className="layer layers__front"
-              style={{ backgroundImage: 'url(/static/img/vin-front3.png)' }}
+              style={{ backgroundImage: 'url(/static/img/ff4.png)' }}
             />
           </div>
-          <div className="layer layers__front" style={{ backgroundImage: 'url(/static/img/fv-3.png)' }} />
-          {/* <div className="layer layers__front" style={{ marginTop:'0px', backgroundImage: 'url(/img/vin2-front.png)' }} /> */}
         </header>
 
-        <article className="main-article" style={{ backgroundImage: 'url(/static/img/fon-3.jpg)' }}>
-          <div id="about" className="main-article__content">
-            <h2 className="main-article__header">Custom Vinyl</h2>
-            <p id="about" className="main-article__paragraph">
+        <article
+          className="main-article"
+          style={{ backgroundImage: 'url(/static/img/fonVin2.png)' }}
+        >
+          <div className="main-article__content">
+
+            <h2 className="layers__title">Custom Vinyl</h2>
+            <img style={ {width: '350px'}} src="/static/img/work3.png" alt="" />
+            <p  id="about" className="main-article__paragraph">
               В нашем магазине вы найдете уникальные виниловые пластинки, которые мы красим и
               наносим на них изображения по вашему заказу. Также мы предлагаем услугу записи ваших
               любимых треков на винил. Создайте свою идеальную коллекцию с нами!
             </p>
           </div>
-          <div className="copy">Vinyl Paradise</div>
         </article>
 
-        <article className="main-article" style={{ backgroundImage: 'url(/static/img/3.jpg)' }}>
+        <article
+          className="main-article"
+          style={{ backgroundImage: 'url(/static/img/fonVi.png)' }}
+        >
           <div className="main-article__content">
             <h2 className="main-article__header">Наши работы:</h2>
             <p id="our-works" className="main-article__paragraph">
-              В нашем магазине вы найдете уникальные виниловые пластинки, которые мы красим и
-              наносим на них изображения по вашему заказу. Также мы предлагаем услугу записи ваших
-              любимых треков на винил. Создайте свою идеальную коллекцию с нами!
+              Мы гордимся нашими работами и рады поделиться ими с вами. В этом разделе вы найдете примеры наших уникальных виниловых пластинок, которые мы красим и наносим на них изображения по вашему заказу. Также мы предлагаем услугу записи ваших любимых треков на винил. Создайте свою идеальную коллекцию с нами!
             </p>
-            {/* <div className="gallery">
-              {vinyls.map((el) => (
-              <VinylCard vinyl={el} key={el.id} />
-              ))}
-            </div> */}
           </div>
-          <div className="copy">Vinyl Paradise</div>
+          <div className="gallery" ref={galleryRef}>
+            {[0, 1, 2, 3, 4, 5].map((index) => (
+              <div key={index} className={`gallery-item ${visibleImages.includes(index) ? 'visible' : ''}`}>
+                <img className="rotating-image" src={`/static/img/work${index + 1}.png`} alt={`Work ${index + 1}`} />
+                <p>Описание работы {index + 1}</p>
+              </div>
+            ))}
+          </div>
         </article>
+
+        <footer className="main-footer" style={{ backgroundImage: 'url(/static/img/fonVin2.png)' }}>
+          <div className="footer-content">
+            <p>&copy; 2023 Vinyl Paradise. Все права защищены.</p>
+            <p>Контакты: info@vinylparadise.com</p>
+            <p>Адрес: 12345, Город, Улица, Дом</p>
+          </div>
+        </footer>
       </div>
     </div>
   );

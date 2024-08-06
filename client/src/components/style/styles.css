@@ -12,6 +12,8 @@
 
 body {
   background-color: #000000;
+  /* background-image: url(/static/img/ground.png); */
+
   font-family: raleway_f, sans-serif;
   line-height: 1.55;
 }
@@ -26,7 +28,7 @@ body {
   z-index: 100;
   width: 100%;
   height: calc(var(--index) * 10);
-  /* background-image: url(/img/55.png); */
+  /* background-image: url(/static/img/ground.png); */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -59,16 +61,16 @@ body {
 }
 
 .layers__base {
-  transform: translate3d(0, calc(var(--scrollTop) / 1.6), 0);
+  transform: translate3d(0, calc(var(--scrollTop) / 3.1), 0);
   /* z-index: 10; */
 }
 
 .layers__middle {
-  transform: translate3d(0, calc(var(--scrollTop) / 2.5), 0);
+  transform: translate3d(0, calc(var(--scrollTop) / 1.4), 0);
 }
 
 .layers__front {
-  transform: translate3d(0, calc(var(--scrollTop) / 100), 0);
+  transform: translate3d(0, calc(var(--scrollTop) / 15.7), 0);
 }
 
 .layer__header {
@@ -100,6 +102,7 @@ body {
   background-position: center;
   color: var(--text);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -115,6 +118,7 @@ body {
   transform: var(--main-article-transform);
   transition: var(--transition);
   will-change: transform;
+  margin-bottom: 20px;
 }
 
 .main-article__paragraph {
@@ -158,6 +162,12 @@ body {
   padding: 10px;
   border-radius: 8px;
   text-align: center;
+  opacity: 0;
+  transition: opacity 3.5s ease-in-out; /* Увеличенное время анимации */
+}
+
+.gallery-item.visible {
+  opacity: 1;
 }
 
 .gallery-item img {
@@ -177,4 +187,42 @@ body {
   to {
     opacity: 1;
   }
+}
+
+/* Анимация вращения */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotating-image {
+  animation: rotate 50s linear infinite;
+}
+
+/* Стили для футера */
+.main-footer {
+  background-color: #1a1a1a;
+  background-size: cover;
+  background-position: center;
+  color: var(--text);
+  text-align: center;
+  padding: 20px 0;
+  position: relative;
+  z-index: 10;
+  margin-top: 300px;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-content p {
+  margin: 5px 0;
+  font-size: 0.9rem;
 }

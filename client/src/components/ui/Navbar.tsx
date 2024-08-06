@@ -38,7 +38,7 @@ export default function Navbar(): JSX.Element {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const scrollToAbout = (): void => {
-    scrollToElement('about', -240, 1000);
+    scrollToElement('about', -260, 1000);
   };
 
   const scrollToOurWorks = (): void => {
