@@ -6,29 +6,38 @@ export default function ContactsPage(): JSX.Element {
     <Container
       maxWidth="lg"
       sx={{
-        padding: '40px',
+        padding: '20px',
+        backgroundImage: `url(/img/fon.gif)`,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100%',
+        minWidth: '100%'
       }}
     >
       <Box sx={{ marginTop: '100px' }}>
         <Container
           maxWidth="lg"
           sx={{
-            backgroundColor: '#333',
-            padding: '20px',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            padding: '10px',
             borderRadius: '8px',
+            border: 'solid 2px #00FEFC'
           }}
         >
           <Paper
             elevation={6}
             sx={{
-              padding: '20px',
-              backgroundColor: '#444',
+              padding: '10px',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
               borderRadius: '8px',
             }}
           >
-            <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'white', textAlign: 'center' }}>
+            <Typography variant="h3" component="h1" gutterBottom sx={{ color: 'white', textAlign: 'center' }}>
               Контакты:
             </Typography>
+            <hr style={{ border: '1px solid white', margin: '20px 0' }} /> 
             <Grid container spacing={4}>
               <Grid item xs={12} md={6}>
                 <Box sx={{ marginBottom: '20px', color: 'white' }}>
