@@ -145,7 +145,7 @@ export default function OrderPage(): JSX.Element {
 
     try {
       await dispatch(addOrderThunk(formData));
-      alert('Order added successfully!');
+      dispatch(openModal({ modalType: 'orderSuccess' }));
     } catch (error) {
       console.error('Error adding order:', error);
       alert('Failed to add order.');
@@ -358,7 +358,7 @@ export default function OrderPage(): JSX.Element {
                     }}
                   />
                 )}
-                {additionalImage && (
+                {additionalImagePath && (
                   <CardMedia
                     component="img"
                     image={additionalImagePath}
