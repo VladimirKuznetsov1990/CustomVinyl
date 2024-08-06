@@ -2,17 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { Box, Slider, Button, Typography } from '@mui/material';
 import Cropper, { type Area } from 'react-easy-crop';
 import { getCroppedImg } from '../../hooks/cropImage';
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { addVinylThunk } from '../../redux/slices/vinyl/vinylThunk';
-import type { VinylDataType } from '../../types/vinylTypes';
-import { addOrderThunk } from '../../redux/slices/order/orderThunk';
-
-
-// const vinylImage = '/disk2.png'
 
 type ImageUploadAndCropProps = {
   onSave: (image: string) => void;
-  vinylImage: () => string;
+  vinylImage: string;
 };
 
 export default function ImageUploadAndCrop({
@@ -25,15 +18,11 @@ export default function ImageUploadAndCrop({
   const [openCropper, setOpenCropper] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
   const [croppedImageSrc, setCroppedImageSrc] = useState<string | null>(null);
-
-  // const { loading, error } = useAppSelector((store) => store.vinyl)
-  const dispatch = useAppDispatch();
-
-  const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPixels: Area) => {
-    setCroppedAreaPixels(croppedAreaPixels);
+  const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPix: Area) => {
+    setCroppedAreaPixels(croppedAreaPix);
   }, []);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -42,18 +31,17 @@ export default function ImageUploadAndCrop({
     }
   };
 
-  // const handleSave = async () => {
-  //   if (imageSrc && croppedAreaPixels) {
-  //     const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
-  //     onSave(croppedImage);
-  //   }
-  // };
-
-  const handleApply = async (): Promise<void> => {
+  const handleApply = (): void => {
     if (imageSrc && croppedAreaPixels) {
-      const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
-      setCroppedImageSrc(croppedImage);
-      onSave(croppedImage);
+      getCroppedImg(imageSrc, croppedAreaPixels)
+        .then((croppedImage) => {
+          setCroppedImageSrc(croppedImage);
+          onSave(croppedImage);
+          setOpenCropper(false);
+        })
+        .catch((error) => {
+          console.error('Ошибка при обрезке изображения:', error);
+        });
     }
   };
 
@@ -72,7 +60,7 @@ export default function ImageUploadAndCrop({
         <Box>
           <div style={{ position: 'relative', width: 500, height: 500 }}>
             <img
-              src={vinylImage()}
+              src={vinylImage}
               alt="Vinyl"
               style={{ position: 'absolute', width: '100%', height: '100%', opacity: 0 }}
             />
@@ -126,29 +114,11 @@ export default function ImageUploadAndCrop({
           </Box>
         </Box>
       )}
-      {/* {croppedImageSrc && (
-        <Box>
-          <img
-            src={croppedImageSrc}
-            alt="Cropped"
-            style={{
-              display: 'block',
-              margin: '10px auto',
-              borderRadius: '50%',
-              width: '200px',
-              height: '200px',
-              objectFit: 'cover',
-            }}
-          />
-        </Box>
-      )} */}
       {imageSrc && openCropper && (
         <Box>
-          <Button onClick={handleApply}>Применить</Button>
+          <Button variant="contained" color="primary" onClick={() => handleApply()}>Применить</Button>
         </Box>
       )}
-      {/* {loading && <Typography>Loading...</Typography>}
-      {error && <Typography color="error">{error}</Typography>} */}
     </Box>
   );
 }
