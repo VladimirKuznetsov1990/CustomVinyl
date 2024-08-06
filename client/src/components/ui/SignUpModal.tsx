@@ -40,13 +40,6 @@ export default function SignUpModal(): JSX.Element {
         <br />
         <TextField name="password" type="password" label="Пароль" variant="outlined" />
         <br />
-        <TextField
-          name="phone"
-          type="tel"
-          label="Номер телефона"
-          variant="outlined"
-        />
-        <br />
         <Button onClick={handleClose} type="submit">
           Зарегистрироваться
         </Button>
