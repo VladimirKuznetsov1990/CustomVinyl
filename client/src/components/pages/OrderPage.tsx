@@ -36,7 +36,8 @@ export default function OrderPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const user = useAppSelector((store) => store.auth.userStatus);
   const [quantity, setQuantity] = useState(1); // Количество пластинок
-  const [selectedFormat, setSelectedFormat] = useState('Single');
+  // const [selectedFormat, setSelectedFormat] = useState('Single');
+  const [selectedFormat, setSelectedFormat] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [totalPrice, setTotalPrice] = useState(0); // Общая стоимость
   const [audioFiles, setAudioFiles] = useState<File[]>([]); // Файлы аудио
@@ -84,18 +85,16 @@ export default function OrderPage(): JSX.Element {
     void dispatch(getFormatVinylThunk());
   }, [dispatch, croppedImage]);
   
-  const [formDataOrder, setFormDataOrder] = useState<OrderDataType>({
-    userId: 1,
-    status: 'pending',
-    totalPrice: totalPrice,
-    formatId: selectedFormat,
-    color: selectedColor,
-    quantity: quantity,
-    userImg: croppedImage?.fileUrl,
-    tracks: [],
-  });
-
-  console.log(selectedColor, formDataOrder)
+  // const [formDataOrder, setFormDataOrder] = useState<OrderDataType>({
+  //   userId: 1,
+  //   status: 'pending',
+  //   totalPrice,
+  //   formatId: Number(selectedFormat),
+  //   color: selectedColor,
+  //   quantity,
+  //   userImg: croppedImage?.fileUrl,
+  //   tracks: [],
+  // });
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -133,12 +132,12 @@ export default function OrderPage(): JSX.Element {
     }
 
     const formData = new FormData();
-    formData.append('userId', formDataOrder.userId.toString());
-    formData.append('status', formDataOrder.status);
-    formData.append('totalPrice', formDataOrder.totalPrice.toString());
-    formData.append('formatId', formDataOrder.formatId.toString());
+    formData.append('userId', user?.id.toString());
+    formData.append('status', 'pending');
+    formData.append('totalPrice', totalPrice.toString());
+    formData.append('formatId', selectedFormat.toString());
     formData.append('color', selectedColor);
-    formData.append('quantity', formDataOrder.quantity.toString());
+    formData.append('quantity', quantity.toString());
     formData.append('userImg', croppedImage?.file);
     Array.from(audioFiles).forEach((file) => {
       formData.append('tracks', file);
@@ -160,12 +159,15 @@ export default function OrderPage(): JSX.Element {
     const additionalPriceForColor = selectedColor !== '' ? 500 : 0; // Дополнительная цена за цвет
     let additionalPriceForFormat = 0;
 
-    if (selectedFormat === 'Single') {
-      additionalPriceForFormat = 0;
-    } else if (selectedFormat === 'EP') {
-      additionalPriceForFormat = 1000;
-    } else if (selectedFormat === 'LP') {
-      additionalPriceForFormat = 2000;
+    if (selectedFormat) {
+      const selectedFormatData = formats.find((format) => format.id === Number(selectedFormat));
+      if (selectedFormatData) {
+        if (selectedFormatData.format === 'EP') {
+          additionalPriceForFormat = 1000;
+        } else if (selectedFormatData.format === 'LP') {
+          additionalPriceForFormat = 2000;
+        }
+      }
     }
 
     const totalAdditionalPrice = additionalPriceForColor + additionalPriceForFormat;
@@ -268,11 +270,12 @@ export default function OrderPage(): JSX.Element {
   // Обновление доступного времени при изменении формата
   useEffect(() => {
     let maxDuration = 0;
-    if (selectedFormat === 'Single') {
+    const selectedFormatData = formats.find((format) => format.id === Number(selectedFormat));
+    if (selectedFormatData?.format === 'Single') {
       maxDuration = 10 * 60;
-    } else if (selectedFormat === 'EP') {
+    } else if (selectedFormatData?.format === 'EP') {
       maxDuration = 20 * 60;
-    } else if (selectedFormat === 'LP') {
+    } else if (selectedFormatData?.format === 'LP') {
       maxDuration = 40 * 60;
     }
     setAvailableDuration(maxDuration);
@@ -395,13 +398,13 @@ export default function OrderPage(): JSX.Element {
                   <InputLabel id="format-label">Формат пластинки</InputLabel>
                   <Select
                     labelId="format-label"
-                    id="format-select"
-                    value=''
+                    id="format"
+                    value={selectedFormat}
                     onChange={(e) => setSelectedFormat(e.target.value)}
                     label="Формат пластинки"
                   >
                     {formats.toReversed().map((format) => (
-                      <MenuItem value={format.format}>{format.format}</MenuItem>
+                      <MenuItem key={format.id} value={format.id}>{format.format}</MenuItem>
                     ))}
                     {/* <MenuItem value="Single">Single</MenuItem>
                     <MenuItem value="EP">EP</MenuItem>
