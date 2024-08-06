@@ -6,12 +6,14 @@ type ModalState = {
   signUp: boolean;
   login: boolean;
   authRequired: boolean;
+  orderSuccess: boolean; 
 };
 
 const initialState: ModalState = {
   signUp: false,
   login: false,
   authRequired: false,
+  orderSuccess: false, 
 };
 
 const modalSlice = createSlice({
