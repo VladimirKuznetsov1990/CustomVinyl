@@ -3,7 +3,7 @@ import { Box, Button, Dialog, DialogTitle, TextField } from '@mui/material';
 import type { UserSignUpType } from '../../types/userTypes';
 import { signUpThunk } from '../../redux/slices/auth/authThunks';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { closeModal } from '../../redux/slices/modal/modalSlice';
+import { closeModal, openModal } from '../../redux/slices/modal/modalSlice';
 
 export default function SignUpModal(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -12,6 +12,12 @@ export default function SignUpModal(): JSX.Element {
   const handleClose = (): void => {
     dispatch(closeModal('signUp'));
   };
+
+  const handleSwitchToLogin = (): void => {
+    dispatch(closeModal('signUp'));
+    dispatch(openModal({ modalType: 'login' }));
+  };
+
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Регистрация нового пользователя</DialogTitle>
@@ -34,8 +40,18 @@ export default function SignUpModal(): JSX.Element {
         <br />
         <TextField name="password" type="password" label="Пароль" variant="outlined" />
         <br />
+        <TextField
+          name="phone"
+          type="tel"
+          label="Номер телефона"
+          variant="outlined"
+        />
+        <br />
         <Button onClick={handleClose} type="submit">
           Зарегистрироваться
+        </Button>
+        <Button onClick={handleSwitchToLogin}>
+          Уже есть аккаунт
         </Button>
       </Box>
     </Dialog>

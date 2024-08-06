@@ -30,6 +30,7 @@ import { addOrderThunk } from '../../redux/slices/order/orderThunk';
 import type { OrderDataType } from '../../types/orderTypes';
 import ImageUploadAndCrop from '../ui/ImageUploadAndCrop';
 import { setCroppedImage } from '../../redux/slices/image/imageSlice';
+import { openModal } from '../../redux/slices/modal/modalSlice';
 
 export default function OrderPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -121,6 +122,11 @@ export default function OrderPage(): JSX.Element {
   };
 
   const handleOrderSubmit = async (): Promise<void> => {
+    if (!user || !user.id) {
+      dispatch(openModal({ modalType: 'authRequired' }));
+      return;
+    }
+        
     if (!croppedImage || !audioFiles) {
       alert('Please upload files.');
       return;
@@ -136,7 +142,7 @@ export default function OrderPage(): JSX.Element {
     formData.append('userImg', croppedImage?.file);
     Array.from(audioFiles).forEach((file) => {
       formData.append('tracks', file);
-    })
+    });
 
     try {
       await dispatch(addOrderThunk(formData));
@@ -215,11 +221,15 @@ export default function OrderPage(): JSX.Element {
     // Вычитаем длительность удаленного файла
     const audio = new Audio(URL.createObjectURL(deletedFile));
     audio.onloadedmetadata = () => {
-      setUsedDuration((prevDuration) => prevDuration - audio.duration);
-    };
+      const newUsedDuration = usedDuration - audio.duration;
+      setUsedDuration(newUsedDuration);
 
-    // Пересчитываем общее время в формате MM:SS
-    getAudioDurations(updatedAudioFiles);
+      const totalMinutes = Math.floor(newUsedDuration / 60);
+      const totalSecondsRemaining = Math.floor(newUsedDuration % 60);
+      setTotalDuration(
+        `${totalMinutes}:${totalSecondsRemaining < 10 ? '0' : ''}${totalSecondsRemaining}`,
+      );
+    };
   };
 
   // Функция для добавления аудиофайлов
@@ -285,13 +295,21 @@ export default function OrderPage(): JSX.Element {
       maxWidth="lg"
       sx={{
         padding: isMobile ? '20px' : '80px',
+        backgroundImage: `url(/img/fon.gif)`,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100%',
+        minWidth: '100%'
       }}
     >
       <Box
         sx={{
           padding: isMobile ? '10px' : '20px',
-          backgroundColor: '#444',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
           borderRadius: '8px',
+          border: 'solid 2px #00FEFC'
         }}
       >
         <Typography
@@ -305,8 +323,7 @@ export default function OrderPage(): JSX.Element {
         <Box
           sx={{
             padding: isMobile ? '20px' : '40px',
-            border: '3px solid black',
-            backgroundColor: 'white',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
             borderRadius: '20px',
           }}
         >
@@ -372,7 +389,6 @@ export default function OrderPage(): JSX.Element {
                   {/* Добавьте другие цвета по мере необходимости */}
                 </Select>
               </FormControl>
-              
               <ImageUploadAndCrop vinylImage={mainImagePath} onSave={handleSaveCroppedImage} />
               <Box component="form" onSubmit={OrderHandleSubmit}>
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
@@ -413,7 +429,8 @@ export default function OrderPage(): JSX.Element {
                     sx={{
                       mb: 4,
                       border: '1px solid black',
-                      maxHeight: audioFiles.length > 3 ? '300px' : 'auto', // Устанавливаем максимальную высоту, если треков больше 5
+                      maxHeight: '300px', // Устанавливаем максимальную высоту
+                      overflowY: 'auto', // Добавляем прокрутку
                     }}
                   >
                     <Table aria-label="track table">
@@ -452,20 +469,21 @@ export default function OrderPage(): JSX.Element {
                       </TableBody>
                     </Table>
                   </TableContainer>
-                ) : (
-                  <Typography
-                    variant="h6"
-                    gutterBottom
-                    style={{
-                      marginBottom: '20px',
-                      textAlign: 'center',
-                      color: usedDuration > availableDuration ? 'red' : 'inherit',
-                    }}
-                  >
-                    Общее время всех треков: {totalDuration} из {Math.floor(availableDuration / 60)}
-                    :00
-                  </Typography>
-                )}
+                ) : null}
+
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  style={{
+                    marginBottom: '20px',
+                    textAlign: 'center',
+                    color: usedDuration > availableDuration ? 'red' : 'inherit',
+                  }}
+                >
+                  Общее время всех треков: {totalDuration} из {Math.floor(availableDuration / 60)}
+                  :00
+                </Typography>
+
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <InputLabel htmlFor="outlined-adornment-quantity">Количество</InputLabel>
                   <OutlinedInput

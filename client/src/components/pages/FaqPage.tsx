@@ -6,23 +6,31 @@ export default function FaqPage(): JSX.Element {
     <Container
       maxWidth="lg"
       sx={{
-        padding: '40px',
+        padding: '1px',
+        backgroundImage: `url(/img/fon.gif)`,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100%',
+        minWidth: '100%'
       }}
     >
       <Box sx={{ marginTop: '100px' }}>
         <Container
           maxWidth="lg"
           sx={{
-            backgroundColor: '#333', // Темный фон для контраста
-            padding: '20px',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            padding: '10px',
             borderRadius: '8px',
+            border: 'solid 2px #00FEFC'
           }}
         >
           <Paper
             elevation={6}
             sx={{
-              padding: '20px',
-              backgroundColor: '#444',
+              padding: '10px',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
               borderRadius: '8px',
             }}
           >
