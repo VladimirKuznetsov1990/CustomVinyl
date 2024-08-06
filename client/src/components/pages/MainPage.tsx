@@ -63,22 +63,22 @@ export default function MainPage(): JSX.Element {
             </div>
             <div
               className="layer layers__base"
-              style={{ backgroundImage: 'url(/img/vin-base3.png)' }}
+              style={{ backgroundImage: 'url(/static/img/vin-base3.png)' }}
             />
             <div
               className="layer layers__middle"
-              style={{ backgroundImage: 'url(/img/vin-middle3.png)' }}
+              style={{ backgroundImage: 'url(/static/img/vin-middle3.png)' }}
             />
             <div
               className="layer layers__front"
-              style={{ backgroundImage: 'url(/img/vin-front3.png)' }}
+              style={{ backgroundImage: 'url(/static/img/vin-front3.png)' }}
             />
           </div>
-          <div className="layer layers__front" style={{ backgroundImage: 'url(/img/fv-3.png)' }} />
+          <div className="layer layers__front" style={{ backgroundImage: 'url(/static/img/fv-3.png)' }} />
           {/* <div className="layer layers__front" style={{ marginTop:'0px', backgroundImage: 'url(/img/vin2-front.png)' }} /> */}
         </header>
 
-        <article className="main-article" style={{ backgroundImage: 'url(/img/fon-3.jpg)' }}>
+        <article className="main-article" style={{ backgroundImage: 'url(/static/img/fon-3.jpg)' }}>
           <div id="about" className="main-article__content">
             <h2 className="main-article__header">Custom Vinyl</h2>
             <p id="about" className="main-article__paragraph">
@@ -90,7 +90,7 @@ export default function MainPage(): JSX.Element {
           <div className="copy">Vinyl Paradise</div>
         </article>
 
-        <article className="main-article" style={{ backgroundImage: 'url(/img/3.jpg)' }}>
+        <article className="main-article" style={{ backgroundImage: 'url(/static/img/3.jpg)' }}>
           <div className="main-article__content">
             <h2 className="main-article__header">Наши работы:</h2>
             <p id="our-works" className="main-article__paragraph">

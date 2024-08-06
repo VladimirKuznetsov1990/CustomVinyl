@@ -62,20 +62,20 @@ export default function OrderPage(): JSX.Element {
 
     switch (color) {
       case 'red':
-        mainImagePath = '/img/Vinyl_red.png';
-        additionalImagePath = '/img/Vinyl+Red_mid.png';
+        mainImagePath = '/static/img/Vinyl_red.png';
+        additionalImagePath = '/static/img/Vinyl+Red_mid.png';
         break;
       case 'blue':
-        mainImagePath = '/img/Vinyl_blue.png';
-        additionalImagePath = '/img/Vinyl+Blue_mid.png';
+        mainImagePath = '/static/img/Vinyl_blue.png';
+        additionalImagePath = '/static/img/Vinyl+Blue_mid.png';
         break;
       case 'green':
-        mainImagePath = '/img/Vinyl_green.png';
-        additionalImagePath = '/img/Vinyl+Green_mid.png';
+        mainImagePath = '/static/img/Vinyl_green.png';
+        additionalImagePath = '/static/img/Vinyl+Green_mid.png';
         break;
       default:
-        mainImagePath = '/img/1Vinyl+.png';
-        additionalImagePath = '/img/Vinyl+Custom_mid.png';
+        mainImagePath = '/static/img/1Vinyl+.png';
+        additionalImagePath = '/static/img/Vinyl+Custom_mid.png';
         break;
     }
 
@@ -137,7 +137,7 @@ export default function OrderPage(): JSX.Element {
     const formData = new FormData();
     if (user) {
       formData.append('userId', user?.id.toString());
-      formData.append('status', 'pending');
+      formData.append('status', 'Новый');
       formData.append('totalPrice', totalPrice.toString());
       formData.append('formatId', selectedFormat.toString());
       formData.append('color', selectedColor);
@@ -308,7 +308,7 @@ export default function OrderPage(): JSX.Element {
       maxWidth="lg"
       sx={{
         padding: isMobile ? '20px' : '80px',
-        backgroundImage: `url(/img/fon.gif)`,
+        backgroundImage: `url(/static/img/fon.gif)`,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',

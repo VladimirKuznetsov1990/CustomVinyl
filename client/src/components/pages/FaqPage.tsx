@@ -7,7 +7,7 @@ export default function FaqPage(): JSX.Element {
       maxWidth="lg"
       sx={{
         padding: '1px',
-        backgroundImage: `url(/img/fon.gif)`,
+        backgroundImage: `url(/static/img/fon.gif)`,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
