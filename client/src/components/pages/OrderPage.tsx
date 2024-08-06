@@ -45,13 +45,16 @@ export default function OrderPage(): JSX.Element {
   const [totalDuration, setTotalDuration] = useState<string>('00:00'); // Общее время всех треков в формате MM:SS
   const [availableDuration, setAvailableDuration] = useState(0); // Доступное время в секундах
   const [usedDuration, setUsedDuration] = useState(0); // Использованное время в секундах
-  const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
   const [additionalImage, setAdditionalImage] = useState<string | null>(null); // дополнительное изображение
-  const formats = useAppSelector((store) => store.format.data)
-  
+  const [typeShop, setTypeShop] = useState<string>('Самовывоз');
+  const [phone, setPhone] = useState<string>('');
+  const [delieveryAddress, setDelieveryAddress] = useState<string>('');
+  const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
+  const formats = useAppSelector((store) => store.format.data);
+
   useEffect(() => {
-    void dispatch(getFormatVinylThunk())
-  }, [dispatch])
+    void dispatch(getFormatVinylThunk());
+  }, [dispatch]);
 
   const getImagePaths = (color: string): { mainImagePath: string; additionalImagePath: string } => {
     let mainImagePath = '';
@@ -80,11 +83,11 @@ export default function OrderPage(): JSX.Element {
   };
 
   const { mainImagePath, additionalImagePath } = getImagePaths(selectedColor);
-  
+
   useEffect(() => {
     void dispatch(getFormatVinylThunk());
   }, [dispatch, croppedImage]);
-  
+
   // const [formDataOrder, setFormDataOrder] = useState<OrderDataType>({
   //   userId: 1,
   //   status: 'pending',
@@ -98,7 +101,6 @@ export default function OrderPage(): JSX.Element {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
 
   const handleSaveCroppedImage = (image: string): void => {
     dispatch(setCroppedImage(image));
@@ -125,23 +127,32 @@ export default function OrderPage(): JSX.Element {
       dispatch(openModal({ modalType: 'authRequired' }));
       return;
     }
-        
+
     if (!croppedImage || !audioFiles) {
       alert('Please upload files.');
       return;
     }
 
+    const { userName, email } = user;
     const formData = new FormData();
-    formData.append('userId', user?.id.toString());
-    formData.append('status', 'pending');
-    formData.append('totalPrice', totalPrice.toString());
-    formData.append('formatId', selectedFormat.toString());
-    formData.append('color', selectedColor);
-    formData.append('quantity', quantity.toString());
-    formData.append('userImg', croppedImage?.file);
-    Array.from(audioFiles).forEach((file) => {
-      formData.append('tracks', file);
-    });
+    if (user) {
+      formData.append('userId', user?.id.toString());
+      formData.append('status', 'pending');
+      formData.append('totalPrice', totalPrice.toString());
+      formData.append('formatId', selectedFormat.toString());
+      formData.append('color', selectedColor);
+      formData.append('quantity', quantity.toString());
+      if (userName && email) {
+        formData.append('userName', userName.toString());
+        formData.append('email', email.toString());
+      }
+      formData.append('phone', `${phone}`);
+      formData.append('address', delieveryAddress);
+      formData.append('userImg', croppedImage?.file);
+      Array.from(audioFiles).forEach((file) => {
+        formData.append('tracks', file);
+      });
+    }
 
     try {
       await dispatch(addOrderThunk(formData));
@@ -177,7 +188,6 @@ export default function OrderPage(): JSX.Element {
   useEffect(() => {
     calculateTotalPrice();
   }, [quantity, selectedColor, selectedFormat]);
-
 
   // Функция для получения длительности аудиофайлов
   const getAudioDurations = (files: File[]): void => {
@@ -304,7 +314,7 @@ export default function OrderPage(): JSX.Element {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         minHeight: '100%',
-        minWidth: '100%'
+        minWidth: '100%',
       }}
     >
       <Box
@@ -312,7 +322,7 @@ export default function OrderPage(): JSX.Element {
           padding: isMobile ? '10px' : '20px',
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
           borderRadius: '8px',
-          border: 'solid 2px #00FEFC'
+          border: 'solid 2px #00FEFC',
         }}
       >
         <Typography
@@ -404,14 +414,12 @@ export default function OrderPage(): JSX.Element {
                     label="Формат пластинки"
                   >
                     {formats.toReversed().map((format) => (
-                      <MenuItem key={format.id} value={format.id}>{format.format}</MenuItem>
+                      <MenuItem key={format.id} value={format.id}>
+                        {format.format}
+                      </MenuItem>
                     ))}
-                    {/* <MenuItem value="Single">Single</MenuItem>
-                    <MenuItem value="EP">EP</MenuItem>
-                    <MenuItem value="LP">LP</MenuItem> */}
                   </Select>
                 </FormControl>
-
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <input
                     id="audio-file-input"
@@ -486,20 +494,50 @@ export default function OrderPage(): JSX.Element {
                   Общее время всех треков: {totalDuration} из {Math.floor(availableDuration / 60)}
                   :00
                 </Typography>
-
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <InputLabel htmlFor="outlined-adornment-quantity">Количество</InputLabel>
                   <OutlinedInput
-                  type="number"
-
+                    type="number"
                     id="outlined-adornment-quantity"
                     value={quantity}
                     onChange={(e) => setQuantity(Number(e.target.value))}
                     label="Количество"
-                    inputProps={{min: 1}}
+                    inputProps={{ min: 1 }}
                   />
                 </FormControl>
-
+                <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+                  <InputLabel htmlFor="outlined-adornment-quantity">Номер телефона</InputLabel>
+                  <OutlinedInput
+                    type="tel"
+                    id="outlined-adornment-quantity"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    label="Номер телефона"
+                  />
+                </FormControl>
+                <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+                  <InputLabel id="delieveryAdress-label">Выберите вариант доставки:</InputLabel>
+                  <Select
+                    labelId="format-delieveryAdress-label"
+                    id="delieveryAdress"
+                    value={typeShop}
+                    onChange={(e) => setTypeShop(e.target.value)}
+                    label="Вариант доставки"
+                  >
+                    <MenuItem value="Доставка">Доставка</MenuItem>
+                    <MenuItem value="Самовывоз">Самовывоз</MenuItem>
+                  </Select>
+                </FormControl>
+                {typeShop === 'Доставка' && (
+                  <FormControl>
+                    <InputLabel>Адрес доставки</InputLabel>
+                    <OutlinedInput
+                      type="string"
+                      value={delieveryAddress}
+                      onChange={(e) => setDelieveryAddress(e.target.value)}
+                    />
+                  </FormControl>
+                )}
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                   <Button variant="contained" color="primary" onClick={handleOrderSubmit}>
                     Оформить Заказ

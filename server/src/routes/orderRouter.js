@@ -12,7 +12,7 @@ router
   .get(async (req, res) => {
     try {
       const orders = await Order.findAll();
-      res.json(OrderSchema.array().parse(orders));
+      res.json(orders);
     } catch (error) {
       console.log('Ошибка получения всех заказов', error);
       res.sendStatus(500).json({ message: 'Ошибка получения всех заказов' });
@@ -24,7 +24,6 @@ router
       { name: 'tracks', maxCount: 20 },
     ]),
     async (req, res) => {
-      console.log(req.files)
       try {
         if (!req.files['userImg'] || !req.files['tracks']) {
           return res.status(400).json({ message: 'Файлы не найдены' });
@@ -52,6 +51,10 @@ router
           color: req.body.color,
           quantity: req.body.quantity,
           tracks: trackFiles,
+          userName: req.body.userName,
+          email: req.body.email,
+          address: req.body.address,
+          phone: req.body.phone,
         });
 
         // const plainOrder = await Order.findOne({
