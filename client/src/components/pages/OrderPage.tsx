@@ -323,6 +323,7 @@ export default function OrderPage(): JSX.Element {
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
           borderRadius: '8px',
           border: 'solid 2px #00FEFC',
+          marginTop: '50px'
         }}
       >
         <Typography
@@ -349,6 +350,7 @@ export default function OrderPage(): JSX.Element {
                   justifyContent: 'center',
                   alignItems: 'center',
                   height: isMobile ? '300px' : '500px',
+                  width: isMobile ? '300px' : '500px',
                   background: `url(${mainImagePath}) no-repeat center center / contain`,
                   animation: 'spin 7s linear infinite',
                 }}
