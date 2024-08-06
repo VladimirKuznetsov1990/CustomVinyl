@@ -137,7 +137,7 @@ export default function OrderPage(): JSX.Element {
     const formData = new FormData();
     if (user) {
       formData.append('userId', user?.id.toString());
-      formData.append('status', 'pending');
+      formData.append('status', 'Новый');
       formData.append('totalPrice', totalPrice.toString());
       formData.append('formatId', selectedFormat.toString());
       formData.append('color', selectedColor);
