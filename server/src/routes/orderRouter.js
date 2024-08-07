@@ -25,23 +25,27 @@ router
     ]),
     async (req, res) => {
       try {
-        if (!req.files['userImg'] || !req.files['tracks']) {
-          return res.status(400).json({ message: 'Файлы не найдены' });
-        }
-
-        const userImgFile = req.files['userImg'][0];
+        const userImgFile = req.files['userImg'] ? req.files['userImg'][0] : null;
         const audiofiles = req.files['tracks'] || [];
-
-        const fileName = `${Date.now()}.webp`;
-        const outputBuffer = await sharp(userImgFile.buffer).webp().toBuffer();
-        await fs.writeFile(`./public/img/${fileName}`, outputBuffer);
-
-        const trackFiles = audiofiles.map((file, index) => {
-          const trackFileName = `${Date.now()}-${index}.mp3`;
-          fs.writeFile(`./public/audio/${trackFileName}`, file.buffer);
-          return trackFileName;
-        });
-
+  
+        let fileName = '';
+        if (req.body.userImg !== '') {
+          if (userImgFile) {
+            fileName = `${Date.now()}.webp`;
+            const outputBuffer = await sharp(userImgFile.buffer).webp().toBuffer();
+            await fs.writeFile(`./public/img/${fileName}`, outputBuffer);
+          }
+        }
+  
+        let trackFiles = [];
+        if (req.body.tracks && req.body.tracks.length > 0) {
+          trackFiles = audiofiles.map((file, index) => {
+            const trackFileName = `${Date.now()}-${index}.mp3`;
+            fs.writeFile(`./public/audio/${trackFileName}`, file.buffer);
+            return trackFileName;
+          });
+        }
+  
         const order = await Order.create({
           userId: req.body.userId,
           status: req.body.status,
@@ -56,20 +60,11 @@ router
           address: req.body.address,
           phone: req.body.phone,
         });
-
-        // const plainOrder = await Order.findOne({
-        //   where: {
-        //     id: order.id,
-        //   },
-        //   include: {
-        //     model: User,
-        //     attributes: ['id', 'userName', 'email'],
-        //   },
-        // });
+  
         res.json(order);
       } catch (error) {
         console.log('Ошибка создания заказа', error);
-        res.sendStatus(500).json({ message: 'Ошибка создания заказа' });
+        res.status(500).json({ message: 'Ошибка создания заказа' });
       }
     },
   );
