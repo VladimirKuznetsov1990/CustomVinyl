@@ -323,7 +323,7 @@ export default function OrderPage(): JSX.Element {
     <Container
       maxWidth="lg"
       sx={{
-        padding: isMobile ? '20px' : '80px',
+        padding: isMobile ? '20px' : '40px',
         backgroundImage: `url(/static/img/fon.gif)`,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         backgroundSize: 'cover',
@@ -546,13 +546,23 @@ export default function OrderPage(): JSX.Element {
                 {typeShop === 'Доставка' && (
                   <Box>
                     <Typography variant="h6">Адрес доставки:</Typography>
-                    <Typography>{deliveryAddress}</Typography>
-                    <Button variant="contained" onClick={handleOpenAddressModal}>
+                    <Typography mb={2}>{deliveryAddress}</Typography>
+                    <Button
+                      sx={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+                        color: '#fff', // Белый текст
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 0, 0, 1 )', // Изменение прозрачности при наведении
+                        },
+                      }}
+                      variant="contained"
+                      onClick={handleOpenAddressModal}
+                    >
                       Добавить адрес
                     </Button>
                   </Box>
                 )}
-                <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
                   <Button
                     sx={{
                       backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет

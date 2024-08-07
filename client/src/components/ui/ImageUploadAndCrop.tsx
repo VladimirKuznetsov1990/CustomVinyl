@@ -17,7 +17,8 @@ export default function ImageUploadAndCrop({
   const [zoom, setZoom] = useState(1);
   const [openCropper, setOpenCropper] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [croppedImageSrc, setCroppedImageSrc] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+  const [_croppedImageSrc, setCroppedImageSrc] = useState<string | null>(null);
   const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPix: Area) => {
     setCroppedAreaPixels(croppedAreaPix);
   }, []);
@@ -73,7 +74,7 @@ export default function ImageUploadAndCrop({
       </Button>
       {imageSrc && openCropper && (
         <Box>
-          <Box position="relative" width={isMobile ? 300 : 500} height={isMobile ? 300 : 500}>
+          <Box position="relative" width={isMobile ? 'avto' : 'avto'} height={isMobile ? 300 : 500}>
             <Box
               component="img"
               src={vinylImage}
