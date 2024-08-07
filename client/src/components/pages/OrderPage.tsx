@@ -12,37 +12,32 @@ import {
   Select,
   MenuItem,
   IconButton,
-  Avatar,
   Table,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Paper,
   useMediaQuery,
   useTheme,
-  TextField,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { getFormatVinylThunk } from '../../redux/slices/formatVinyl/formatVinylThunk';
 import { addOrderThunk } from '../../redux/slices/order/orderThunk';
-import type { OrderDataType } from '../../types/orderTypes';
 import ImageUploadAndCrop from '../ui/ImageUploadAndCrop';
 import { setCroppedImage } from '../../redux/slices/image/imageSlice';
 import { closeModal, openModal } from '../../redux/slices/modal/modalSlice';
 import AudioPlayer from '../ui/AudioPlayer';
 import '../style/styles-order.css';
-
 import AddressModal from '../ui/AddressModal';
 import { setDeliveryAddress } from '../../redux/slices/order/orderSlice';
+import { type OrderDataType } from '../../types/orderTypes';
 
 export default function OrderPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const user = useAppSelector((store) => store.auth.userStatus);
   const [quantity, setQuantity] = useState(1); // Количество пластинок
-  // const [selectedFormat, setSelectedFormat] = useState('Single');
   const [selectedFormat, setSelectedFormat] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [totalPrice, setTotalPrice] = useState(0); // Общая стоимость
@@ -51,11 +46,8 @@ export default function OrderPage(): JSX.Element {
   const [totalDuration, setTotalDuration] = useState<string>('00:00'); // Общее время всех треков в формате MM:SS
   const [availableDuration, setAvailableDuration] = useState(0); // Доступное время в секундах
   const [usedDuration, setUsedDuration] = useState(0); // Использованное время в секундах
-  const [additionalImage, setAdditionalImage] = useState<string | null>(null); // дополнительное изображение
   const [typeShop, setTypeShop] = useState<string>('Самовывоз');
   const [phone, setPhone] = useState<string>('');
-  const [phoneError, setPhoneError] = useState<boolean>(false);
-  // const [delieveryAddress, setDelieveryAddress] = useState<string>(''); //старое
   const isAddressModalOpen = useAppSelector((state) => state.modal.address);
   const deliveryAddress = useAppSelector((state) => state.order.deliveryAddress);
   const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
@@ -72,7 +64,7 @@ export default function OrderPage(): JSX.Element {
   const handleSaveAddress = (address: string): void => {
     dispatch(setDeliveryAddress(address));
   };
-      
+
   useEffect(() => {
     void dispatch(getFormatVinylThunk());
   }, [dispatch]);
@@ -118,52 +110,19 @@ export default function OrderPage(): JSX.Element {
     void dispatch(getFormatVinylThunk());
   }, [dispatch, croppedImage]);
 
-  // const [formDataOrder, setFormDataOrder] = useState<OrderDataType>({
-  //   userId: 1,
-  //   status: 'pending',
-  //   totalPrice,
-  //   formatId: Number(selectedFormat),
-  //   color: selectedColor,
-  //   quantity,
-  //   userImg: croppedImage?.fileUrl,
-  //   tracks: [],
-  // });
-
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleSaveCroppedImage = (image: string): void => {
     dispatch(setCroppedImage(image));
   };
-
-  const OrderHandleSubmit = (e: React.FormEvent): void => {
-    e.preventDefault();
-
-    if (user && user.id !== undefined) {
-      const newOrder: OrderDataType = {
-        userId: user.id,
-        status: 'newOrder',
-        totalPrice,
-      };
-
-      void dispatch(addOrderThunk(newOrder));
-    } else {
-      console.error('User is not authenticated or user ID is undefined');
-    }
-  };
-
-  console.log(audioFiles.length);
+  
+  console.log(typeof(croppedImage))
   const handleOrderSubmit = async (): Promise<void> => {
     if (!user || !user.id) {
       dispatch(openModal({ modalType: 'authRequired' }));
       return;
     }
-
-    // if (!croppedImage || !audioFiles) {
-    //   setCroppedImage('без картинки')
-    //   alert('Please upload files.');
-    //   return;
-    // }
 
     if (!phone) {
       alert('Поле "Номер телефона" обязательно для заполнения');
@@ -171,32 +130,48 @@ export default function OrderPage(): JSX.Element {
     }
 
     const { userName, email } = user;
-    const formData = new FormData();
-    if (user) {
-      formData.append('userId', user?.id.toString());
-      formData.append('status', 'Новый');
-      formData.append('totalPrice', totalPrice.toString());
-      formData.append('formatId', selectedFormat.toString());
-      formData.append('color', selectedColor);
-      formData.append('quantity', quantity.toString());
-      if (userName && email) {
-        formData.append('userName', userName.toString());
-        formData.append('email', email.toString());
-      }
-      formData.append('phone', `${phone}`);
-      formData.append('address', deliveryAddress);
-      if (!croppedImage) {
-        formData.append('userImg', '');
-      } else {
-        formData.append('userImg', croppedImage.file);
-      }
-      Array.from(audioFiles).forEach((file) => {
-        formData.append('tracks', file);
-      });
-    }
+    // const formData = new FormData();
+    // if (user) {
+    //   formData.append('userId', user?.id.toString());
+    //   formData.append('status', 'Новый');
+    //   formData.append('totalPrice', totalPrice.toString());
+    //   formData.append('formatId', selectedFormat.toString());
+    //   formData.append('color', selectedColor);
+    //   formData.append('quantity', quantity.toString());
+    //   if (userName && email) {
+    //     formData.append('userName', userName.toString());
+    //     formData.append('email', email.toString());
+    //   }
+    //   formData.append('phone', phone.toString());
+    //   formData.append('address', deliveryAddress);
+    //   if (!croppedImage) {
+    //     formData.append('userImg', '');
+    //   } else {
+    //     formData.append('userImg', croppedImage.file);
+    //   }
+    //   Array.from(audioFiles).forEach((file) => {
+    //     formData.append('tracks', file);
+    //   });
+    // }
+
+    // const { file, fileUrl } = croppedImage;
+    const orderData: OrderDataType = {
+      userId: user.id,
+      status: 'Новый',
+      totalPrice: Number(totalPrice),
+      formatId: Number(selectedFormat),
+      color: selectedColor,
+      quantity: Number(quantity),
+      userName: userName ? userName.toString() : '',
+      email: email ? email.toString() : '',
+      phone: phone.toString(),
+      address: deliveryAddress,
+      userImg: croppedImage ? croppedImage.file : '',
+      tracks: Array.from(audioFiles).map((file) => file.name),
+    };
 
     try {
-      await dispatch(addOrderThunk(formData));
+      await dispatch(addOrderThunk(orderData));
       dispatch(openModal({ modalType: 'orderSuccess' }));
     } catch (error) {
       console.error('Error adding order:', error);
@@ -429,11 +404,7 @@ export default function OrderPage(): JSX.Element {
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
-              <FormControl
-                variant="outlined"
-                fullWidth
-                className="custom-form-control"
-              >
+              <FormControl variant="outlined" fullWidth className="custom-form-control">
                 <InputLabel id="color-label">Цвет</InputLabel>
                 <Select
                   labelId="color-label"
@@ -450,7 +421,7 @@ export default function OrderPage(): JSX.Element {
                 </Select>
               </FormControl>
               <ImageUploadAndCrop vinylImage={mainImagePath} onSave={handleSaveCroppedImage} />
-              <Box component="form" onSubmit={OrderHandleSubmit}>
+              <Box>
                 <FormControl variant="outlined" fullWidth className="custom-form-control">
                   <InputLabel id="format-label">Формат пластинки</InputLabel>
                   <Select
@@ -503,31 +474,12 @@ export default function OrderPage(): JSX.Element {
                     }}
                   >
                     <Table aria-label="track table">
-                      {/* <TableHead>
-                        <TableRow>
-                          <TableCell>Прослушать</TableCell>
-                          <TableCell>Картинка</TableCell>
-                          <TableCell>Название трека</TableCell>
-                          <TableCell>Длительность</TableCell>
-                          <TableCell>Удалить</TableCell>
-                        </TableRow>
-                      </TableHead> */}
-
                       <TableBody>
                         {audioFiles.map((file, index) => (
                           <TableRow key={file.name}>
                             <TableCell>
                               <AudioPlayer file={file} />
                             </TableCell>
-                            {/* <TableCell>
-                              {' '}
-                              <Avatar
-                                src="/path/to/track/image.jpg"
-                                alt={file.name}
-                                sx={{ mr: 2 }}
-                              />
-                            </TableCell> */}
-                            {/* <TableCell>{`${file.name.slice(0, 20)}...`}</TableCell> */}
                             <TableCell>{audioDurations[index] || 'Загрузка...'}</TableCell>
                             <TableCell>
                               <IconButton
@@ -574,7 +526,6 @@ export default function OrderPage(): JSX.Element {
                     id="outlined-adornment-quantity"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    error={phoneError}
                     required
                     label="Номер телефона"
                   />
@@ -593,26 +544,9 @@ export default function OrderPage(): JSX.Element {
                   </Select>
                 </FormControl>
                 {typeShop === 'Доставка' && (
-                  // <FormControl>
-                  //   <InputLabel>Адрес доставки</InputLabel>
-                  //   <OutlinedInput
-                  //     type="string"
-                  //     value={delieveryAddress}
-                  //     onChange={(e) => setDelieveryAddress(e.target.value)}
-                  //   />
-                  // </FormControl>
                   <Box>
                     <Typography variant="h6">Адрес доставки:</Typography>
                     <Typography>{deliveryAddress}</Typography>
-                    {/* <TextField
-                      label="Адрес доставки"
-                      fullWidth
-                      margin="normal"
-                      value={deliveryAddress}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    /> */}
                     <Button variant="contained" onClick={handleOpenAddressModal}>
                       Добавить адрес
                     </Button>
@@ -629,7 +563,7 @@ export default function OrderPage(): JSX.Element {
                     }}
                     variant="contained"
                     color="primary"
-                    onClick={handleOrderSubmit}
+                    onClick={() => void handleOrderSubmit()}
                   >
                     Оформить Заказ
                   </Button>

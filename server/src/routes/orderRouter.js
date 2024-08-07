@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Order, User } = require('../../db/models');
+const { Order } = require('../../db/models');
 const { OrderSchema, orderReqBodySchema } = require('../schemas/order');
 const fs = require('fs/promises');
 const upload = require('../middlewares/multer.middleware');
@@ -18,52 +18,6 @@ router
       res.sendStatus(500).json({ message: 'Ошибка получения всех заказов' });
     }
   })
-  // .post(
-  //   upload.fields([
-  //     { name: 'userImg', maxCount: 1 },
-  //     { name: 'tracks', maxCount: 20 },
-  //   ]),
-  //   async (req, res) => {
-  //     try {
-  //       if (!req.files['userImg'] || !req.files['tracks']) {
-  //         return res.status(400).json({ message: 'Файлы не найдены' });
-  //       }
-
-  //       const userImgFile = req.files['userImg'][0];
-  //       const audiofiles = req.files['tracks'] || [];
-
-  //       const fileName = `${Date.now()}.webp`;
-  //       const outputBuffer = await sharp(userImgFile.buffer).webp().toBuffer();
-  //       await fs.writeFile(`./public/img/${fileName}`, outputBuffer);
-
-  //       const trackFiles = audiofiles.map((file, index) => {
-  //         const trackFileName = `${Date.now()}-${index}.mp3`;
-  //         fs.writeFile(`./public/audio/${trackFileName}`, file.buffer);
-  //         return trackFileName;
-  //       });
-
-  //       const order = await Order.create({
-  //         userId: req.body.userId,
-  //         status: req.body.status,
-  //         totalPrice: req.body.totalPrice,
-  //         formatId: req.body.formatId,
-  //         userImg: fileName,
-  //         color: req.body.color,
-  //         quantity: req.body.quantity,
-  //         tracks: trackFiles,
-  //         userName: req.body.userName,
-  //         email: req.body.email,
-  //         address: req.body.address,
-  //         phone: req.body.phone,
-  //       });
-
-  //       res.json(order);
-  //     } catch (error) {
-  //       console.log('Ошибка создания заказа', error);
-  //       res.sendStatus(500).json({ message: 'Ошибка создания заказа' });
-  //     }
-  //   },
-  // );
   .post(
     upload.fields([
       { name: 'userImg', maxCount: 1 },
