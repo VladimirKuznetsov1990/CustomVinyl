@@ -53,33 +53,41 @@ export default function AccountPage(): JSX.Element {
     <Container
       maxWidth="lg"
       sx={{
-        padding: '40px',
+        padding: '1px',
+        backgroundImage: `url(/static/img/fon.gif)`,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        minHeight: '100%',
+        minWidth: '100%'
       }}
     >
       <Box sx={{ marginTop: '100px' }}>
         <Container
           maxWidth="lg"
           sx={{
-            backgroundColor: '#333', // Темный фон для контраста
-            padding: '20px',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            padding: '10px',
             borderRadius: '8px',
+            border: 'solid 2px #00FEFC'
           }}
         >
           <Paper
             elevation={6}
             sx={{
-              padding: '20px',
-              backgroundColor: '#444',
+              padding: '10px',
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
               borderRadius: '8px',
             }}
           >
-            <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'white' }}>
+            <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'white', textAlign: 'center'  }}>
               Ваши заказы
             </Typography>
-            <Box sx={{ marginBottom: '20px', color: 'white' }}>
+            <hr style={{ border: '1px solid white', margin: '20px 0' }} /> 
+            <Box sx={{ marginBottom: '20px', color: 'white', textAlign: 'center' }}>
               <Typography variant="body1" gutterBottom>
-                Добро пожаловать на страницу заказов. Здесь вы можете просмотреть и управлять своими
-                заказами.
+                Добро пожаловать на страницу заказов. Здесь вы можете просмотреть все свои заказы.
               </Typography>
             </Box>
             {user.roleId === 1 && (

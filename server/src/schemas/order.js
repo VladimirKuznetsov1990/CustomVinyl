@@ -9,7 +9,7 @@ const OrderSchema = z.object({
   userImg: z.string(),
   color: z.string(),
   quantity: z.number(),
-  tracks: z.array(z.string()),
+  tracks: z.array(),
   userName: z.string(),
   email: z.string(),
   address: z.string(),
