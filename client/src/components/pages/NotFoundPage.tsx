@@ -1,4 +1,4 @@
-import { Container, Box, Typography } from '@mui/material';
+import { Container, Box } from '@mui/material';
 import React from 'react';
 
 export default function NotFoundPage(): JSX.Element {
