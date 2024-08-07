@@ -172,7 +172,7 @@ export default function OrderPage(): JSX.Element {
       alert('Failed to add order.');
     }
   };
-  
+
   // Пример функции для расчета общей стоимости
   const calculateTotalPrice = (): void => {
     // Пример расчета стоимости, замените на вашу логику
@@ -333,7 +333,7 @@ export default function OrderPage(): JSX.Element {
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
           borderRadius: '8px',
           border: 'solid 2px #00FEFC',
-          marginTop: '50px'
+          marginTop: '50px',
         }}
       >
         <Typography
@@ -441,7 +441,18 @@ export default function OrderPage(): JSX.Element {
                     onChange={handleFileInputChange}
                     multiple
                   />
-                  <Button variant="contained" component="label" htmlFor="audio-file-input">
+                  <Button
+                    sx={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+                      color: '#fff', // Белый текст
+                      '&:hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+                      },
+                    }}
+                    variant="contained"
+                    component="label"
+                    htmlFor="audio-file-input"
+                  >
                     Выберите аудио файлы
                   </Button>
                 </FormControl>
@@ -555,7 +566,18 @@ export default function OrderPage(): JSX.Element {
                   </FormControl>
                 )}
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                  <Button variant="contained" color="primary" onClick={handleOrderSubmit}>
+                  <Button
+                    sx={{
+                      backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+                      color: '#fff', // Белый текст
+                      '&:hover': {
+                        backgroundColor: 'rgba(0, 0, 0, 1 )', // Изменение прозрачности при наведении
+                      },
+                    }}
+                    variant="contained"
+                    color="primary"
+                    onClick={handleOrderSubmit}
+                  >
                     Оформить Заказ
                   </Button>
                   <Typography variant="h6" gutterBottom>

@@ -24,6 +24,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
     }
   };
 
+
   return (
     <Card sx={{ width: '100%', display: 'flex', flexDirection: 'column', height: '100%' }}>
       <CardMedia
@@ -53,12 +54,12 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
         <Typography gutterBottom variant="h6" component="div">
           Цвет пластинки: {order.color}
         </Typography>
-        <Typography variant='h6'>Аудио:</Typography>
+        <Typography variant="h6">Аудио:</Typography>
         <Box display="flex" flexDirection="column">
           {order.tracks.map((track) => (
             <Typography gutterBottom variant="body2" color="text.secondary">
               {track}
-          </Typography>
+            </Typography>
           ))}
         </Box>
         <Typography gutterBottom variant="h5" component="div">
@@ -73,7 +74,15 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               variant="contained"
               onClick={() => handleStatusChange('Новый')}
               disabled={status === 'Новый'}
-              sx={{ marginRight: '8px', marginBottom: '8px' }}
+              sx={{
+                marginRight: '8px',
+                marginBottom: '8px',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+                color: '#fff', // Белый текст
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+                },
+              }}
             >
               Новый
             </Button>
@@ -81,7 +90,15 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               variant="contained"
               onClick={() => handleStatusChange('В работе')}
               disabled={status === 'В работе'}
-              sx={{ marginRight: '8px', marginBottom: '8px' }}
+              sx={{
+                marginRight: '8px',
+                marginBottom: '8px',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+                color: '#fff', // Белый текст
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+                },
+              }}
             >
               В работе
             </Button>
@@ -89,14 +106,30 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               variant="contained"
               onClick={() => handleStatusChange('Выполнен')}
               disabled={status === 'Выполнен'}
-              sx={{ marginRight: '8px', marginBottom: '8px' }}
+              sx={{
+                marginRight: '8px',
+                marginBottom: '8px',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+                color: '#fff', // Белый текст
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+                },
+              }}
             >
               Выполнен
             </Button>
             <Button
               variant="contained"
               onClick={() => downloadArchive(order)}
-              sx={{ marginRight: '8px', marginBottom: '8px' }}
+              sx={{
+                marginRight: '8px',
+                marginBottom: '8px',
+                backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+                color: '#fff', // Белый текст
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+                },
+              }}
             >
               Скачать архив
             </Button>
