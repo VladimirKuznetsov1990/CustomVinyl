@@ -150,6 +150,7 @@ export default function OrderPage(): JSX.Element {
     }
   };
 
+  console.log(audioFiles.length);
   const handleOrderSubmit = async (): Promise<void> => {
     if (!user || !user.id) {
       dispatch(openModal({ modalType: 'authRequired' }));
@@ -187,13 +188,9 @@ export default function OrderPage(): JSX.Element {
       } else {
         formData.append('userImg', croppedImage.file);
       }
-      if (!audioFiles) {
-        formData.append('tracks', '');
-      } else {
-        Array.from(audioFiles).forEach((file) => {
-          formData.append('tracks', file);
-        });
-      }
+      Array.from(audioFiles).forEach((file) => {
+        formData.append('tracks', file);
+      });
     }
 
     try {

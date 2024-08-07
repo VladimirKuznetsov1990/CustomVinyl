@@ -1,4 +1,4 @@
-import { Card, CardContent, CardMedia, Typography, Button, Box, IconButton } from '@mui/material';
+import { Card, CardMedia, Typography, Button, Box, IconButton } from '@mui/material';
 import React, { useState } from 'react';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import EmailIcon from '@mui/icons-material/Email';
@@ -8,7 +8,7 @@ import { updateStatusOrderThunk } from '../../redux/slices/order/orderThunk';
 
 type OrderCardTypes = {
   order: OrderType;
-  downloadArchive: (order: OrderType) => void;
+  downloadArchive: (order: OrderType) => Promise<void>;
 };
 
 export default function OrderCard({ order, downloadArchive }: OrderCardTypes): JSX.Element {
@@ -26,7 +26,15 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
   };
 
   return (
-    <Card sx={{ width: '100%', display: 'flex', padding: '40px', flexDirection: 'column', height: '100%' }}>
+    <Card
+      sx={{
+        width: '100%',
+        display: 'flex',
+        padding: '40px',
+        flexDirection: 'column',
+        height: '100%',
+      }}
+    >
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%' }}>
         <Box sx={{ flex: 1, mr: { md: 2 }, mb: { xs: 2, md: 0 } }}>
           <Typography gutterBottom variant="h6" component="div">
@@ -40,18 +48,22 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
           </Typography>
           <Typography variant="h6">Аудио:</Typography>
           <Box display="flex" flexDirection="column">
-            {order.tracks.map((track) => (
-              <Typography gutterBottom variant="body2" color="text.secondary">
-                {track}
-              </Typography>
-            ))}
+            {order.tracks === null || order.tracks.length === 0 ? (
+              <Typography>Без аудиофайлов</Typography>
+            ) : (
+              order.tracks.map((track) => (
+                <Typography gutterBottom variant="body2" color="text.secondary">
+                  {track}
+                </Typography>
+              ))
+            )}
           </Box>
         </Box>
         <Box sx={{ flex: 1, mr: { md: 2 }, mb: { xs: 2, md: 0 } }}>
           <Typography gutterBottom variant="h6" component="div">
             Контакты:
           </Typography>
-          <Box display='flex' alignItems="center">
+          <Box display="flex" alignItems="center">
             <Typography gutterBottom variant="body2" color="text.secondary">
               Email: {order.email}
             </Typography>
@@ -59,7 +71,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               <EmailIcon fontSize="small" />
             </IconButton>
           </Box>
-          <Box display='flex' alignItems="center">
+          <Box display="flex" alignItems="center">
             <Typography gutterBottom variant="body2" color="text.secondary">
               Телефон: {order.phone}
             </Typography>
@@ -68,7 +80,16 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
             </IconButton>
           </Box>
         </Box>
-        <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', marginTop: '10px', justifyContent: 'center', mb: { xs: 2, md: 0 } }}>
+        <Box
+          sx={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: '10px',
+            justifyContent: 'center',
+            mb: { xs: 2, md: 0 },
+          }}
+        >
           <CardMedia
             component="img"
             image={`/img/${order.userImg}`}
