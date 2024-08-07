@@ -179,20 +179,20 @@ export default function Navbar(): JSX.Element {
             )}
             {user.status === 'logged' && (
               <>
+                <Link to="/account">
+                  <Button variant="text" sx={{ color: 'white' }}>
+                    Личный кабинет
+                  </Button>
+                </Link>
                 <Button
                   variant="text"
                   sx={{ color: 'white' }}
                   onClick={() => {
                     void dispatch(logoutThunk());
                   }}
-                >
+                  >
                   Выйти
                 </Button>
-                <Link to="/account">
-                  <Button variant="text" sx={{ color: 'white' }}>
-                    Личный кабинет
-                  </Button>
-                </Link>
               </>
             )}
           </Box>

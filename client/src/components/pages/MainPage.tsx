@@ -75,7 +75,7 @@ export default function MainPage(): JSX.Element {
               Мы гордимся нашими работами и рады поделиться ими с вами. В этом разделе вы найдете примеры наших уникальных виниловых пластинок, которые мы красим и наносим на них изображения по вашему заказу. Также мы предлагаем услугу записи ваших любимых треков на винил. Создайте свою идеальную коллекцию с нами!
             </p>
           </div>
-          <div className="gallery" ref={galleryRef}>
+          <div   style={{ padding: '100px' }} className="gallery" ref={galleryRef}>
             {[0, 1, 2, 3, 4, 5].map((index) => (
               <div key={index} className={`gallery-item ${visibleImages.includes(index) ? 'visible' : ''}`}>
                 <img className="rotating-image" src={`/static/img/work${index + 1}.png`} alt={`Work ${index + 1}`} />

@@ -50,9 +50,21 @@ export default function ImageUploadAndCrop({
 
   return (
     <Box mb={2}>
-      <Button variant="contained" color="primary" fullWidth onClick={() => setOpenCropper(true)}>
+      <Button
+        sx={{
+          backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+          color: '#fff', // Белый текст
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+          },
+        }}
+        variant="contained"
+        color="primary"
+        fullWidth
+        onClick={() => setOpenCropper(true)}
+      >
         <input
-          style={{ position: 'absolute', inset: 0, border: 'none', background: 'none', opacity: 0}}
+          style={{ position: 'absolute', inset: 0, border: 'none', background: 'none', opacity: 0 }}
           type="file"
           accept="image/*"
           onChange={handleImageChange}
@@ -120,7 +132,9 @@ export default function ImageUploadAndCrop({
       )}
       {imageSrc && openCropper && (
         <Box sx={{ mt: 2 }}>
-          <Button variant="contained" color="primary" onClick={() => handleApply()}>Применить</Button>
+          <Button variant="contained" color="primary" onClick={() => handleApply()}>
+            Применить
+          </Button>
         </Box>
       )}
     </Box>
