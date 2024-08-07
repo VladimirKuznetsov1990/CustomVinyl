@@ -56,7 +56,7 @@ export default function MainPage(): JSX.Element {
           <div className="main-article__content">
 
             <h2 className="layers__title">Custom Vinyl</h2>
-            <img style={ {width: '350px'}} src="/static/img/work3.png" alt="" />
+            <img style={ {width: '350px'}} src="/static/img/vinyl2.png" alt="" />
             <p  id="about" className="main-article__paragraph">
               В нашем магазине вы найдете уникальные виниловые пластинки, которые мы красим и
               наносим на них изображения по вашему заказу. Также мы предлагаем услугу записи ваших
@@ -79,17 +79,16 @@ export default function MainPage(): JSX.Element {
             {[0, 1, 2, 3, 4, 5].map((index) => (
               <div key={index} className={`gallery-item ${visibleImages.includes(index) ? 'visible' : ''}`}>
                 <img className="rotating-image" src={`/static/img/work${index + 1}.png`} alt={`Work ${index + 1}`} />
-                <p>Описание работы {index + 1}</p>
               </div>
             ))}
           </div>
         </article>
 
-        <footer className="main-footer" style={{ backgroundImage: 'url(/static/img/fonVin2.png)' }}>
+        <footer className="main-footer" style={{ backgroundImage: 'url(/static/img/fonVin2.png)', opacity: 0.6 }}>
           <div className="footer-content">
-            <p>&copy; 2023 Vinyl Paradise. Все права защищены.</p>
-            <p>Контакты: info@vinylparadise.com</p>
-            <p>Адрес: 12345, Город, Улица, Дом</p>
+            <p>&copy; 2024 Custom Vinyl. Все права защищены.</p>
+            <p>Контакты: info@customVinyl.ru</p>
+            <p>Москва, ул. Орджоникидзе, 11 стр. 10 (м. Ленинский проспект)</p>
           </div>
         </footer>
       </div>

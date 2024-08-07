@@ -163,7 +163,7 @@ body {
   border-radius: 8px;
   text-align: center;
   opacity: 0;
-  transition: opacity 3.5s ease-in-out; /* Увеличенное время анимации */
+  transition: opacity 3s ease-in-out; /* Увеличенное время анимации */
 }
 
 .gallery-item.visible {
