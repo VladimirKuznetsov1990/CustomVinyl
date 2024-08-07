@@ -121,6 +121,13 @@ export default function ImageUploadAndCrop({
           <Box sx={{ mt: 2 }}>
             <Typography>Zoom</Typography>
             <Slider
+                        sx={{
+                          backgroundColor: 'rgba(0, 0, 0, 0.1)', // Прозрачный черный цвет
+                          color: '#fff', // Белый текст
+                          '&:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.3)', // Изменение прозрачности при наведении
+                          },
+                        }}
               value={zoom}
               min={1}
               max={3}
@@ -132,7 +139,18 @@ export default function ImageUploadAndCrop({
       )}
       {imageSrc && openCropper && (
         <Box sx={{ mt: 2 }}>
-          <Button variant="contained" color="primary" onClick={() => handleApply()}>
+          <Button
+            sx={{
+              backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+              color: '#fff', // Белый текст
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+              },
+            }}
+            variant="contained"
+            color="primary"
+            onClick={() => handleApply()}
+          >
             Применить
           </Button>
         </Box>
