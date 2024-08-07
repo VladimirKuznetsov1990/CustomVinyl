@@ -27,26 +27,54 @@ export default function AccountPage(): JSX.Element {
     return true;
   });
 
-  const downloadArchive = async (order: OrderType): Promise<void> => {
+  // const downloadArchive = async (order: OrderType): Promise<void> => {
+  //   const zip = new JSZip();
+
+  //   // Добавляем кропнутое изображение
+  //   const imageResponse = await fetch(`/img/${order.userImg}`);
+  //   const imageBlob = await imageResponse.blob();
+  //   zip.file('cropped_image.png', imageBlob);
+
+  //   // Добавляем музыкальные файлы
+  //   const trackPromises = order.tracks.map(async (track, index) => {
+  //     const trackResponse = await fetch(`/audio/${track}`);
+  //     const trackBlob = await trackResponse.blob();
+  //     zip.file(`track_${index + 1}.mp3`, trackBlob);
+  //   });
+
+  //   await Promise.all(trackPromises);
+
+
+  //   const content: Blob = await zip.generateAsync({ type: 'blob' });
+  //   saveAs(content, `order_${order.id}.zip`);
+  // };
+  const downloadArchive = (order: OrderType): void => {
     const zip = new JSZip();
-
+  
     // Добавляем кропнутое изображение
-    const imageResponse = await fetch(`/img/${order.userImg}`);
-    const imageBlob = await imageResponse.blob();
-    zip.file('cropped_image.png', imageBlob);
-
-    // Добавляем музыкальные файлы
-    const trackPromises = order.tracks.map(async (track, index) => {
-      const trackResponse = await fetch(`/audio/${track}`);
-      const trackBlob = await trackResponse.blob();
-      zip.file(`track_${index + 1}.mp3`, trackBlob);
-    });
-
-    await Promise.all(trackPromises);
-
-
-    const content: Blob = await zip.generateAsync({ type: 'blob' });
-    saveAs(content, `order_${order.id}.zip`);
+    fetch(`/img/${order.userImg}`)
+      .then((imageResponse) => imageResponse.blob())
+      .then((imageBlob) => {
+        zip.file('cropped_image.png', imageBlob);
+  
+        // Добавляем музыкальные файлы
+        const trackPromises = order.tracks.map((track, index) =>
+          fetch(`/audio/${track}`)
+            .then((trackResponse) => trackResponse.blob())
+            .then((trackBlob) => {
+              zip.file(`track_${index + 1}.mp3`, trackBlob);
+            })
+        );
+  
+        return Promise.all(trackPromises);
+      })
+      .then(() => zip.generateAsync({ type: 'blob' }))
+      .then((content) => {
+        saveAs(content, `order_${order.id}.zip`);
+      })
+      .catch((error) => {
+        console.error('Failed to download archive:', error);
+      });
   };
 
   return (

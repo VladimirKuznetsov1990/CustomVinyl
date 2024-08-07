@@ -22,6 +22,7 @@ import {
   Paper,
   useMediaQuery,
   useTheme,
+  TextField,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
@@ -30,8 +31,10 @@ import { addOrderThunk } from '../../redux/slices/order/orderThunk';
 import type { OrderDataType } from '../../types/orderTypes';
 import ImageUploadAndCrop from '../ui/ImageUploadAndCrop';
 import { setCroppedImage } from '../../redux/slices/image/imageSlice';
-import { openModal } from '../../redux/slices/modal/modalSlice';
+import { closeModal, openModal } from '../../redux/slices/modal/modalSlice';
 import AudioPlayer from '../ui/AudioPlayer';
+import AddressModal from '../ui/AddressModal';
+import { setDeliveryAddress } from '../../redux/slices/order/orderSlice';
 
 export default function OrderPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -49,9 +52,24 @@ export default function OrderPage(): JSX.Element {
   const [additionalImage, setAdditionalImage] = useState<string | null>(null); // дополнительное изображение
   const [typeShop, setTypeShop] = useState<string>('Самовывоз');
   const [phone, setPhone] = useState<string>('');
-  const [delieveryAddress, setDelieveryAddress] = useState<string>('');
+  const [phoneError, setPhoneError] = useState<boolean>(false);
+  // const [delieveryAddress, setDelieveryAddress] = useState<string>(''); //старое
+  const isAddressModalOpen = useAppSelector((state) => state.modal.address);
+  const deliveryAddress = useAppSelector((state) => state.order.deliveryAddress);
   const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
   const formats = useAppSelector((store) => store.format.data);
+
+  const handleOpenAddressModal = (): void => {
+    dispatch(openModal({ modalType: 'address' }));
+  };
+
+  const handleCloseAddressModal = (): void => {
+    dispatch(closeModal('address'));
+  };
+
+  const handleSaveAddress = (address: string): void => {
+    dispatch(setDeliveryAddress(address));
+  };
 
   useEffect(() => {
     void dispatch(getFormatVinylThunk());
@@ -138,8 +156,14 @@ export default function OrderPage(): JSX.Element {
       return;
     }
 
-    if (!croppedImage || !audioFiles) {
-      alert('Please upload files.');
+    // if (!croppedImage || !audioFiles) {
+    //   setCroppedImage('без картинки')
+    //   alert('Please upload files.');
+    //   return;
+    // }
+
+    if (!phone) {
+      alert('Поле "Номер телефона" обязательно для заполнения');
       return;
     }
 
@@ -157,11 +181,19 @@ export default function OrderPage(): JSX.Element {
         formData.append('email', email.toString());
       }
       formData.append('phone', `${phone}`);
-      formData.append('address', delieveryAddress);
-      formData.append('userImg', croppedImage?.file);
-      Array.from(audioFiles).forEach((file) => {
-        formData.append('tracks', file);
-      });
+      formData.append('address', deliveryAddress);
+      if (!croppedImage) {
+        formData.append('userImg', '');
+      } else {
+        formData.append('userImg', croppedImage.file);
+      }
+      if (!audioFiles) {
+        formData.append('tracks', '');
+      } else {
+        Array.from(audioFiles).forEach((file) => {
+          formData.append('tracks', file);
+        });
+      }
     }
 
     try {
@@ -539,6 +571,8 @@ export default function OrderPage(): JSX.Element {
                     id="outlined-adornment-quantity"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
+                    error={phoneError}
+                    required
                     label="Номер телефона"
                   />
                 </FormControl>
@@ -556,14 +590,30 @@ export default function OrderPage(): JSX.Element {
                   </Select>
                 </FormControl>
                 {typeShop === 'Доставка' && (
-                  <FormControl>
-                    <InputLabel>Адрес доставки</InputLabel>
-                    <OutlinedInput
-                      type="string"
-                      value={delieveryAddress}
-                      onChange={(e) => setDelieveryAddress(e.target.value)}
-                    />
-                  </FormControl>
+                  // <FormControl>
+                  //   <InputLabel>Адрес доставки</InputLabel>
+                  //   <OutlinedInput
+                  //     type="string"
+                  //     value={delieveryAddress}
+                  //     onChange={(e) => setDelieveryAddress(e.target.value)}
+                  //   />
+                  // </FormControl>
+                  <Box>
+                    <Typography variant="h6">Адрес доставки:</Typography>
+                    <Typography>{deliveryAddress}</Typography>
+                    {/* <TextField
+                      label="Адрес доставки"
+                      fullWidth
+                      margin="normal"
+                      value={deliveryAddress}
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                    /> */}
+                    <Button variant="contained" onClick={handleOpenAddressModal}>
+                      Добавить адрес
+                    </Button>
+                  </Box>
                 )}
                 <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
                   <Button
@@ -592,6 +642,11 @@ export default function OrderPage(): JSX.Element {
           </Grid>
         </Box>
       </Box>
+      <AddressModal
+        open={isAddressModalOpen}
+        onClose={handleCloseAddressModal}
+        onSave={handleSaveAddress}
+      />
     </Container>
   );
 }

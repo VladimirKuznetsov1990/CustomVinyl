@@ -8,7 +8,7 @@ import { updateStatusOrderThunk } from '../../redux/slices/order/orderThunk';
 
 type OrderCardTypes = {
   order: OrderType;
-  downloadArchive: (order: OrderType) => Promise<void>;
+  downloadArchive: (order: OrderType) => void;
 };
 
 export default function OrderCard({ order, downloadArchive }: OrderCardTypes): JSX.Element {
@@ -91,15 +91,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               variant="contained"
               onClick={() => void handleStatusChange('Новый')}
               disabled={status === 'Новый'}
-              sx={{
-                marginRight: '8px',
-                marginBottom: '8px',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
-                color: '#fff', // Белый текст
-                '&:hover': {
-                  backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
-                },
-              }}
+              sx={{ marginRight: '8px', marginBottom: '8px' }}
             >
               Новый
             </Button>
@@ -107,15 +99,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               variant="contained"
               onClick={() => void handleStatusChange('В работе')}
               disabled={status === 'В работе'}
-              sx={{
-                marginRight: '8px',
-                marginBottom: '8px',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
-                color: '#fff', // Белый текст
-                '&:hover': {
-                  backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
-                },
-              }}
+              sx={{ marginRight: '8px', marginBottom: '8px' }}
             >
               В работе
             </Button>
@@ -123,15 +107,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               variant="contained"
               onClick={() => void handleStatusChange('Выполнен')}
               disabled={status === 'Выполнен'}
-              sx={{
-                marginRight: '8px',
-                marginBottom: '8px',
-                backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
-                color: '#fff', // Белый текст
-                '&:hover': {
-                  backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
-                },
-              }}
+              sx={{ marginRight: '8px', marginBottom: '8px' }}
             >
               Выполнен
             </Button>
