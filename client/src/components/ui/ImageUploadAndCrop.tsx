@@ -17,7 +17,8 @@ export default function ImageUploadAndCrop({
   const [zoom, setZoom] = useState(1);
   const [openCropper, setOpenCropper] = useState(false);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
-  const [croppedImageSrc, setCroppedImageSrc] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
+  const [_croppedImageSrc, setCroppedImageSrc] = useState<string | null>(null);
   const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPix: Area) => {
     setCroppedAreaPixels(croppedAreaPix);
   }, []);
