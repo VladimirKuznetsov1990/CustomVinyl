@@ -5,7 +5,7 @@ import { checkUserThunk } from './redux/slices/auth/authThunks';
 import { useAppDispatch, useAppSelector } from './hooks/reduxHooks';
 import AccountPage from './components/pages/AccountPage';
 import MainPage from './components/pages/MainPage';
-import CartPage from './components/pages/CartPage';
+// import CartPage from './components/pages/CartPage';
 import OrderPage from './components/pages/OrderPage';
 import Layout from './components/Layout';
 import ContactsPage from './components/pages/ContactsPage';
@@ -40,10 +40,10 @@ function App(): JSX.Element {
               path: '/account',
               element: <AccountPage />,
             },
-            {
-              path: '/cart',
-              element: <CartPage />,
-            },
+            // {
+            //   path: '/cart',
+            //   element: <CartPage />,
+            // },
           ],
         },
         {

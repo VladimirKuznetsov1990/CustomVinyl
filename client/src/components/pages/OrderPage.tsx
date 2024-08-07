@@ -57,6 +57,15 @@ export default function OrderPage(): JSX.Element {
     void dispatch(getFormatVinylThunk());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (formats.length > 0) {
+      const defaultFormat = formats.find((format) => format.format === 'Single');
+      if (defaultFormat) {
+        setSelectedFormat(defaultFormat.id.toString());
+      }
+    }
+  }, [formats]);
+
   const getImagePaths = (color: string): { mainImagePath: string; additionalImagePath: string } => {
     let mainImagePath = '';
     let additionalImagePath = '';
