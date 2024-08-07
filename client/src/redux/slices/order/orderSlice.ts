@@ -1,19 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { OrderListType } from '../../../types/orderTypes';
 import { addOrderThunk, getOrdersThunk, updateStatusOrderThunk } from './orderThunk';
 
 type InitialStateType = {
   data: OrderListType;
+  deliveryAddress: string;
 };
 
 const initialState: InitialStateType = {
   data: [],
+  deliveryAddress: '',
 };
 
 const orderSlice = createSlice({
   name: 'orders',
   initialState,
-  reducers: {},
+  reducers: {
+    setDeliveryAddress(state, action: PayloadAction<string>) {
+      state.deliveryAddress = action.payload;
+    },
+    resetDeliveryAddress(state) {
+      state.deliveryAddress = '';
+    },
+  },
   extraReducers: (builder) => {
     builder
     .addCase(getOrdersThunk.fulfilled, (state, { payload }) => {
@@ -21,6 +30,7 @@ const orderSlice = createSlice({
     })
     .addCase(addOrderThunk.fulfilled, (state, { payload }) => {
       state.data.push(payload);
+      state.deliveryAddress = '';
     })
     .addCase(addOrderThunk.rejected, (state) => {
       state.data = [];
@@ -35,5 +45,7 @@ const orderSlice = createSlice({
     })
   },
 });
+
+export const { setDeliveryAddress, resetDeliveryAddress } = orderSlice.actions;
 
 export default orderSlice.reducer;
