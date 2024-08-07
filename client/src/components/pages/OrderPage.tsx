@@ -130,48 +130,32 @@ export default function OrderPage(): JSX.Element {
     }
 
     const { userName, email } = user;
-    // const formData = new FormData();
-    // if (user) {
-    //   formData.append('userId', user?.id.toString());
-    //   formData.append('status', 'Новый');
-    //   formData.append('totalPrice', totalPrice.toString());
-    //   formData.append('formatId', selectedFormat.toString());
-    //   formData.append('color', selectedColor);
-    //   formData.append('quantity', quantity.toString());
-    //   if (userName && email) {
-    //     formData.append('userName', userName.toString());
-    //     formData.append('email', email.toString());
-    //   }
-    //   formData.append('phone', phone.toString());
-    //   formData.append('address', deliveryAddress);
-    //   if (!croppedImage) {
-    //     formData.append('userImg', '');
-    //   } else {
-    //     formData.append('userImg', croppedImage.file);
-    //   }
-    //   Array.from(audioFiles).forEach((file) => {
-    //     formData.append('tracks', file);
-    //   });
-    // }
-
-    // const { file, fileUrl } = croppedImage;
-    const orderData: OrderDataType = {
-      userId: user.id,
-      status: 'Новый',
-      totalPrice: Number(totalPrice),
-      formatId: Number(selectedFormat),
-      color: selectedColor,
-      quantity: Number(quantity),
-      userName: userName ? userName.toString() : '',
-      email: email ? email.toString() : '',
-      phone: phone.toString(),
-      address: deliveryAddress,
-      userImg: croppedImage ? croppedImage.file : '',
-      tracks: Array.from(audioFiles).map((file) => file.name),
-    };
+    const formData = new FormData();
+    if (user) {
+      formData.append('userId', user?.id.toString());
+      formData.append('status', 'Новый');
+      formData.append('totalPrice', totalPrice.toString());
+      formData.append('formatId', selectedFormat.toString());
+      formData.append('color', selectedColor);
+      formData.append('quantity', quantity.toString());
+      if (userName && email) {
+        formData.append('userName', userName.toString());
+        formData.append('email', email.toString());
+      }
+      formData.append('phone', phone.toString());
+      formData.append('address', deliveryAddress);
+      if (!croppedImage) {
+        formData.append('userImg', '');
+      } else {
+        formData.append('userImg', croppedImage.file);
+      }
+      Array.from(audioFiles).forEach((file) => {
+        formData.append('tracks', file);
+      });
+    }
 
     try {
-      await dispatch(addOrderThunk(orderData));
+      await dispatch(addOrderThunk(formData));
       dispatch(openModal({ modalType: 'orderSuccess' }));
     } catch (error) {
       console.error('Error adding order:', error);
