@@ -74,7 +74,7 @@ export default function ImageUploadAndCrop({
       </Button>
       {imageSrc && openCropper && (
         <Box>
-          <Box position="relative" width={isMobile ? 300 : 500} height={isMobile ? 300 : 500}>
+          <Box position="relative" width={isMobile ? 'avto' : 'avto'} height={isMobile ? 300 : 500}>
             <Box
               component="img"
               src={vinylImage}
