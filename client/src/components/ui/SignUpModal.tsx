@@ -40,10 +40,33 @@ export default function SignUpModal(): JSX.Element {
         <br />
         <TextField name="password" type="password" label="Пароль" variant="outlined" />
         <br />
-        <Button onClick={handleClose} type="submit">
+        <Button
+          sx={{
+            marginRight: '8px',
+            marginBottom: '8px',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+            color: '#fff', // Белый текст
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+            },
+          }}
+          onClick={handleClose}
+          type="submit"
+        >
           Зарегистрироваться
         </Button>
-        <Button onClick={handleSwitchToLogin}>
+        <Button
+          sx={{
+            marginRight: '8px',
+            marginBottom: '8px',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+            color: '#fff', // Белый текст
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+            },
+          }}
+          onClick={handleSwitchToLogin}
+        >
           Уже есть аккаунт
         </Button>
       </Box>

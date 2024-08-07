@@ -20,7 +20,7 @@ export default function LoginModal(): JSX.Element {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle sx={{textAlign: 'center'}}>Вход</DialogTitle>
+      <DialogTitle sx={{ textAlign: 'center' }}>Вход</DialogTitle>
       <Box
         mt={5}
         display="flex"
@@ -38,10 +38,33 @@ export default function LoginModal(): JSX.Element {
         <br />
         <TextField name="password" type="password" label="Пароль" variant="outlined" />
         <br />
-        <Button onClick={handleClose} type="submit">
+        <Button
+          sx={{
+            marginRight: '8px',
+            marginBottom: '8px',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+            color: '#fff', // Белый текст
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+            },
+          }}
+          onClick={handleClose}
+          type="submit"
+        >
           Вход
         </Button>
-        <Button onClick={handleSwitchToSignUp}>
+        <Button
+          sx={{
+            marginRight: '8px',
+            marginBottom: '8px',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+            color: '#fff', // Белый текст
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+            },
+          }}
+          onClick={handleSwitchToSignUp}
+        >
           Регистрация
         </Button>
       </Box>

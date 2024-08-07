@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Box,
   Button,
   Dialog,
   DialogTitle,
@@ -36,10 +35,34 @@ export default function AuthRequiredModal(): JSX.Element {
         <Typography>Для оформления заказа необходимо войти или зарегистрироваться.</Typography>
       </DialogContent>
       <DialogActions sx={{ justifyContent: 'center' }}>
-        <Button onClick={handleLogin} color="primary">
+        <Button
+          sx={{
+            marginRight: '8px',
+            marginBottom: '8px',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+            color: '#fff', // Белый текст
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+            },
+          }}
+          onClick={handleLogin}
+          color="primary"
+        >
           Войти
         </Button>
-        <Button onClick={handleSignUp} color="primary">
+        <Button
+          sx={{
+            marginRight: '8px',
+            marginBottom: '8px',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+            color: '#fff', // Белый текст
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+            },
+          }}
+          onClick={handleSignUp}
+          color="primary"
+        >
           Зарегистрироваться
         </Button>
       </DialogActions>

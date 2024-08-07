@@ -38,11 +38,11 @@ export default function Navbar(): JSX.Element {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const scrollToAbout = (): void => {
-    scrollToElement('about', -260, 1000);
+    scrollToElement('about', -440, 1000);
   };
 
   const scrollToOurWorks = (): void => {
-    scrollToElement('our-works', 0, 2000);
+    scrollToElement('our-works', -70, 2000);
   };
 
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -57,7 +57,7 @@ export default function Navbar(): JSX.Element {
     setDrawerOpen(open);
   };
 
-  const list = () => (
+  const list = (): React.JSX.Element => (
     <Box
       sx={{ width: 250 }}
       role="presentation"
