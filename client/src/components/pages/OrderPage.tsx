@@ -32,6 +32,8 @@ import ImageUploadAndCrop from '../ui/ImageUploadAndCrop';
 import { setCroppedImage } from '../../redux/slices/image/imageSlice';
 import { openModal } from '../../redux/slices/modal/modalSlice';
 import AudioPlayer from '../ui/AudioPlayer';
+import '../style/styles-order.css';
+
 
 export default function OrderPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -53,6 +55,8 @@ export default function OrderPage(): JSX.Element {
   const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
   const formats = useAppSelector((store) => store.format.data);
 
+
+  
   useEffect(() => {
     void dispatch(getFormatVinylThunk());
   }, [dispatch]);
@@ -323,8 +327,8 @@ export default function OrderPage(): JSX.Element {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        minHeight: '100%',
-        // minWidth: '100%'
+        minHeight: '100vh',
+        minWidth: '100%',
       }}
     >
       <Box
@@ -398,7 +402,11 @@ export default function OrderPage(): JSX.Element {
               </Box>
             </Grid>
             <Grid item xs={12} md={6}>
-              <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+              <FormControl
+                variant="outlined"
+                fullWidth
+                className="custom-form-control"
+              >
                 <InputLabel id="color-label">Цвет</InputLabel>
                 <Select
                   labelId="color-label"
@@ -416,7 +424,7 @@ export default function OrderPage(): JSX.Element {
               </FormControl>
               <ImageUploadAndCrop vinylImage={mainImagePath} onSave={handleSaveCroppedImage} />
               <Box component="form" onSubmit={OrderHandleSubmit}>
-                <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+                <FormControl variant="outlined" fullWidth className="custom-form-control">
                   <InputLabel id="format-label">Формат пластинки</InputLabel>
                   <Select
                     labelId="format-label"
@@ -521,7 +529,7 @@ export default function OrderPage(): JSX.Element {
                   Общее время всех треков: {totalDuration} из {Math.floor(availableDuration / 60)}
                   :00
                 </Typography>
-                <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+                <FormControl variant="outlined" fullWidth className="custom-form-control">
                   <InputLabel htmlFor="outlined-adornment-quantity">Количество</InputLabel>
                   <OutlinedInput
                     type="number"
@@ -532,7 +540,7 @@ export default function OrderPage(): JSX.Element {
                     inputProps={{ min: 1 }}
                   />
                 </FormControl>
-                <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+                <FormControl variant="outlined" fullWidth className="custom-form-control">
                   <InputLabel htmlFor="outlined-adornment-quantity">Номер телефона</InputLabel>
                   <OutlinedInput
                     type="tel"
@@ -542,8 +550,8 @@ export default function OrderPage(): JSX.Element {
                     label="Номер телефона"
                   />
                 </FormControl>
-                <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
-                  <InputLabel id="delieveryAdress-label">Выберите вариант доставки:</InputLabel>
+                <FormControl variant="outlined" fullWidth className="custom-form-control">
+                  <InputLabel id="delieveryAdress-label">Вариант доставки:</InputLabel>
                   <Select
                     labelId="format-delieveryAdress-label"
                     id="delieveryAdress"
@@ -556,7 +564,7 @@ export default function OrderPage(): JSX.Element {
                   </Select>
                 </FormControl>
                 {typeShop === 'Доставка' && (
-                  <FormControl>
+                  <FormControl >
                     <InputLabel>Адрес доставки</InputLabel>
                     <OutlinedInput
                       type="string"

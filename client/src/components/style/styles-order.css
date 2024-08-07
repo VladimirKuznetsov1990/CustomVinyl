@@ -1,0 +1,25 @@
+/* styles.css */
+.custom-form-control .MuiOutlinedInput-root fieldset {
+    border-color: rgba(0, 0, 0, 0.4); /* Изменение цвета обводки инпута */
+  }
+  
+  .custom-form-control .MuiOutlinedInput-root:hover fieldset {
+    border-color: black; /* Изменение цвета обводки при наведении */
+  }
+  
+  .custom-form-control .MuiOutlinedInput-root.Mui-focused fieldset {
+    border-color: rgba(0, 0, 0, 0.4); /* Изменение цвета обводки при фокусе */
+  }
+  
+  .custom-form-control .MuiOutlinedInput-root {
+    margin-bottom: 16px;
+  }
+  
+  .custom-form-control .MuiInputLabel-root {
+    color: rgba(0, 0, 0, 0.4); /* Изменение цвета лейбла */
+  }
+  
+  .custom-form-control .MuiInputLabel-root.Mui-focused {
+    color: rgba(0, 0, 0, 0.7); /* Изменение цвета лейбла при фокусе */
+  }
+  

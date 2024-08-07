@@ -41,13 +41,49 @@ export default function OrderSuccessModal(): JSX.Element {
         <Typography>Ваш заказ был успешно добавлен. Что вы хотите сделать дальше?</Typography>
       </DialogContent>
       <DialogActions sx={{ justifyContent: 'center' }}>
-        <Button onClick={handleGoToHome} color="primary">
+        <Button
+          sx={{
+            marginRight: '8px',
+            marginBottom: '8px',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+            color: '#fff', // Белый текст
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+            },
+          }}
+          onClick={handleGoToHome}
+          color="primary"
+        >
           На главную
         </Button>
-        <Button onClick={handleGoToOrders} color="primary">
+        <Button
+          sx={{
+            marginRight: '8px',
+            marginBottom: '8px',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+            color: '#fff', // Белый текст
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+            },
+          }}
+          onClick={handleGoToOrders}
+          color="primary"
+        >
           К заказам
         </Button>
-        <Button onClick={handleCreateNewOrder} color="primary">
+        <Button
+          sx={{
+            marginRight: '8px',
+            marginBottom: '8px',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+            color: '#fff', // Белый текст
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+            },
+          }}
+          onClick={handleCreateNewOrder}
+          color="primary"
+        >
           Создать еще один заказ
         </Button>
       </DialogActions>

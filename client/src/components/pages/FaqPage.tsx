@@ -12,7 +12,7 @@ export default function FaqPage(): JSX.Element {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        minHeight: '100%',
+        minHeight: '100vh',
         minWidth: '100%'
       }}
     >

@@ -129,6 +129,7 @@ body {
   transition: var(--transition);
   will-change: transform;
   text-align: center;
+  font-weight: 550;
 }
 
 .content {
@@ -141,10 +142,6 @@ body {
   opacity: 0.45;
   font-size: calc(var(--index) * 0.75);
   letter-spacing: calc(var(--index) / 37.5);
-}
-
-#about {
-  /* margin-top: -365px; */
 }
 
 /* Добавленные стили для раздела "Наши работы" */
@@ -213,7 +210,7 @@ body {
   padding: 20px 0;
   position: relative;
   z-index: 10;
-  margin-top: 300px;
+  margin-top: 50px;
 }
 
 .footer-content {
