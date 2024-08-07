@@ -4,6 +4,7 @@ import type { UserSignUpType } from '../../types/userTypes';
 import { signUpThunk } from '../../redux/slices/auth/authThunks';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { closeModal, openModal } from '../../redux/slices/modal/modalSlice';
+import '../style/styles-order.css';
 
 export default function SignUpModal(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -26,7 +27,7 @@ export default function SignUpModal(): JSX.Element {
         display="flex"
         flexDirection="column"
         margin="15px"
-        padding="15px"
+        padding="10px"
         component="form"
         onSubmit={(e) => {
           e.preventDefault();
@@ -34,16 +35,32 @@ export default function SignUpModal(): JSX.Element {
           void dispatch(signUpThunk(formData));
         }}
       >
-        <TextField name="userName" label="Логин" variant="outlined" />
-        <br />
-        <TextField name="email" type="email" label="Email" variant="outlined" />
-        <br />
-        <TextField name="password" type="password" label="Пароль" variant="outlined" />
-        <br />
+        <TextField
+          name="userName"
+          label="Логин"
+          variant="outlined"
+          sx={{ mb: 1 }}
+          className="custom-form-control"
+        />
+        <TextField
+          name="email"
+          type="email"
+          label="Email"
+          variant="outlined"
+          sx={{ mb: 1 }}
+          className="custom-form-control"
+        />
+        <TextField
+          name="password"
+          type="password"
+          label="Пароль"
+          variant="outlined"
+          sx={{ mb: 1 }}
+          className="custom-form-control"
+        />
         <Button
           sx={{
-            marginRight: '8px',
-            marginBottom: '8px',
+            margin: '8px',
             backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
             color: '#fff', // Белый текст
             '&:hover': {
@@ -57,8 +74,7 @@ export default function SignUpModal(): JSX.Element {
         </Button>
         <Button
           sx={{
-            marginRight: '8px',
-            marginBottom: '8px',
+            margin: '8px',
             backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
             color: '#fff', // Белый текст
             '&:hover': {
