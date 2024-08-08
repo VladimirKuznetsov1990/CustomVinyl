@@ -11,6 +11,21 @@ type OrderCardTypes = {
   downloadArchive: (order: OrderType) => Promise<void>;
 };
 
+type ImagePaths = {
+  main: {
+    green: string;
+    blue: string;
+    red: string;
+    default: string;
+  };
+  additional: {
+    green: string;
+    blue: string;
+    red: string;
+    default: string;
+  };
+};
+
 export default function OrderCard({ order, downloadArchive }: OrderCardTypes): JSX.Element {
   const [status, setStatus] = useState(order.status);
   const dispatch = useAppDispatch();
@@ -24,6 +39,24 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
       console.error('Failed to update order status:', error);
     }
   };
+
+  const images: ImagePaths = {
+    main: {
+      Зеленый: '/static/img/Vinyl_green.png',
+      Синий: '/static/img/Vinyl_blue.png',
+      Красный: '/static/img/Vinyl_red.png',
+      default: '/static/img/1Vinyl+.png',
+    },
+    additional: {
+      Зеленый: '/static/img/Vinyl+Green_mid.png',
+      Синий: '/static/img/Vinyl+Blue_mid.png',
+      Красный: '/static/img/Vinyl+Red_mid.png',
+      default: '/static/img/Vinyl+Custom_mid.png',
+    },
+  };
+
+  const getImagePath = (color: string, type: keyof ImagePaths): string =>
+    images[type][color as keyof (typeof images)[typeof type]] || images[type].default;
 
   return (
     <Card
@@ -88,14 +121,51 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
             marginTop: '10px',
             justifyContent: 'center',
             mb: { xs: 2, md: 0 },
+            position: 'relative', // Добавляем position: relative для контейнера
           }}
         >
           <CardMedia
             component="img"
+            image={getImagePath(order.color, 'main')} // Путь к первому слою изображения
+            alt="additional color layer"
+            sx={{
+              borderRadius: '50%',
+              height: '200px',
+              width: '200px',
+              objectFit: 'cover',
+              position: 'absolute',
+              zIndex: 1, // Первый слой
+            }}
+          />
+          <CardMedia
+            component="img"
             image={`/img/${order.userImg}`}
             alt="img"
-            sx={{ borderRadius: '50%', height: '200px', width: '200px', objectFit: 'cover' }}
+            sx={{
+              borderRadius: '50%',
+              height: '184px',
+              width: '184px',
+              objectFit: 'cover',
+              position: 'absolute',
+              opacity: '0.7',
+              zIndex: 2, // Второй слой
+            }}
           />
+          {['green', 'blue', 'red', ''].includes(order.color) && (
+            <CardMedia
+              component="img"
+              image={getImagePath(order.color, 'additional')}
+              alt={`${order.color} color`}
+              sx={{
+                borderRadius: '50%',
+                height: '200px',
+                width: '200px',
+                objectFit: 'cover',
+                position: 'absolute',
+                zIndex: 3, // Третий слой
+              }}
+            />
+          )}
         </Box>
       </Box>
       <hr style={{ border: '1px solid black', margin: '20px 0' }} />
