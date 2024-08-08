@@ -13,15 +13,15 @@ type OrderCardTypes = {
 
 type ImagePaths = {
   main: {
-    green: string;
-    blue: string;
-    red: string;
+    Зеленый: string;
+    Синий: string;
+    Красный: string;
     default: string;
   };
   additional: {
-    green: string;
-    blue: string;
-    red: string;
+    Зеленый: string;
+    Синий: string;
+    Красный: string;
     default: string;
   };
 };
@@ -151,7 +151,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               zIndex: 2, // Второй слой
             }}
           />
-          {['green', 'blue', 'red', ''].includes(order.color) && (
+          {['Зеленый', 'Синий', 'Красный', ''].includes(order.color) && (
             <CardMedia
               component="img"
               image={getImagePath(order.color, 'additional')}
