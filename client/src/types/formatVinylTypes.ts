@@ -1,8 +1,9 @@
 import { z } from 'zod';
 
 export const FormatSchema = z.object({
-    id: z.number(),
-    format: z.string(),
+  id: z.number(),
+  format: z.string(),
+  description: z.string().optional(),
 });
 
 export const FormatesSchema = z.array(FormatSchema);

@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
   FormatVinyl.init(
     {
       format: DataTypes.STRING,
+      description: DataTypes.STRING,
     },
     {
       sequelize,
