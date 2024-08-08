@@ -4,6 +4,7 @@ import type { UserLoginType } from '../../types/userTypes';
 import { loginThunk } from '../../redux/slices/auth/authThunks';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { closeModal, openModal } from '../../redux/slices/modal/modalSlice';
+import { setError } from '../../redux/slices/auth/authSlice';
 import '../style/styles-order.css';
 
 export default function LoginModal(): JSX.Element {
@@ -19,6 +20,18 @@ export default function LoginModal(): JSX.Element {
     dispatch(openModal({ modalType: 'signUp' }));
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    const formData = Object.fromEntries(new FormData(e.currentTarget)) as UserLoginType;
+    dispatch(loginThunk(formData))
+      .unwrap()
+      .catch((error) => {
+        dispatch(setError('Не удалось войти: неверный адрес электронной почты или пароль.'));
+        console.log(error);
+        
+      });
+  };
+
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle sx={{ textAlign: 'center' }}>Вход</DialogTitle>
@@ -29,11 +42,7 @@ export default function LoginModal(): JSX.Element {
         margin="15px"
         padding="10px"
         component="form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const formData = Object.fromEntries(new FormData(e.currentTarget)) as UserLoginType;
-          void dispatch(loginThunk(formData));
-        }}
+        onSubmit={handleSubmit}
       >
         <TextField
           name="email"

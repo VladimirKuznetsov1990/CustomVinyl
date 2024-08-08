@@ -15,6 +15,7 @@ import SignUpModal from './components/ui/SignUpModal';
 import AuthRequiredModal from './components/ui/AuthRequiredModal';
 import NotFoundPage from './components/pages/NotFoundPage';
 import OrderSuccessModal from './components/ui/OrderSuccessModal'; // Импортируйте новую модалку
+import ErrorSnackbar from './components/ui/ErrorSnackbar';
 
 function App(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -77,7 +78,8 @@ function App(): JSX.Element {
       <LoginModal />
       <SignUpModal />
       <AuthRequiredModal />
-      <OrderSuccessModal /> {/* Добавьте новую модалку */}
+      <OrderSuccessModal />
+      <ErrorSnackbar />
     </>
   );
 }
