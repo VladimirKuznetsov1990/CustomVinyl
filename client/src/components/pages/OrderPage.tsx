@@ -121,7 +121,6 @@ export default function OrderPage(): JSX.Element {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleSaveCroppedImage = (image: { file: string | File; fileUrl: string }): void => {
-    console.log(image);
     dispatch(setCroppedImage(image));
   };
 

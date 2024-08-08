@@ -4,7 +4,6 @@ const { OrderSchema, orderReqBodySchema } = require('../schemas/order');
 const fs = require('fs/promises');
 const upload = require('../middlewares/multer.middleware');
 const sharp = require('sharp');
-const { log } = require('console');
 
 const router = Router();
 // Получить все заказы
@@ -42,11 +41,9 @@ router
 
         let trackFiles = [];
         if (audiofiles.length > 0) {
-          console.log(audiofiles)
           trackFiles = audiofiles.map((file, index) => {
             const trackFileName = `${Date.now()}-${index}.mp3`;
             fs.writeFile(`./public/audio/${trackFileName}`, file.buffer);
-            console.log(trackFileName)
             return trackFileName;
           });
         }

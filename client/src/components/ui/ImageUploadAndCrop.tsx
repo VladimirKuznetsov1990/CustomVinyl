@@ -41,7 +41,6 @@ export default function ImageUploadAndCrop({
     if (imageSrc && croppedAreaPixels) {
       getCroppedImg(imageSrc, croppedAreaPixels)
         .then((croppedImage: ImageType) => {
-          console.log(croppedImage)
           setCroppedImageSrc(croppedImage);
           onSave(croppedImage);
           setOpenCropper(false);

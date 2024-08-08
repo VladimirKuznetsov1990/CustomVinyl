@@ -79,9 +79,6 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
     }
   };
 
-  console.log(order.userImg );
-  
-
   return (
     <Card
       sx={{
@@ -136,6 +133,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               <LocalPhoneIcon fontSize="small" />
             </IconButton>
           </Box>
+
         </Box>
         <Box
           sx={{
@@ -159,7 +157,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               objectFit: 'cover',
               position: 'absolute',
               zIndex: 1, // Первый слой
-              right: { xs: '20px', md: 'auto' },
+              right: { xs: '-20px', md: 'auto' },
               bottom: { xs: '20px', md: 'auto' },
             }}
           />
@@ -176,8 +174,8 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
                 position: 'absolute',
                 opacity: '0.7',
                 zIndex: 2, // Второй слой
-                right: { xs: '20px', md: 'auto' },
-                bottom: { xs: '20px', md: 'auto' },
+                right: { xs: '-16px', md: 'auto' },
+                bottom: { xs: '24px', md: 'auto' },
               }}
             />
           )}
@@ -193,7 +191,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
                 objectFit: 'cover',
                 position: 'absolute',
                 zIndex: 3, // Третий слой
-                right: { xs: '20px', md: 'auto' },
+                right: { xs: '-20px', md: 'auto' },
                 bottom: { xs: '20px', md: 'auto' },
               }}
             />
