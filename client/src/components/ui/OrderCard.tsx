@@ -16,13 +16,13 @@ type ImagePaths = {
     Зеленый: string;
     Синий: string;
     Красный: string;
-    default: string;
+    Стандарт: string;
   };
   additional: {
     Зеленый: string;
     Синий: string;
     Красный: string;
-    default: string;
+    Стандарт: string;
   };
 };
 
@@ -53,18 +53,18 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
       Зеленый: '/static/img/Vinyl_green.png',
       Синий: '/static/img/Vinyl_blue.png',
       Красный: '/static/img/Vinyl_red.png',
-      default: '/static/img/1Vinyl+.png',
+      Стандарт: '/static/img/1Vinyl+.png',
     },
     additional: {
       Зеленый: '/static/img/Vinyl+Green_mid.png',
       Синий: '/static/img/Vinyl+Blue_mid.png',
       Красный: '/static/img/Vinyl+Red_mid.png',
-      default: '/static/img/Vinyl+Custom_mid.png',
+      Стандарт: '/static/img/Vinyl+Custom_mid.png',
     },
   };
 
   const getImagePath = (color: string, type: keyof ImagePaths): string =>
-    images[type][color as keyof (typeof images)[typeof type]] || images[type].default;
+    images[type][color as keyof (typeof images)[typeof type]] || images[type].Стандарт;
 
   const getStatusColor = (statusValue: string): 'error' | 'warning' | 'success' | 'default' => {
     switch (statusValue) {

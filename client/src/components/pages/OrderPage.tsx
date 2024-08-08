@@ -32,15 +32,15 @@ import AudioPlayer from '../ui/AudioPlayer';
 import '../style/styles-order.css';
 import AddressModal from '../ui/AddressModal';
 import { setDeliveryAddress } from '../../redux/slices/order/orderSlice';
-import { type OrderDataType } from '../../types/orderTypes';
 import ErrorSnackbar from '../ui/ErrorSnackbar'; // Импортируем ErrorSnackbar
+import { type OrderData } from '../../types/orderTypes';
 
 export default function OrderPage(): JSX.Element {
   const dispatch = useAppDispatch();
   const user = useAppSelector((store) => store.auth.userStatus);
   const [quantity, setQuantity] = useState(1); // Количество пластинок
   const [selectedFormat, setSelectedFormat] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColor, setSelectedColor] = useState('Стандарт');
   const [totalPrice, setTotalPrice] = useState(0); // Общая стоимость
   const [audioFiles, setAudioFiles] = useState<File[]>([]); // Файлы аудио
   const [audioDurations, setAudioDurations] = useState<string[]>([]); // Длительности аудио
@@ -53,6 +53,7 @@ export default function OrderPage(): JSX.Element {
   const deliveryAddress = useAppSelector((state) => state.order.deliveryAddress);
   const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
   const formats = useAppSelector((store) => store.format.data);
+  const [selectedFormatDescription, setSelectedFormatDescription] = useState('');
 
   const handleOpenAddressModal = (): void => {
     dispatch(openModal({ modalType: 'address' }));
@@ -75,6 +76,7 @@ export default function OrderPage(): JSX.Element {
       const defaultFormat = formats.find((format) => format.format === 'Single');
       if (defaultFormat) {
         setSelectedFormat(defaultFormat.id.toString());
+        setSelectedFormatDescription(defaultFormat.description);
       }
     }
   }, [formats]);
@@ -96,6 +98,10 @@ export default function OrderPage(): JSX.Element {
         mainImagePath = '/static/img/Vinyl_green.png';
         additionalImagePath = '/static/img/Vinyl+Green_mid.png';
         break;
+      case 'Стандарт':
+        mainImagePath = '/static/img/1Vinyl+.png';
+        additionalImagePath = '/static/img/Vinyl+Custom_mid.png';
+        break;
       default:
         mainImagePath = '/static/img/1Vinyl+.png';
         additionalImagePath = '/static/img/Vinyl+Custom_mid.png';
@@ -114,11 +120,42 @@ export default function OrderPage(): JSX.Element {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleSaveCroppedImage = (image: string): void => {
+  const handleSaveCroppedImage = (image: { file: string | File; fileUrl: string }): void => {
+    console.log(image);
     dispatch(setCroppedImage(image));
   };
 
-  console.log(typeof(croppedImage))
+  const createOrderFormData = (data: OrderData): FormData => {
+    const formData = new FormData();
+
+    formData.append('userId', `${data.userId}`);
+    formData.append('status', data.status);
+    formData.append('totalPrice', `${data.totalPrice}`);
+    formData.append('formatId', `${data.formatId}`);
+    formData.append('color', data.color);
+    formData.append('quantity', `${data.quantity}`);
+    formData.append('userName', data.userName);
+    formData.append('email', data.email);
+    formData.append('phone', data.phone);
+    formData.append('address', data.address);
+
+    if (data.userImg) {
+      formData.append('userImg', data.userImg);
+    } else {
+      formData.append('userImg', '');
+    }
+
+    if (data.tracks && data.tracks.length > 0) {
+      data.tracks.forEach((file) => {
+        formData.append('tracks', file);
+      });
+    } else {
+      formData.append('tracks', '');
+    }
+
+    return formData;
+  };
+
   const handleOrderSubmit = async (): Promise<void> => {
     if (!user || !user.id) {
       dispatch(openModal({ modalType: 'authRequired' }));
@@ -131,29 +168,22 @@ export default function OrderPage(): JSX.Element {
     }
 
     const { userName, email } = user;
-    const formData = new FormData();
-    if (user) {
-      formData.append('userId', user?.id.toString());
-      formData.append('status', 'Новый');
-      formData.append('totalPrice', totalPrice.toString());
-      formData.append('formatId', selectedFormat.toString());
-      formData.append('color', selectedColor);
-      formData.append('quantity', quantity.toString());
-      if (userName && email) {
-        formData.append('userName', userName.toString());
-        formData.append('email', email.toString());
-      }
-      formData.append('phone', phone.toString());
-      formData.append('address', deliveryAddress);
-      if (!croppedImage) {
-        formData.append('userImg', '');
-      } else {
-        formData.append('userImg', croppedImage.file);
-      }
-      Array.from(audioFiles).forEach((file) => {
-        formData.append('tracks', file);
-      });
-    }
+    const orderData: OrderData = {
+      userId: `${user.id}`,
+      status: 'Новый',
+      totalPrice: totalPrice.toString(),
+      formatId: selectedFormat,
+      color: selectedColor,
+      quantity: quantity.toString(),
+      userName: userName?.toString() || '',
+      email: email?.toString() || '',
+      phone: phone.toString(),
+      address: deliveryAddress,
+      userImg: croppedImage ? croppedImage.file : undefined,
+      tracks: Array.from(audioFiles),
+    };
+
+    const formData = createOrderFormData(orderData);
 
     try {
       await dispatch(addOrderThunk(formData));
@@ -396,13 +426,12 @@ export default function OrderPage(): JSX.Element {
                   id="color-select"
                   value={selectedColor}
                   onChange={(e) => setSelectedColor(e.target.value)}
-                  label="Цвет"
+                  label="Цвет" 
                 >
-                  <MenuItem value="">Выберите цвет</MenuItem>
+                  <MenuItem value="Стандарт">Стандарт</MenuItem>
                   <MenuItem value="Красный">Красный</MenuItem>
                   <MenuItem value="Синий">Синий</MenuItem>
                   <MenuItem value="Зеленый">Зеленый</MenuItem>
-                  {/* Добавьте другие цвета по мере необходимости */}
                 </Select>
               </FormControl>
               <ImageUploadAndCrop vinylImage={mainImagePath} onSave={handleSaveCroppedImage} />
@@ -413,7 +442,14 @@ export default function OrderPage(): JSX.Element {
                     labelId="format-label"
                     id="format"
                     value={selectedFormat}
-                    onChange={(e) => setSelectedFormat(e.target.value)}
+                    onChange={(e) => {
+                      const selectedFormatId = e.target.value;
+                      setSelectedFormat(selectedFormatId);
+                      const selectedFormatData = formats.find((format) => format.id === Number(selectedFormatId));
+                      if (selectedFormatData) {
+                        setSelectedFormatDescription(selectedFormatData.description);
+                      }
+                    }}
                     label="Формат пластинки"
                   >
                     {formats.toReversed().map((format) => (
@@ -423,6 +459,12 @@ export default function OrderPage(): JSX.Element {
                     ))}
                   </Select>
                 </FormControl>
+                {selectedFormatDescription && (
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    {selectedFormatDescription}
+                  </Typography>
+                )}
+                <Box mt={2}>
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <input
                     id="audio-file-input"
@@ -447,7 +489,7 @@ export default function OrderPage(): JSX.Element {
                     Выберите аудио файлы
                   </Button>
                 </FormControl>
-
+                </Box>
                 {audioFiles.length > 0 ? (
                   <TableContainer
                     component={Paper}
