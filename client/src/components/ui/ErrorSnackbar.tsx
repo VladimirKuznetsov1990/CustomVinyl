@@ -1,14 +1,14 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Snackbar, Alert } from '@mui/material';
 import { clearError } from '../../redux/slices/auth/authSlice';
 import type { RootState } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 
 export default function ErrorSnackbar(): JSX.Element {
-  const dispatch = useDispatch();
-  const error = useSelector((state: RootState) => state.auth.error);
+  const dispatch = useAppDispatch();
+  const error = useAppSelector((state: RootState) => state.auth.error);
 
-  const handleClose = (event?: React.SyntheticEvent | Event, reason?: string): void => {
+  const handleClose = (_event?: React.SyntheticEvent | Event, reason?: string): void => {
     if (reason === 'clickaway') {
       return;
     }

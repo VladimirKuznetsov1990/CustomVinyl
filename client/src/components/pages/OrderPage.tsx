@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Container,
   Typography,
@@ -194,13 +194,11 @@ export default function OrderPage(): JSX.Element {
     }
   };
 
-  // Пример функции для расчета общей стоимости
-  const calculateTotalPrice = (): void => {
-    // Пример расчета стоимости, замените на вашу логику
+  const calculateTotalPrice = useCallback((): void => {
     const pricePerUnit = 1000; // Цена за одну пластинку
     const additionalPriceForColor = selectedColor !== '' ? 500 : 0; // Дополнительная цена за цвет
     let additionalPriceForFormat = 0;
-
+  
     if (selectedFormat) {
       const selectedFormatData = formats.find((format) => format.id === Number(selectedFormat));
       if (selectedFormatData) {
@@ -211,14 +209,14 @@ export default function OrderPage(): JSX.Element {
         }
       }
     }
-
+  
     const totalAdditionalPrice = additionalPriceForColor + additionalPriceForFormat;
     setTotalPrice(quantity * (pricePerUnit + totalAdditionalPrice));
-  };
+  }, [selectedColor, selectedFormat, formats, quantity]);
 
   useEffect(() => {
     calculateTotalPrice();
-  }, [quantity, selectedColor, selectedFormat]);
+  }, [calculateTotalPrice]);
 
   // Функция для получения длительности аудиофайлов
   const getAudioDurations = (files: File[]): void => {
@@ -323,7 +321,7 @@ export default function OrderPage(): JSX.Element {
     setUsedDuration(0);
     setAudioFiles([]);
     setAudioDurations([]);
-  }, [selectedFormat]);
+  }, [selectedFormat, formats]);
 
   // Вызов getAudioDurations при изменении списка файлов
   useEffect(() => {

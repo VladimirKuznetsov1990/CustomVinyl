@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { OrderData, OrderDataType, OrderListType, OrderType, UpdateStatusOrderType } from "../../../types/orderTypes";
+import type { OrderListType, OrderType, UpdateStatusOrderType } from "../../../types/orderTypes";
 import orderService from "../../../services/orderService";
 
 // eslint-disable-next-line import/prefer-default-export

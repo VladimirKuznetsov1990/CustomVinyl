@@ -1,12 +1,5 @@
 // src/redux/slices/imageSlice.ts
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { z } from 'zod';
-
-const CroppedImageSchema = z.object({
-  croppedImage: z.object({file: z.string(), fileUrl: z.string()}).nullable(),
-});
-
-// type CroppedImageState = z.infer<typeof CroppedImageSchema>;
 
 type CroppedImageState = {
   croppedImage: {file: string | File, fileUrl: string} | null

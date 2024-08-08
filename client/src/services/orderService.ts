@@ -1,9 +1,6 @@
 import type { AxiosInstance } from 'axios';
 import apiInstance from './apiInstance';
 import {
-  type OrderData,
-  OrderSchema,
-  type OrderDataType,
   type OrderListType,
   type OrderType,
   type UpdateStatusOrderType,
