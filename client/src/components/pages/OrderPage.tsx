@@ -39,7 +39,7 @@ export default function OrderPage(): JSX.Element {
   const user = useAppSelector((store) => store.auth.userStatus);
   const [quantity, setQuantity] = useState(1); // Количество пластинок
   const [selectedFormat, setSelectedFormat] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedColor, setSelectedColor] = useState('Стандарт');
   const [totalPrice, setTotalPrice] = useState(0); // Общая стоимость
   const [audioFiles, setAudioFiles] = useState<File[]>([]); // Файлы аудио
   const [audioDurations, setAudioDurations] = useState<string[]>([]); // Длительности аудио
@@ -97,6 +97,10 @@ export default function OrderPage(): JSX.Element {
         mainImagePath = '/static/img/Vinyl_green.png';
         additionalImagePath = '/static/img/Vinyl+Green_mid.png';
         break;
+      case 'Стандарт':
+        mainImagePath = '/static/img/1Vinyl+.png';
+        additionalImagePath = '/static/img/Vinyl+Custom_mid.png';
+        break;
       default:
         mainImagePath = '/static/img/1Vinyl+.png';
         additionalImagePath = '/static/img/Vinyl+Custom_mid.png';
@@ -115,15 +119,14 @@ export default function OrderPage(): JSX.Element {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  
-  const handleSaveCroppedImage = (image: {file: string | File, fileUrl: string}): void => {
-    console.log(image)
+  const handleSaveCroppedImage = (image: { file: string | File; fileUrl: string }): void => {
+    console.log(image);
     dispatch(setCroppedImage(image));
   };
 
   const createOrderFormData = (data: OrderData): FormData => {
     const formData = new FormData();
-  
+
     formData.append('userId', `${data.userId}`);
     formData.append('status', data.status);
     formData.append('totalPrice', `${data.totalPrice}`);
@@ -134,13 +137,13 @@ export default function OrderPage(): JSX.Element {
     formData.append('email', data.email);
     formData.append('phone', data.phone);
     formData.append('address', data.address);
-  
+
     if (data.userImg) {
       formData.append('userImg', data.userImg);
     } else {
       formData.append('userImg', '');
     }
-  
+
     if (data.tracks && data.tracks.length > 0) {
       data.tracks.forEach((file) => {
         formData.append('tracks', file);
@@ -148,7 +151,7 @@ export default function OrderPage(): JSX.Element {
     } else {
       formData.append('tracks', '');
     }
-  
+
     return formData;
   };
 
@@ -178,7 +181,7 @@ export default function OrderPage(): JSX.Element {
       userImg: croppedImage ? croppedImage.file : undefined,
       tracks: Array.from(audioFiles),
     };
-  
+
     const formData = createOrderFormData(orderData);
 
     try {
@@ -422,13 +425,12 @@ export default function OrderPage(): JSX.Element {
                   id="color-select"
                   value={selectedColor}
                   onChange={(e) => setSelectedColor(e.target.value)}
-                  label="Цвет"
+                  label="Цвет" 
                 >
-                  <MenuItem value="">Выберите цвет</MenuItem>
+                  <MenuItem value="Стандарт">Стандарт</MenuItem>
                   <MenuItem value="Красный">Красный</MenuItem>
                   <MenuItem value="Синий">Синий</MenuItem>
                   <MenuItem value="Зеленый">Зеленый</MenuItem>
-                  {/* Добавьте другие цвета по мере необходимости */}
                 </Select>
               </FormControl>
               <ImageUploadAndCrop vinylImage={mainImagePath} onSave={handleSaveCroppedImage} />
