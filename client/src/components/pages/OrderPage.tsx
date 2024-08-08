@@ -83,15 +83,15 @@ export default function OrderPage(): JSX.Element {
     let additionalImagePath = '';
 
     switch (color) {
-      case 'red':
+      case 'Красный':
         mainImagePath = '/static/img/Vinyl_red.png';
         additionalImagePath = '/static/img/Vinyl+Red_mid.png';
         break;
-      case 'blue':
+      case 'Синий':
         mainImagePath = '/static/img/Vinyl_blue.png';
         additionalImagePath = '/static/img/Vinyl+Blue_mid.png';
         break;
-      case 'green':
+      case 'Зеленый':
         mainImagePath = '/static/img/Vinyl_green.png';
         additionalImagePath = '/static/img/Vinyl+Green_mid.png';
         break;
@@ -448,9 +448,9 @@ export default function OrderPage(): JSX.Element {
                   label="Цвет"
                 >
                   <MenuItem value="">Выберите цвет</MenuItem>
-                  <MenuItem value="red">Красный</MenuItem>
-                  <MenuItem value="blue">Синий</MenuItem>
-                  <MenuItem value="green">Зеленый</MenuItem>
+                  <MenuItem value="Красный">Красный</MenuItem>
+                  <MenuItem value="Синий">Синий</MenuItem>
+                  <MenuItem value="Зеленый">Зеленый</MenuItem>
                   {/* Добавьте другие цвета по мере необходимости */}
                 </Select>
               </FormControl>

@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Button, Dialog, DialogTitle, TextField } from '@mui/material';
 import type { UserSignUpType } from '../../types/userTypes';
 import { signUpThunk } from '../../redux/slices/auth/authThunks';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { closeModal, openModal } from '../../redux/slices/modal/modalSlice';
+import { setError } from '../../redux/slices/auth/authSlice';
 import '../style/styles-order.css';
 
 export default function SignUpModal(): JSX.Element {
   const dispatch = useAppDispatch();
   const open = useAppSelector((state) => state.modal.signUp);
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   const handleClose = (): void => {
     dispatch(closeModal('signUp'));
@@ -19,9 +21,39 @@ export default function SignUpModal(): JSX.Element {
     dispatch(openModal({ modalType: 'login' }));
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    const formData = Object.fromEntries(new FormData(e.currentTarget)) as UserSignUpType;
+
+    // Валидация полей
+    if (!formData.userName || !formData.email || !formData.password) {
+      dispatch(setError('Ошибка регистрации: Все поля должны быть заполнены'));
+      return;
+    }
+
+    // Проверка наличия символа @ в email
+    if (!formData.email.includes('@')) {
+      setEmailError('Некорректный email адрес');
+      return;
+    }
+
+    setEmailError(null); // Сброс ошибки email, если она была
+
+    dispatch(signUpThunk(formData))
+      .unwrap()
+      .then(() => {
+        // Закрытие модалки при успешной регистрации
+        dispatch(closeModal('signUp'));
+      })
+      .catch((error) => {
+        dispatch(setError('Ошибка регистрации: Пользователь с таким email уже существует'));
+        console.log(error);
+      });
+  };
+
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Регистрация нового пользователя</DialogTitle>
+      <DialogTitle sx={{ textAlign: 'center' }}>Регистрация</DialogTitle>
       <Box
         mt={5}
         display="flex"
@@ -29,15 +61,12 @@ export default function SignUpModal(): JSX.Element {
         margin="15px"
         padding="10px"
         component="form"
-        onSubmit={(e) => {
-          e.preventDefault();
-          const formData = Object.fromEntries(new FormData(e.currentTarget)) as UserSignUpType;
-          void dispatch(signUpThunk(formData));
-        }}
+        onSubmit={handleSubmit}
       >
         <TextField
           name="userName"
-          label="Логин"
+          type="text"
+          label="Имя пользователя"
           variant="outlined"
           sx={{ mb: 1 }}
           className="custom-form-control"
@@ -49,6 +78,8 @@ export default function SignUpModal(): JSX.Element {
           variant="outlined"
           sx={{ mb: 1 }}
           className="custom-form-control"
+          error={!!emailError}
+          helperText={emailError}
         />
         <TextField
           name="password"
@@ -67,10 +98,9 @@ export default function SignUpModal(): JSX.Element {
               backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
             },
           }}
-          onClick={handleClose}
           type="submit"
         >
-          Зарегистрироваться
+          Регистрация
         </Button>
         <Button
           sx={{
@@ -83,7 +113,7 @@ export default function SignUpModal(): JSX.Element {
           }}
           onClick={handleSwitchToLogin}
         >
-          Уже есть аккаунт
+          Вход
         </Button>
       </Box>
     </Dialog>
