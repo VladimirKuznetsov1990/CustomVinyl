@@ -1,4 +1,14 @@
-import { Container, Typography, Grid, Box, Paper, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Grid,
+  Box,
+  Paper,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -44,7 +54,6 @@ export default function AccountPage(): JSX.Element {
 
     await Promise.all(trackPromises);
 
-
     const content: Blob = await zip.generateAsync({ type: 'blob' });
     saveAs(content, `order_${order.id}.zip`);
   };
@@ -60,7 +69,7 @@ export default function AccountPage(): JSX.Element {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         minHeight: '100vh',
-        minWidth: '100%'
+        minWidth: '100%',
       }}
     >
       <Box sx={{ marginTop: '100px' }}>
@@ -70,7 +79,7 @@ export default function AccountPage(): JSX.Element {
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             padding: '10px',
             borderRadius: '8px',
-            border: 'solid 2px #00FEFC'
+            border: 'solid 2px #00FEFC',
           }}
         >
           <Paper
@@ -81,10 +90,15 @@ export default function AccountPage(): JSX.Element {
               borderRadius: '8px',
             }}
           >
-            <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'white', textAlign: 'center'  }}>
+            <Typography
+              variant="h4"
+              component="h1"
+              gutterBottom
+              sx={{ color: 'white', textAlign: 'center' }}
+            >
               Ваши заказы
             </Typography>
-            <hr style={{ border: '1px solid white', margin: '20px 0' }} /> 
+            <hr style={{ border: '1px solid white', margin: '20px 0' }} />
             <Box sx={{ marginBottom: '20px', color: 'white', textAlign: 'center' }}>
               <Typography variant="body1" gutterBottom>
                 Добро пожаловать на страницу заказов. Здесь вы можете просмотреть все свои заказы.
@@ -92,13 +106,38 @@ export default function AccountPage(): JSX.Element {
             </Box>
             {user.roleId === 1 && (
               <FormControl fullWidth sx={{ marginBottom: '20px' }}>
-                <InputLabel id="status-filter-label" sx={{ color: 'white' }}>Сортировать по статусу</InputLabel>
+                <InputLabel
+                  id="status-filter-label"
+                  sx={{
+                    color: 'white',
+                    '&.Mui-focused': {
+                      color: 'white',
+                    },
+                  }}
+                >
+                  Сортировать по статусу
+                </InputLabel>
                 <Select
                   labelId="status-filter-label"
                   value={statusFilter}
                   label="Сортировать по статусу"
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  sx={{ color: 'white', borderColor: 'white', '.MuiSvgIcon-root': { color: 'white' } }}
+                  sx={{
+                    color: 'white',
+                    borderColor: 'white',
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'white',
+                    },
+                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'white',
+                    },
+                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'white',
+                    },
+                    '& .MuiSvgIcon-root': {
+                      color: 'white',
+                    },
+                  }}
                 >
                   <MenuItem value="Все">Все</MenuItem>
                   <MenuItem value="Новый">Новый</MenuItem>
