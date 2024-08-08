@@ -12,7 +12,9 @@ router
   .route('/')
   .get(async (req, res) => {
     try {
-      const orders = await Order.findAll();
+      const orders = await Order.findAll({
+        order: [['createdAt', 'DESC']] // Сортировка по дате создания в порядке убывания
+      });
       res.json(orders);
     } catch (error) {
       console.log('Ошибка получения всех заказов', error);
