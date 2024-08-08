@@ -1,5 +1,17 @@
 // src/components/cropImage.ts
-const getCroppedImg = (imageSrc: string, pixelCrop: any): Promise<string> => {
+export type PixelCrop = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+export type CroppedImageResult = {
+  fileUrl: string;
+  file: File;
+};
+
+const getCroppedImg = (imageSrc: string, pixelCrop: PixelCrop): Promise<CroppedImageResult> => {
   const image = new Image();
   image.src = imageSrc;
 
@@ -46,4 +58,4 @@ const getCroppedImg = (imageSrc: string, pixelCrop: any): Promise<string> => {
   });
 };
 
-export { getCroppedImg };
+export default getCroppedImg;
