@@ -1,12 +1,17 @@
 import React, { useState, useCallback } from 'react';
 import { Box, Slider, Button, Typography, useMediaQuery, useTheme } from '@mui/material';
 import Cropper, { type Area } from 'react-easy-crop';
-import { getCroppedImg } from '../../hooks/cropImage';
+import getCroppedImg, { type PixelCrop } from '../../hooks/cropImage';
 
 type ImageUploadAndCropProps = {
-  onSave: (image: string) => void;
+  onSave: (image: {file: string | File, fileUrl: string}) => void;
   vinylImage: string;
 };
+
+type ImageType = {
+  file: string | File,
+  fileUrl: string,
+}
 
 export default function ImageUploadAndCrop({
   vinylImage,
@@ -16,9 +21,9 @@ export default function ImageUploadAndCrop({
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [openCropper, setOpenCropper] = useState(false);
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<PixelCrop | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/naming-convention
-  const [_croppedImageSrc, setCroppedImageSrc] = useState<string | null>(null);
+  const [_croppedImageSrc, setCroppedImageSrc] = useState<ImageType | null>(null);
   const onCropComplete = useCallback((_croppedArea: Area, croppedAreaPix: Area) => {
     setCroppedAreaPixels(croppedAreaPix);
   }, []);
@@ -35,7 +40,8 @@ export default function ImageUploadAndCrop({
   const handleApply = (): void => {
     if (imageSrc && croppedAreaPixels) {
       getCroppedImg(imageSrc, croppedAreaPixels)
-        .then((croppedImage) => {
+        .then((croppedImage: ImageType) => {
+          console.log(croppedImage)
           setCroppedImageSrc(croppedImage);
           onSave(croppedImage);
           setOpenCropper(false);

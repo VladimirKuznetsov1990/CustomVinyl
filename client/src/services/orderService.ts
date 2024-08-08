@@ -1,6 +1,7 @@
 import type { AxiosInstance } from 'axios';
 import apiInstance from './apiInstance';
 import {
+  type OrderData,
   OrderSchema,
   type OrderDataType,
   type OrderListType,
@@ -21,7 +22,7 @@ class OrderService {
     return data;
   }
 
-  async addOrder(formData: OrderDataType): Promise<OrderType> {
+  async addOrder(formData: FormData): Promise<OrderType> {
     const { data } = await this.api.post<OrderType>('/orders', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

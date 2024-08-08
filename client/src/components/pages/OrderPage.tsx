@@ -32,7 +32,7 @@ import AudioPlayer from '../ui/AudioPlayer';
 import '../style/styles-order.css';
 import AddressModal from '../ui/AddressModal';
 import { setDeliveryAddress } from '../../redux/slices/order/orderSlice';
-import { type OrderDataType } from '../../types/orderTypes';
+import { type OrderData } from '../../types/orderTypes';
 
 export default function OrderPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -115,11 +115,43 @@ export default function OrderPage(): JSX.Element {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleSaveCroppedImage = (image: string): void => {
+  
+  const handleSaveCroppedImage = (image: {file: string | File, fileUrl: string}): void => {
+    console.log(image)
     dispatch(setCroppedImage(image));
   };
 
-  console.log(typeof(croppedImage))
+  const createOrderFormData = (data: OrderData): FormData => {
+    const formData = new FormData();
+  
+    formData.append('userId', `${data.userId}`);
+    formData.append('status', data.status);
+    formData.append('totalPrice', `${data.totalPrice}`);
+    formData.append('formatId', `${data.formatId}`);
+    formData.append('color', data.color);
+    formData.append('quantity', `${data.quantity}`);
+    formData.append('userName', data.userName);
+    formData.append('email', data.email);
+    formData.append('phone', data.phone);
+    formData.append('address', data.address);
+  
+    if (data.userImg) {
+      formData.append('userImg', data.userImg);
+    } else {
+      formData.append('userImg', '');
+    }
+  
+    if (data.tracks && data.tracks.length > 0) {
+      data.tracks.forEach((file) => {
+        formData.append('tracks', file);
+      });
+    } else {
+      formData.append('tracks', '');
+    }
+  
+    return formData;
+  };
+
   const handleOrderSubmit = async (): Promise<void> => {
     if (!user || !user.id) {
       dispatch(openModal({ modalType: 'authRequired' }));
@@ -132,29 +164,22 @@ export default function OrderPage(): JSX.Element {
     }
 
     const { userName, email } = user;
-    const formData = new FormData();
-    if (user) {
-      formData.append('userId', user?.id.toString());
-      formData.append('status', 'Новый');
-      formData.append('totalPrice', totalPrice.toString());
-      formData.append('formatId', selectedFormat.toString());
-      formData.append('color', selectedColor);
-      formData.append('quantity', quantity.toString());
-      if (userName && email) {
-        formData.append('userName', userName.toString());
-        formData.append('email', email.toString());
-      }
-      formData.append('phone', phone.toString());
-      formData.append('address', deliveryAddress);
-      if (!croppedImage) {
-        formData.append('userImg', '');
-      } else {
-        formData.append('userImg', croppedImage.file);
-      }
-      Array.from(audioFiles).forEach((file) => {
-        formData.append('tracks', file);
-      });
-    }
+    const orderData: OrderData = {
+      userId: `${user.id}`,
+      status: 'Новый',
+      totalPrice: totalPrice.toString(),
+      formatId: selectedFormat,
+      color: selectedColor,
+      quantity: quantity.toString(),
+      userName: userName?.toString() || '',
+      email: email?.toString() || '',
+      phone: phone.toString(),
+      address: deliveryAddress,
+      userImg: croppedImage ? croppedImage.file : undefined,
+      tracks: Array.from(audioFiles),
+    };
+  
+    const formData = createOrderFormData(orderData);
 
     try {
       await dispatch(addOrderThunk(formData));
