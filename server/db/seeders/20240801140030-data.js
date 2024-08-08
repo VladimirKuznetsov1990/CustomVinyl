@@ -8,16 +8,19 @@ module.exports = {
     await queryInterface.bulkInsert('FormatVinyls', [
       {
         format: 'LP',
+        description: 'Диаметр: 7-дюймов (17.78 см) Время: 40 минут',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         format: 'EP',
+        description: 'Диаметр: 7-дюймов (17.78 см) или 12-дюймов (30.48 см). Время: 20 минут',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         format: 'Single',
+        description: 'Диаметр: 12-дюймовов (30.48 см). Время: 10 минут',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -66,11 +69,11 @@ module.exports = {
     await queryInterface.bulkInsert('Orders', [
       {
         userId: 1,
-        status: 'В ожидании',
+        status: 'Новый',
         totalPrice: 100,
         formatId: 1,
-        userImg: 'path/to/image1.jpg',
-        color: 'black',
+        userImg: '',
+        color: 'Черный',
         quantity: 1, 
         tracks: ['Track1', 'Track2'], 
         userName: 'admin',
@@ -85,8 +88,8 @@ module.exports = {
         status: 'Новый',
         totalPrice: 200,
         formatId: 2,
-        userImg: 'path/to/image2.jpg',
-        color: 'red',
+        userImg: '',
+        color: 'Красный',
         quantity: 2, 
         tracks: ['Track3', 'Track4'],
         userName: 'user',

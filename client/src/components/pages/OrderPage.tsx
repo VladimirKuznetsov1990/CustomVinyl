@@ -52,6 +52,7 @@ export default function OrderPage(): JSX.Element {
   const deliveryAddress = useAppSelector((state) => state.order.deliveryAddress);
   const croppedImage = useAppSelector((store) => store.image.croppedImage); // кропнутое изображение
   const formats = useAppSelector((store) => store.format.data);
+  const [selectedFormatDescription, setSelectedFormatDescription] = useState('');
 
   const handleOpenAddressModal = (): void => {
     dispatch(openModal({ modalType: 'address' }));
@@ -74,6 +75,7 @@ export default function OrderPage(): JSX.Element {
       const defaultFormat = formats.find((format) => format.format === 'Single');
       if (defaultFormat) {
         setSelectedFormat(defaultFormat.id.toString());
+        setSelectedFormatDescription(defaultFormat.description);
       }
     }
   }, [formats]);
@@ -118,7 +120,7 @@ export default function OrderPage(): JSX.Element {
     console.log(image)
     dispatch(setCroppedImage(image));
   };
-  
+
   const createOrderFormData = (data: OrderData): FormData => {
     const formData = new FormData();
   
@@ -150,7 +152,6 @@ export default function OrderPage(): JSX.Element {
     return formData;
   };
 
-
   const handleOrderSubmit = async (): Promise<void> => {
     if (!user || !user.id) {
       dispatch(openModal({ modalType: 'authRequired' }));
@@ -163,30 +164,6 @@ export default function OrderPage(): JSX.Element {
     }
 
     const { userName, email } = user;
-    // const formData = new FormData();
-    // if (user) {
-    //   formData.append('userId', user?.id.toString());
-    //   formData.append('status', 'Новый');
-    //   formData.append('totalPrice', totalPrice.toString());
-    //   formData.append('formatId', selectedFormat.toString());
-    //   formData.append('color', selectedColor);
-    //   formData.append('quantity', quantity.toString());
-    //   if (userName && email) {
-    //     formData.append('userName', userName.toString());
-    //     formData.append('email', email.toString());
-    //   }
-    //   formData.append('phone', phone.toString());
-    //   formData.append('address', deliveryAddress);
-    //   if (!croppedImage) {
-    //     formData.append('userImg', '');
-    //   } else {
-    //     formData.append('userImg', croppedImage.file);
-    //   }
-    //   Array.from(audioFiles).forEach((file) => {
-    //     formData.append('tracks', file);
-    //   });
-    // }
-
     const orderData: OrderData = {
       userId: `${user.id}`,
       status: 'Новый',
@@ -462,7 +439,14 @@ export default function OrderPage(): JSX.Element {
                     labelId="format-label"
                     id="format"
                     value={selectedFormat}
-                    onChange={(e) => setSelectedFormat(e.target.value)}
+                    onChange={(e) => {
+                      const selectedFormatId = e.target.value;
+                      setSelectedFormat(selectedFormatId);
+                      const selectedFormatData = formats.find((format) => format.id === Number(selectedFormatId));
+                      if (selectedFormatData) {
+                        setSelectedFormatDescription(selectedFormatData.description);
+                      }
+                    }}
                     label="Формат пластинки"
                   >
                     {formats.toReversed().map((format) => (
@@ -472,6 +456,12 @@ export default function OrderPage(): JSX.Element {
                     ))}
                   </Select>
                 </FormControl>
+                {selectedFormatDescription && (
+                  <Typography variant="body1" sx={{ mt: 2 }}>
+                    {selectedFormatDescription}
+                  </Typography>
+                )}
+                <Box mt={2}>
                 <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
                   <input
                     id="audio-file-input"
@@ -496,7 +486,7 @@ export default function OrderPage(): JSX.Element {
                     Выберите аудио файлы
                   </Button>
                 </FormControl>
-
+                </Box>
                 {audioFiles.length > 0 ? (
                   <TableContainer
                     component={Paper}
