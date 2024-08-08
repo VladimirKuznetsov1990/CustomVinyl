@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 import { useLocation } from 'react-router-dom';
 import '../style/styles.css';
+import { IconButton } from '@mui/material';
 
 const scrollToElement = (elementId: string, offset: number = 0, duration: number = 1000): void => {
   const element = document.getElementById(elementId);
@@ -26,6 +28,7 @@ const scrollToElement = (elementId: string, offset: number = 0, duration: number
 
 export default function MainPage(): JSX.Element {
   const [visibleImages, setVisibleImages] = useState<number[]>([]);
+  const [showScrollButton, setShowScrollButton] = useState(false);
   const galleryRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
 
@@ -42,6 +45,9 @@ export default function MainPage(): JSX.Element {
           setVisibleImages([]);
         }
       }
+
+      // Show or hide the scroll button based on scroll position
+      setShowScrollButton(scrollTop > 200);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -56,16 +62,20 @@ export default function MainPage(): JSX.Element {
     if (hash) {
       switch (hash) {
         case 'about':
-          scrollToElement('about', -440, 1000);
+          scrollToElement('about', -440, 3000);
           break;
         case 'our-works':
-          scrollToElement('our-works', -70, 2000);
+          scrollToElement('our-works', -70, 6000);
           break;
         default:
           break;
       }
     }
   }, [location]);
+
+  const scrollToTop = (): void => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="wrapper">
@@ -102,26 +112,53 @@ export default function MainPage(): JSX.Element {
           </div>
         </article>
 
-        <article
-          className="main-article"
-          style={{ backgroundImage: 'url(/static/img/fonVi.png)' }}
-        >
+        <article className="main-article" style={{ backgroundImage: 'url(/static/img/fonVi.png)' }}>
           <div className="main-article__content">
             <h2 className="main-article__header">Наши работы:</h2>
             <p id="our-works" className="main-article__paragraph">
-              Мы гордимся нашими работами и рады поделиться ими с вами. В этом разделе вы найдете примеры наших уникальных виниловых пластинок, которые мы красим и наносим на них изображения по вашему заказу. Также мы предлагаем услугу записи ваших любимых треков на винил. Создайте свою идеальную коллекцию с нами!
+              Мы гордимся нашими работами и рады поделиться ими с вами. В этом разделе вы найдете
+              примеры наших уникальных виниловых пластинок, которые мы красим и наносим на них
+              изображения по вашему заказу. Также мы предлагаем услугу записи ваших любимых треков
+              на винил. Создайте свою идеальную коллекцию с нами!
             </p>
           </div>
           <div style={{ padding: '100px' }} className="gallery" ref={galleryRef}>
             {[0, 1, 2, 3, 4, 5].map((index) => (
-              <div key={index} className={`gallery-item ${visibleImages.includes(index) ? 'visible' : ''}`}>
-                <img className="rotating-image" src={`/static/img/work${index + 1}.png`} alt={`Work ${index + 1}`} />
+              <div
+                key={index}
+                className={`gallery-item ${visibleImages.includes(index) ? 'visible' : ''}`}
+              >
+                <img
+                  className="rotating-image"
+                  src={`/static/img/work${index + 1}.png`}
+                  alt={`Work ${index + 1}`}
+                />
               </div>
             ))}
           </div>
         </article>
 
-        <footer className="main-footer" style={{ backgroundImage: 'url(/static/img/fonVin2.png)', opacity: 0.6 }}>
+        {showScrollButton && (
+          <IconButton
+            className="scroll-to-top-button"
+            onClick={scrollToTop}
+            style={{
+              position: 'sticky',
+              bottom: '40px',
+              left: '40px',
+              zIndex: 1000,
+              boxShadow: "2px 2px 2px #00FFFF",
+              opacity: '.4'
+            }}
+          >
+            <KeyboardDoubleArrowUpIcon sx={{width: '40px', height: '40px', color: '#00FFFF'}}/>
+          </IconButton>
+        )}
+
+        <footer
+          className="main-footer"
+          style={{ backgroundImage: 'url(/static/img/fonVin2.png)', opacity: 0.6 }}
+        >
           <div className="footer-content">
             <p>&copy; 2024 Custom Vinyl. Все права защищены.</p>
             <p>Контакты: info@customVinyl.ru</p>

@@ -102,6 +102,22 @@ export default function OrderPage(): JSX.Element {
         mainImagePath = '/static/img/1Vinyl+.png';
         additionalImagePath = '/static/img/Vinyl+Custom_mid.png';
         break;
+      case 'Фиолетовый':
+        mainImagePath = '/static/img/VinylsPurple1.png';
+        additionalImagePath = '/static/img/VinylsPurple2.png';
+        break;
+      case 'Оранжевый':
+        mainImagePath = '/static/img/VinylsOrange1.png';
+        additionalImagePath = '/static/img/VinylsOrange2.png';
+        break;
+      case 'Желтый':
+        mainImagePath = '/static/img/VinylsYellow1.png';
+        additionalImagePath = '/static/img/VinylsYellow2.png';
+        break;
+      case 'Серебряный':
+        mainImagePath = '/static/img/VinylsWhite1.png';
+        additionalImagePath = '/static/img/VinylsWhite2.png';
+        break;
       default:
         mainImagePath = '/static/img/1Vinyl+.png';
         additionalImagePath = '/static/img/Vinyl+Custom_mid.png';
@@ -162,7 +178,10 @@ export default function OrderPage(): JSX.Element {
     }
 
     if (!phone) {
-      dispatch({ type: 'auth/setError', payload: 'Поле "Номер телефона" обязательно для заполнения' });
+      dispatch({
+        type: 'auth/setError',
+        payload: 'Поле "Номер телефона" обязательно для заполнения',
+      });
       return;
     }
 
@@ -197,7 +216,7 @@ export default function OrderPage(): JSX.Element {
     const pricePerUnit = 1000; // Цена за одну пластинку
     const additionalPriceForColor = selectedColor !== '' ? 500 : 0; // Дополнительная цена за цвет
     let additionalPriceForFormat = 0;
-  
+
     if (selectedFormat) {
       const selectedFormatData = formats.find((format) => format.id === Number(selectedFormat));
       if (selectedFormatData) {
@@ -208,7 +227,7 @@ export default function OrderPage(): JSX.Element {
         }
       }
     }
-  
+
     const totalAdditionalPrice = additionalPriceForColor + additionalPriceForFormat;
     setTotalPrice(quantity * (pricePerUnit + totalAdditionalPrice));
   }, [selectedColor, selectedFormat, formats, quantity]);
@@ -290,7 +309,10 @@ export default function OrderPage(): JSX.Element {
     newTotalDuration += durations.reduce((sum, duration) => sum + duration, 0);
 
     if (newTotalDuration > availableDuration) {
-      dispatch({ type: 'auth/setError', payload: 'Превышено допустимое время для выбранного формата' });
+      dispatch({
+        type: 'auth/setError',
+        payload: 'Превышено допустимое время для выбранного формата',
+      });
       return;
     }
 
@@ -423,12 +445,16 @@ export default function OrderPage(): JSX.Element {
                   id="color-select"
                   value={selectedColor}
                   onChange={(e) => setSelectedColor(e.target.value)}
-                  label="Цвет" 
+                  label="Цвет"
                 >
                   <MenuItem value="Стандарт">Стандарт</MenuItem>
                   <MenuItem value="Красный">Красный</MenuItem>
                   <MenuItem value="Синий">Синий</MenuItem>
                   <MenuItem value="Зеленый">Зеленый</MenuItem>
+                  <MenuItem value="Фиолетовый">Фиолетовый</MenuItem>
+                  <MenuItem value="Оранжевый">Оранжевый</MenuItem>
+                  <MenuItem value="Желтый">Желтый</MenuItem>
+                  <MenuItem value="Серебряный">Серебряный</MenuItem>
                 </Select>
               </FormControl>
               <ImageUploadAndCrop vinylImage={mainImagePath} onSave={handleSaveCroppedImage} />
@@ -442,7 +468,9 @@ export default function OrderPage(): JSX.Element {
                     onChange={(e) => {
                       const selectedFormatId = e.target.value;
                       setSelectedFormat(selectedFormatId);
-                      const selectedFormatData = formats.find((format) => format.id === Number(selectedFormatId));
+                      const selectedFormatData = formats.find(
+                        (format) => format.id === Number(selectedFormatId),
+                      );
                       if (selectedFormatData) {
                         setSelectedFormatDescription(selectedFormatData.description);
                       }
@@ -462,30 +490,30 @@ export default function OrderPage(): JSX.Element {
                   </Typography>
                 )}
                 <Box mt={2}>
-                <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
-                  <input
-                    id="audio-file-input"
-                    type="file"
-                    accept="audio/*, .m4r,.mp3,.acc"
-                    style={{ display: 'none' }}
-                    onChange={handleFileInputChange}
-                    multiple
-                  />
-                  <Button
-                    sx={{
-                      backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
-                      color: '#fff', // Белый текст
-                      '&:hover': {
-                        backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
-                      },
-                    }}
-                    variant="contained"
-                    component="label"
-                    htmlFor="audio-file-input"
-                  >
-                    Выберите аудио файлы
-                  </Button>
-                </FormControl>
+                  <FormControl variant="outlined" fullWidth sx={{ mb: 2 }}>
+                    <input
+                      id="audio-file-input"
+                      type="file"
+                      accept="audio/*, .m4r,.mp3,.acc"
+                      style={{ display: 'none' }}
+                      onChange={handleFileInputChange}
+                      multiple
+                    />
+                    <Button
+                      sx={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)', // Прозрачный черный цвет
+                        color: '#fff', // Белый текст
+                        '&:hover': {
+                          backgroundColor: 'rgba(0, 0, 0, 1)', // Изменение прозрачности при наведении
+                        },
+                      }}
+                      variant="contained"
+                      component="label"
+                      htmlFor="audio-file-input"
+                    >
+                      Выберите аудио файлы
+                    </Button>
+                  </FormControl>
                 </Box>
                 {audioFiles.length > 0 ? (
                   <TableContainer
@@ -555,13 +583,13 @@ export default function OrderPage(): JSX.Element {
                   />
                 </FormControl>
                 <FormControl variant="outlined" fullWidth className="custom-form-control">
-                  <InputLabel id="delieveryAdress-label">Вариант доставки:</InputLabel>
+                  <InputLabel id="delieveryAdress-label">Способ получения:</InputLabel>
                   <Select
                     labelId="format-delieveryAdress-label"
                     id="delieveryAdress"
                     value={typeShop}
                     onChange={(e) => setTypeShop(e.target.value)}
-                    label="Вариант доставки"
+                    label="Способ получения"
                   >
                     <MenuItem value="Доставка">Доставка</MenuItem>
                     <MenuItem value="Самовывоз">Самовывоз</MenuItem>

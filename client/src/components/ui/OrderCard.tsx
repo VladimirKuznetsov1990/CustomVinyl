@@ -17,12 +17,20 @@ type ImagePaths = {
     Синий: string;
     Красный: string;
     Стандарт: string;
+    Фиолетовый: string;
+    Оранжевый: string;
+    Желтый: string;
+    Серебряный: string;
   };
   additional: {
     Зеленый: string;
     Синий: string;
     Красный: string;
     Стандарт: string;
+    Фиолетовый: string;
+    Оранжевый: string;
+    Желтый: string;
+    Серебряный: string;
   };
 };
 
@@ -54,12 +62,20 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
       Синий: '/static/img/Vinyl_blue.png',
       Красный: '/static/img/Vinyl_red.png',
       Стандарт: '/static/img/1Vinyl+.png',
+      Фиолетовый: '/static/img/VinylsPurple1.png',
+      Оранжевый: '/static/img/VinylsOrange1.png',
+      Желтый: '/static/img/VinylsYellow1.png',
+      Серебряный: '/static/img/VinylsWhite1.png',
     },
     additional: {
       Зеленый: '/static/img/Vinyl+Green_mid.png',
       Синий: '/static/img/Vinyl+Blue_mid.png',
       Красный: '/static/img/Vinyl+Red_mid.png',
       Стандарт: '/static/img/Vinyl+Custom_mid.png',
+      Фиолетовый: '/static/img/VinylsPurple2.png',
+      Оранжевый: '/static/img/VinylsOrange2.png',
+      Желтый: '/static/img/VinylsYellow2.png',
+      Серебряный: '/static/img/VinylsWhite2.png',
     },
   };
 
@@ -89,6 +105,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
         height: '100%',
       }}
     >
+          <Typography variant='h5' sx={{fontWeight: 800}}>Номер заказа: #{order.id + 1000 } </Typography>
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%' }}>
         <Box sx={{ flex: 1, mr: { md: 2 }, mb: { xs: 2, md: 0 } }}>
           <Typography gutterBottom variant="h6" component="div">
@@ -133,7 +150,6 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               <LocalPhoneIcon fontSize="small" />
             </IconButton>
           </Box>
-
         </Box>
         <Box
           sx={{
@@ -179,7 +195,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               }}
             />
           )}
-          {['Зеленый', 'Синий', 'Красный', ''].includes(order.color) && (
+          {['Зеленый', 'Синий', 'Красный', '', 'Фиолетовый', 'Оранжевый', 'Желтый', 'Серебряный' ].includes(order.color) && (
             <CardMedia
               component="img"
               image={getImagePath(order.color, 'additional')}
@@ -200,6 +216,9 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
       </Box>
       <hr style={{ border: '1px solid black', margin: '20px 0' }} />
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <Typography gutterBottom variant="h6" component="div">
+          Количество: {order.quantity} шт.
+        </Typography>
         <Typography gutterBottom variant="h5" component="div">
           Итоговая сумма: {order.totalPrice} р.
         </Typography>

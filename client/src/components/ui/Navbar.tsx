@@ -38,11 +38,11 @@ export default function Navbar(): JSX.Element {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const scrollToAbout = (): void => {
-    scrollToElement('about', -440, 1000);
+    scrollToElement('about', -440, 3000);
   };
 
   const scrollToOurWorks = (): void => {
-    scrollToElement('our-works', -70, 2000);
+    scrollToElement('our-works', -70, 6000);
   };
 
   const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {

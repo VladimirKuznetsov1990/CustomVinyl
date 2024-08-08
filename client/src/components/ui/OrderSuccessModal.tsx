@@ -35,9 +35,10 @@ export default function OrderSuccessModal(): JSX.Element {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle sx={{ textAlign: 'center' }}>Заказ успешно добавлен!</DialogTitle>
+      <DialogTitle sx={{ textAlign: 'center' }}>Поздравляю! Ваш Заказ успешно создан!</DialogTitle>
       <DialogContent>
-        <Typography>Ваш заказ был успешно добавлен. Что вы хотите сделать дальше?</Typography>
+        <Typography>Наш менееджер свяжется с вами в ближайшее время.</Typography>
+        <Typography>Отслеживайте статус вашего заказа в личном кабинете.</Typography>
       </DialogContent>
       <DialogActions sx={{ justifyContent: 'center' }}>
         <Button
