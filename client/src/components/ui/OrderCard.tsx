@@ -1,10 +1,10 @@
-import { Card, CardMedia, Typography, Button, Box, IconButton } from '@mui/material';
+import { Card, CardMedia, Typography, Button, Box, IconButton, Chip } from '@mui/material';
 import React, { useState } from 'react';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import EmailIcon from '@mui/icons-material/Email';
 import type { OrderType } from '../../types/orderTypes';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { updateStatusOrderThunk } from '../../redux/slices/order/orderThunk';
+import { updateStatusOrderThunk, deleteOrderThunk } from '../../redux/slices/order/orderThunk';
 
 type OrderCardTypes = {
   order: OrderType;
@@ -40,6 +40,14 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
     }
   };
 
+  const handleDeleteOrder = async (id: number): Promise<void> => {
+    try {
+      await dispatch(deleteOrderThunk(id));
+    } catch (error) {
+      console.error('Failed to delete order:', error);
+    }
+  };
+
   const images: ImagePaths = {
     main: {
       Зеленый: '/static/img/Vinyl_green.png',
@@ -57,6 +65,22 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
 
   const getImagePath = (color: string, type: keyof ImagePaths): string =>
     images[type][color as keyof (typeof images)[typeof type]] || images[type].Стандарт;
+
+  const getStatusColor = (statusValue: string): 'error' | 'warning' | 'success' | 'default' => {
+    switch (statusValue) {
+      case 'Новый':
+        return 'error';
+      case 'В работе':
+        return 'warning';
+      case 'Выполнен':
+        return 'success';
+      default:
+        return 'default';
+    }
+  };
+
+  console.log(order.userImg );
+  
 
   return (
     <Card
@@ -130,27 +154,33 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
             alt="additional color layer"
             sx={{
               borderRadius: '50%',
-              height: '200px',
-              width: '200px',
+              height: { xs: '100px', md: '200px' },
+              width: { xs: '100px', md: '200px' },
               objectFit: 'cover',
               position: 'absolute',
               zIndex: 1, // Первый слой
+              right: { xs: '20px', md: 'auto' },
+              bottom: { xs: '20px', md: 'auto' },
             }}
           />
-          <CardMedia
-            component="img"
-            image={`/img/${order.userImg}`}
-            alt="img"
-            sx={{
-              borderRadius: '50%',
-              height: '184px',
-              width: '184px',
-              objectFit: 'cover',
-              position: 'absolute',
-              opacity: '0.7',
-              zIndex: 2, // Второй слой
-            }}
-          />
+          {order.userImg && (
+            <CardMedia
+              component="img"
+              image={`/img/${order.userImg}`}
+              alt="img"
+              sx={{
+                borderRadius: '50%',
+                height: { xs: '92px', md: '184px' },
+                width: { xs: '92px', md: '184px' },
+                objectFit: 'cover',
+                position: 'absolute',
+                opacity: '0.7',
+                zIndex: 2, // Второй слой
+                right: { xs: '20px', md: 'auto' },
+                bottom: { xs: '20px', md: 'auto' },
+              }}
+            />
+          )}
           {['Зеленый', 'Синий', 'Красный', ''].includes(order.color) && (
             <CardMedia
               component="img"
@@ -158,11 +188,13 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               alt={`${order.color} color`}
               sx={{
                 borderRadius: '50%',
-                height: '200px',
-                width: '200px',
+                height: { xs: '100px', md: '200px' },
+                width: { xs: '100px', md: '200px' },
                 objectFit: 'cover',
                 position: 'absolute',
                 zIndex: 3, // Третий слой
+                right: { xs: '20px', md: 'auto' },
+                bottom: { xs: '20px', md: 'auto' },
               }}
             />
           )}
@@ -173,9 +205,7 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
         <Typography gutterBottom variant="h5" component="div">
           Итоговая сумма: {order.totalPrice} р.
         </Typography>
-        <Typography gutterBottom variant="h5" component="div" color="red">
-          Статус: {status}
-        </Typography>
+        <Chip label={status} color={getStatusColor(status)} sx={{ marginBottom: '16px' }} />
         {currentUser.roleId === 1 && (
           <Box sx={{ display: 'flex', flexDirection: 'row', mt: 2 }}>
             <Button
@@ -216,6 +246,21 @@ export default function OrderCard({ order, downloadArchive }: OrderCardTypes): J
               }}
             >
               Скачать архив
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => void handleDeleteOrder(order.id)}
+              sx={{
+                marginRight: '8px',
+                marginBottom: '8px',
+                backgroundColor: 'rgba(255, 0, 0, 0.8)', // Прозрачный красный цвет
+                color: '#fff', // Белый текст
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 0, 0, 1)', // Изменение прозрачности при наведении
+                },
+              }}
+            >
+              Отменить заказ
             </Button>
           </Box>
         )}

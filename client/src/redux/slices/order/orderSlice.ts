@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { OrderListType } from '../../../types/orderTypes';
-import { addOrderThunk, getOrdersThunk, updateStatusOrderThunk } from './orderThunk';
+import { addOrderThunk, deleteOrderThunk, getOrdersThunk, updateStatusOrderThunk } from './orderThunk';
 
 type InitialStateType = {
   data: OrderListType;
@@ -43,6 +43,9 @@ const orderSlice = createSlice({
         return order;
       });
     })
+    .addCase(deleteOrderThunk.fulfilled, (state, { payload }) => {
+      state.data = state.data.filter((order) => order.id !== payload);
+    });
   },
 });
 

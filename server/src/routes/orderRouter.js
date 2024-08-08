@@ -4,6 +4,7 @@ const { OrderSchema, orderReqBodySchema } = require('../schemas/order');
 const fs = require('fs/promises');
 const upload = require('../middlewares/multer.middleware');
 const sharp = require('sharp');
+const { log } = require('console');
 
 const router = Router();
 // Получить все заказы
@@ -105,7 +106,7 @@ router.patch('/:id/status', async (req, res) => {
     if (!order) throw new Error('Order not found');
 
     await order.update({ status });
-    res.json(OrderSchema.parse(order));
+    res.json(order);
   } catch (error) {
     console.log('Ошибка обновления статуса заказа', error);
     res.status(500).json({ message: 'Ошибка обновления статуса заказа' });

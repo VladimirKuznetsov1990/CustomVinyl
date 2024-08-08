@@ -53,13 +53,13 @@ export default function AccountPage(): JSX.Element {
     <Container
       maxWidth="lg"
       sx={{
-        padding: '1px',
+        padding: '20px',
         backgroundImage: `url(/static/img/fon.gif)`,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        minHeight: '100%',
+        minHeight: '100vh',
         minWidth: '100%'
       }}
     >
