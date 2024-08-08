@@ -33,6 +33,7 @@ import '../style/styles-order.css';
 import AddressModal from '../ui/AddressModal';
 import { setDeliveryAddress } from '../../redux/slices/order/orderSlice';
 import { type OrderDataType } from '../../types/orderTypes';
+import ErrorSnackbar from '../ui/ErrorSnackbar'; // Импортируем ErrorSnackbar
 
 export default function OrderPage(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -116,7 +117,7 @@ export default function OrderPage(): JSX.Element {
   const handleSaveCroppedImage = (image: string): void => {
     dispatch(setCroppedImage(image));
   };
-  
+
   console.log(typeof(croppedImage))
   const handleOrderSubmit = async (): Promise<void> => {
     if (!user || !user.id) {
@@ -125,7 +126,7 @@ export default function OrderPage(): JSX.Element {
     }
 
     if (!phone) {
-      alert('Поле "Номер телефона" обязательно для заполнения');
+      dispatch({ type: 'auth/setError', payload: 'Поле "Номер телефона" обязательно для заполнения' });
       return;
     }
 
@@ -159,7 +160,7 @@ export default function OrderPage(): JSX.Element {
       dispatch(openModal({ modalType: 'orderSuccess' }));
     } catch (error) {
       console.error('Error adding order:', error);
-      alert('Failed to add order.');
+      dispatch({ type: 'auth/setError', payload: 'Не удалось добавить заказ.' });
     }
   };
 
@@ -262,7 +263,7 @@ export default function OrderPage(): JSX.Element {
     newTotalDuration += durations.reduce((sum, duration) => sum + duration, 0);
 
     if (newTotalDuration > availableDuration) {
-      alert('Превышено допустимое время для выбранного формата');
+      dispatch({ type: 'auth/setError', payload: 'Превышено допустимое время для выбранного формата' });
       return;
     }
 
@@ -504,7 +505,7 @@ export default function OrderPage(): JSX.Element {
                   />
                 </FormControl>
                 <FormControl variant="outlined" fullWidth className="custom-form-control">
-                  <InputLabel htmlFor="outlined-adornment-quantity">Номер телефона</InputLabel>
+                  <InputLabel htmlFor="outlined-adornment-quantity">Номер телефона*</InputLabel>
                   <OutlinedInput
                     type="tel"
                     id="outlined-adornment-quantity"
@@ -578,6 +579,7 @@ export default function OrderPage(): JSX.Element {
         onClose={handleCloseAddressModal}
         onSave={handleSaveAddress}
       />
+      <ErrorSnackbar /> {/* Добавляем ErrorSnackbar в основной компонент */}
     </Container>
   );
 }
