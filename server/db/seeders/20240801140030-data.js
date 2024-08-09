@@ -45,7 +45,7 @@ module.exports = {
       {
         userName: 'admin',
         email: 'admin@example.com',
-        password: await bcrypt.hash('adminpass', 10),
+        password: await bcrypt.hash('adminpass123', 10),
         address: '123 Admin St',
         phone: '1234567890',
         roleId: 1,
